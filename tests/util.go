@@ -155,6 +155,7 @@ type RuleSet struct {
 	DiehardBlock             *big.Int
 	ExplosionBlock           *big.Int
 	AtlantisBlock            *big.Int
+	AghartaBlock             *big.Int
 }
 
 // StateTest object that matches the General State Test json file
@@ -164,6 +165,13 @@ type StateTest struct {
 	Tx   stTransaction            `json:"transaction"`
 	Out  string                   `json:"out"`
 	Post map[string][]stPostState `json:"post"`
+}
+
+type ShiftTest struct {
+	Env         VmEnv                    `json:"env"`
+	Pre         map[string]Account       `json:"pre"`
+	Post        map[string][]stPostState `json:"post"`
+	Transaction map[string]string
 }
 
 // GenesisAccount is an account in the state of the genesis block.
@@ -201,6 +209,10 @@ func (r RuleSet) IsHomestead(n *big.Int) bool {
 
 func (r RuleSet) IsAtlantis(n *big.Int) bool {
 	return r.AtlantisBlock != nil && n.Cmp(r.AtlantisBlock) >= 0
+}
+
+func (r RuleSet) IsAgharta(n *big.Int) bool {
+	return r.AghartaBlock != nil && n.Cmp(r.AghartaBlock) >= 0
 }
 
 func (r RuleSet) GasTable(num *big.Int) *vm.GasTable {

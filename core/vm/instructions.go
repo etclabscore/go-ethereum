@@ -22,6 +22,7 @@ import (
 
 	"github.com/eth-classic/go-ethereum/common"
 	"github.com/eth-classic/go-ethereum/crypto"
+	"github.com/ethereum/go-ethereum/common/math"
 )
 
 var callStipend = big.NewInt(2300) // Free gas given at beginning of call.
@@ -273,7 +274,50 @@ func opMulmod(pc *uint64, env Environment, contract *Contract, memory *Memory, s
 	return nil, nil
 }
 
-func opSha3(pc *uint64, env Environment, contract *Contract, memory *Memory, stack *stack) ([]byte, error) {
+func opSHL(instr instruction, pc *uint64, env Environment, contract *Contract, memory *Memory, stack *stack) {
+	shift, value := math.U256(stack.pop()), math.U256(stack.pop())
+
+	if shift.Cmp(big.NewInt(256)) >= 0 {
+		value.SetUint64(0)
+	} else {
+		n := uint(shift.Uint64())
+		math.U256(value.Lsh(value, n))
+	}
+	stack.push(value)
+}
+
+func opSHR(instr instruction, pc *uint64, env Environment, contract *Contract, memory *Memory, stack *stack) {
+	shift, value := math.U256(stack.pop()), math.U256(stack.pop())
+
+	if shift.Cmp(big.NewInt(256)) >= 0 {
+		value.SetUint64(0)
+	} else {
+		n := uint(shift.Uint64())
+		math.U256(value.Rsh(value, n))
+	}
+	stack.push(value)
+}
+
+func opSAR(instr instruction, pc *uint64, env Environment, contract *Contract, memory *Memory, stack *stack) {
+	shift, value := math.U256(stack.pop()), math.S256(stack.pop())
+
+	if shift.Cmp(big.NewInt(256)) >= 0 {
+		if value.Sign() >= 0 {
+			value.SetUint64(0)
+		} else {
+			value.SetInt64(-1)
+		}
+
+		stack.push(math.U256(value))
+	} else {
+		n := uint(shift.Uint64())
+		// value
+		value.Rsh(value, n)
+		stack.push(math.U256(value))
+	}
+}
+
+func opSha3(instr instruction, pc *uint64, env Environment, contract *Contract, memory *Memory, stack *stack) {
 	offset, size := stack.pop(), stack.pop()
 	hash := crypto.Keccak256(memory.Get(offset.Int64(), size.Int64()))
 
