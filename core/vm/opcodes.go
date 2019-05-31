@@ -366,6 +366,7 @@ var opCodeToString = map[OpCode]string{
 	STATICCALL:   "STATICCALL",
 	REVERT:       "REVERT",
 	SUICIDE:      "SUICIDE",
+	CREATE2:      "CREATE2",
 
 	PUSH: "PUSH",
 	DUP:  "DUP",
