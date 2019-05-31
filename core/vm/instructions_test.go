@@ -96,7 +96,7 @@ func testTwoOperandOp(t *testing.T, tests []TwoOperandTestcase, opFn instrFn, na
 		expected := new(big.Int).SetBytes(common.Hex2Bytes(test.Expected))
 		stack.push(x)
 		stack.push(y)
-		opFn(&pc, nil, nil, nil, stack)
+		opFn(instruction{}, &pc, nil, nil, nil, stack)
 		actual := stack.pop()
 
 		if actual.Cmp(expected) != 0 {
