@@ -411,7 +411,6 @@ func (self *Env) Create2(caller vm.ContractRef, data []byte, gas, price, salt, v
 		return nil, obj.Address(), nil
 	} else {
 		return core.Create2(self, caller, data, gas, price, salt, value)
-		// return core.Create(self, caller, data, gas, price, value)
 	}
 }
 
