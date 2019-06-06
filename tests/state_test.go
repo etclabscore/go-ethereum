@@ -709,6 +709,9 @@ func TestAllETH(t *testing.T) {
 	unsupportedDirs := map[string]bool{
 		"stZeroKnowledge":  true,
 		"stZeroKnowledge2": true,
+		"stReturnDataTest": true,
+		"stCodeSizeLimit":  true,
+		"stSStoreTest":     true,
 		// "stCreate2":        true,
 	}
 

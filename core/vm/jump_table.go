@@ -295,6 +295,12 @@ func newFrontierInstructionSet() vmJumpTable {
 			writes:  true,
 			returns: true,
 		},
+		// CREATE2: {
+		// 	fn:      opCreate2,
+		// 	valid:   true,
+		// 	writes:  true,
+		// 	returns: true,
+		// },
 		CALL: {
 			fn:      opCall,
 			valid:   true,
