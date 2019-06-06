@@ -532,7 +532,6 @@ func opCreate2(pc *uint64, env Environment, contract *Contract, memory *Memory, 
 		salt         = stack.pop()
 		input        = memory.Get(offset.Int64(), size.Int64())
 		gas          = new(big.Int).Set(contract.Gas)
-		// gas2         = new(big.Int).Set(contract.Gas)
 	)
 	if env.RuleSet().GasTable(env.BlockNumber()).CreateBySuicide != nil {
 		gas.Div(gas, n64)
