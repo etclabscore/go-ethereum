@@ -141,6 +141,21 @@ var Forks = map[string]RuleSet{
 		DiehardBlock:             big.NewInt(0),
 		AtlantisBlock:            big.NewInt(0),
 	},
+	"Constantinople": {
+		HomesteadBlock:           big.NewInt(0),
+		HomesteadGasRepriceBlock: big.NewInt(0),
+		DiehardBlock:             big.NewInt(0),
+		AtlantisBlock:            big.NewInt(0),
+		AghartaBlock:             big.NewInt(0),
+	},
+	"ConstantinopleFix": {
+		HomesteadBlock:           big.NewInt(0),
+		HomesteadGasRepriceBlock: big.NewInt(0),
+		DiehardBlock:             big.NewInt(0),
+		ExplosionBlock:           big.NewInt(0),
+		AtlantisBlock:            big.NewInt(0),
+		AghartaBlock:             big.NewInt(0),
+	},
 }
 
 // ChainConfigs table used to map configs to difficulty test files

@@ -75,6 +75,28 @@ func Create(env vm.Environment, caller vm.ContractRef, code []byte, gas, gasPric
 	return ret, address, err
 }
 
+// Create2 creates a new contract with the given code
+func Create2(env vm.Environment, caller vm.ContractRef, code []byte, gas, gasPrice, salt, value *big.Int) (ret []byte, address common.Address, err error) {
+	// common.BigToHash()
+	hash := common.BytesToHash(crypto.Keccak256([]byte{0xff}, caller.Address().Bytes(), common.BigToAddress(salt).Bytes(), crypto.Keccak256Hash(code).Bytes())[12:])
+	addr := common.BytesToAddress(crypto.Keccak256([]byte{0xff}, caller.Address().Bytes(), common.BigToAddress(salt).Bytes(), crypto.Keccak256Hash(code).Bytes())[12:])
+	// fmt.Println("HASH: " + hash.Str())
+
+	// hash := common.BytesToHash((crypto.Keccak256([]byte{0xff}, salt.Bytes(), crypto.Keccak256Hash(code).Bytes())[12:]))
+	// addr := common.BytesToAddress((crypto.Keccak256([]byte{0xff}, salt.Bytes(), crypto.Keccak256Hash(code).Bytes())[12:]))
+	ret, address, err = exec(env, caller, nil, &addr, hash, nil, code, gas, gasPrice, value, false)
+	// fmt.Println("ADDRESS: " +
+	// Here we get an error if we run into maximum stack depth,
+	// See: https://github.com/ethereum/yellowpaper/pull/131
+	// and YP definitions for CREATE
+
+	//if there's an error we return nothing
+	if err != nil && err != vm.ErrRevert {
+		return nil, address, err
+	}
+	return ret, address, err
+}
+
 func exec(env vm.Environment, caller vm.ContractRef, address, codeAddr *common.Address, codeHash common.Hash, input, code []byte, gas, gasPrice, value *big.Int, readOnly bool) (ret []byte, addr common.Address, err error) {
 	evm := env.Vm()
 	// Depth check execution. Fail if we're trying to execute above the
