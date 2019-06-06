@@ -18,10 +18,12 @@ package vm
 
 import (
 	"errors"
+	"math"
 	"math/big"
 
 	"github.com/eth-classic/go-ethereum/common"
 	"github.com/eth-classic/go-ethereum/crypto"
+	"github.com/eth-classic/go-ethereum/params"
 )
 
 var callStipend = big.NewInt(2300) // Free gas given at beginning of call.
@@ -505,6 +507,43 @@ func opCreate(pc *uint64, env Environment, contract *Contract, memory *Memory, s
 
 	contract.UseGas(gas)
 	ret, addr, suberr := env.Create(contract, input, gas, contract.Price, value)
+	// Push item on the stack based on the returned error. If the ruleset is
+	// homestead we must check for CodeStoreOutOfGasError (homestead only
+	// rule) and treat as an error, if the ruleset is frontier we must
+	// ignore this error and pretend the operation was successful.
+	if env.RuleSet().IsHomestead(env.BlockNumber()) && suberr == CodeStoreOutOfGasError {
+		stack.push(new(big.Int))
+	} else if suberr != nil && suberr != CodeStoreOutOfGasError {
+		stack.push(new(big.Int))
+	} else {
+		stack.push(addr.Big())
+	}
+
+	if suberr == ErrRevert {
+		return ret, nil
+	}
+	return nil, nil
+}
+
+func opCreate2(pc *uint64, env Environment, contract *Contract, memory *Memory, stack *stack) ([]byte, error) {
+	var (
+		value        = stack.pop()
+		offset, size = stack.pop(), stack.pop()
+		salt         = stack.pop()
+		input        = memory.Get(offset.Int64(), size.Int64())
+		gas          = new(big.Int).Set(contract.Gas)
+	)
+	if env.RuleSet().GasTable(env.BlockNumber()).CreateBySuicide != nil {
+		gas.Div(gas, n64)
+		gas = gas.Sub(contract.Gas, gas)
+	}
+
+	//Add extra gas calculation for the extra hashing that must be performed
+	hashcost := params.Sha3WordGas * uint64(math.Ceil(float64(len(contract.Code)/32)))
+	gas = gas.Sub(contract.Gas, new(big.Int).SetUint64(hashcost))
+
+	contract.UseGas(gas)
+	ret, addr, suberr := env.Create2(contract, input, gas, contract.Price, salt, value)
 	// Push item on the stack based on the returned error. If the ruleset is
 	// homestead we must check for CodeStoreOutOfGasError (homestead only
 	// rule) and treat as an error, if the ruleset is frontier we must

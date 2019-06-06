@@ -335,6 +335,12 @@ func calculateGasAndSize(gasTable *GasTable, env Environment, contract *Contract
 		newMemSize = calcMemSize(stack.back(1), stack.back(2))
 
 		quadMemGas(mem, newMemSize, gas)
+	case CREATE2:
+		newMemSize = calcMemSize(stack.back(1), stack.back(2))
+
+		quadMemGas(mem, newMemSize, gas)
+
+		//TODO: Add gas cost of GSHA3WORD*ceil(len(init_code) / 32)
 	case CALL, CALLCODE:
 		gas.Set(gasTable.Calls)
 
