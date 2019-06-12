@@ -698,8 +698,7 @@ func TestAllETH(t *testing.T) {
 	skipTests["createJS_ExampleContract.json"] = "Not Implemented"
 	skipTests["RevertDepthCreateAddressCollision.json"] = "Not Implemented"
 
-	// Random Test failures (REVISIT)
-	skipTests["randomStatetest642.json"] = "random unimplemented"
+	// Random Test failures
 	skipTests["randomStatetest644.json"] = "random unimplemented"
 	skipTests["randomStatetest645.json"] = "random unimplemented"
 
@@ -708,7 +707,6 @@ func TestAllETH(t *testing.T) {
 	skipTests["FailedCreateRevertsDeletion.json"] = "State trie clearing unimplemented"
 
 	unsupportedDirs := map[string]bool{
-		"stStaticCall":     true,
 		"stZeroKnowledge":  true,
 		"stZeroKnowledge2": true,
 		"stReturnDataTest": true,
