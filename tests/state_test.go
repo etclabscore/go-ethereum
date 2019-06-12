@@ -709,10 +709,14 @@ func TestAllETH(t *testing.T) {
 	unsupportedDirs := map[string]bool{
 		"stZeroKnowledge":  true,
 		"stZeroKnowledge2": true,
+<<<<<<< HEAD
 		"stReturnDataTest": true,
 		"stCodeSizeLimit":  true,
 		"stSStoreTest":     true,
 		// "stCreate2":        true,
+=======
+		"stCreate2":        true,
+>>>>>>> Added error handling for precompiles and removed skipped tests (#54)
 	}
 
 	for _, dn := range dirNames {
