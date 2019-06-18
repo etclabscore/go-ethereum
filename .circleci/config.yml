@@ -84,4 +84,4 @@ workflows:
             - tests-linux-go-1.12
           filters:
             tags:
-              only: /^v.*/
+              only: /^v*/
