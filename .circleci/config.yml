@@ -75,13 +75,21 @@ workflows:
   version: 2
   release:
     jobs:
-      - build-linux-go-1.12
+      - build-linux-go-1.12:
+          filters:
+            tags:
+              only: /.*/
       - tests-linux-go-1.12:
           requires:
             - build-linux-go-1.12
+          filters:
+            tags:
+              only: /.*/
       - release-linux-go-1.12:
           requires:
-            - tests-linux-go-1.12
+            - build-linux-go-1.12
           filters:
             tags:
               only: /^v*/
+            branches:
+              ignore: /.*/
