@@ -18,9 +18,14 @@ package vm
 
 import (
 	"errors"
+<<<<<<< HEAD
+=======
+	"fmt"
+>>>>>>> Implemented create function for Create2 contracts
 	"math/big"
 
 	"github.com/eth-classic/go-ethereum/common"
+	"github.com/eth-classic/go-ethereum/common/hexutil"
 	"github.com/eth-classic/go-ethereum/crypto"
 )
 
@@ -531,6 +536,7 @@ func opCreate2(pc *uint64, env Environment, contract *Contract, memory *Memory, 
 		salt         = stack.pop()
 		input        = memory.Get(offset.Int64(), size.Int64())
 		gas          = new(big.Int).Set(contract.Gas)
+		// gas2         = new(big.Int).Set(contract.Gas)
 	)
 	if env.RuleSet().GasTable(env.BlockNumber()).CreateBySuicide != nil {
 		gas.Div(gas, n64)
@@ -538,6 +544,7 @@ func opCreate2(pc *uint64, env Environment, contract *Contract, memory *Memory, 
 	}
 
 	contract.UseGas(gas)
+	// ret, addr, suberr := env.Create2(contract, input, gas, contract.Price, salt, value)
 	ret, addr, suberr := env.Create2(contract, input, gas, contract.Price, salt, value)
 	// Push item on the stack based on the returned error. If the ruleset is
 	// homestead we must check for CodeStoreOutOfGasError (homestead only
@@ -546,6 +553,7 @@ func opCreate2(pc *uint64, env Environment, contract *Contract, memory *Memory, 
 	if suberr != nil {
 		stack.push(new(big.Int))
 	} else {
+		fmt.Println("ADDR: " + hexutil.Encode(addr.Bytes()))
 		stack.push(addr.Big())
 	}
 

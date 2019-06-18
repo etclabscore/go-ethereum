@@ -257,6 +257,7 @@ func calculateGasAndSize(gasTable *GasTable, env Environment, contract *Contract
 		gas.Set(GasFastestStep)
 	case LOG0, LOG1, LOG2, LOG3, LOG4:
 		n := int(op - LOG0)
+		fmt.Println("3")
 		err := stack.require(n + 2)
 		if err != nil {
 			return nil, nil, err
@@ -278,6 +279,7 @@ func calculateGasAndSize(gasTable *GasTable, env Environment, contract *Contract
 		expByteLen := int64(len(stack.back(1).Bytes()))
 		gas.Add(gas, new(big.Int).Mul(big.NewInt(expByteLen), gasTable.ExpByte))
 	case SSTORE:
+		fmt.Println("4")
 		err := stack.require(2)
 		if err != nil {
 			return nil, nil, err
