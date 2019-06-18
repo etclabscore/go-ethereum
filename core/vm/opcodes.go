@@ -362,10 +362,10 @@ var opCodeToString = map[OpCode]string{
 	RETURN:       "RETURN",
 	CALLCODE:     "CALLCODE",
 	DELEGATECALL: "DELEGATECALL",
+	CREATE2:      "CREATE2",
 	STATICCALL:   "STATICCALL",
 	REVERT:       "REVERT",
 	SUICIDE:      "SUICIDE",
-	CREATE2:      "CREATE2",
 
 	PUSH: "PUSH",
 	DUP:  "DUP",

@@ -706,6 +706,8 @@ func TestAllETH(t *testing.T) {
 	skipTests["RevertPrefoundEmptyOOG.json"] = "State trie clearing unimplemented"
 	skipTests["FailedCreateRevertsDeletion.json"] = "State trie clearing unimplemented"
 
+	skipTests["create2noCash.json"] = "Bug"
+
 	unsupportedDirs := map[string]bool{
 		"stZeroKnowledge":  true,
 		"stZeroKnowledge2": true,
