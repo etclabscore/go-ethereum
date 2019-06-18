@@ -1,71 +1,32 @@
 version: 2
 jobs:
-  build-linux-go-1.12:
-    working_directory: ~/go-ethereum
-    docker:
-      - image: circleci/golang:1.12
+  build:
     steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - go-mod-v4-{{ checksum "go.sum" }}
       - run:
           name: Compile Binaries
-          command: make build
-      - run:
-          name: Release Artifacts
-          command: |
-            pushd ./bin/
-            sha256sum ./abigen > ./abigen.sha256
-            sha256sum ./bootnode > ./bootnode.sha256
-            sha256sum ./disasm > ./disasm.sha256
-            sha256sum ./ethtest > ./ethtest.sha256
-            sha256sum ./evm > ./evm.sha256
-            sha256sum ./geth > ./geth.sha256
-            sha256sum ./rlpdump > ./rlpdump.sha256
-            popd
-            mkdir ./artifacts/
-            VERSION=$(bin/geth version | grep -i version | head -n1 | awk '{print $2}')
-            cp -rv ./bin ./geth-classic-${VERSION}-linux
-            tar -zcvf geth-classic-${VERSION}-linux.tar.gz geth-classic-${VERSION}-linux
-            cp -v ./geth-classic-${VERSION}-linux.tar.gz ./artifacts/
-            pushd ./artifacts
-            sha256sum ./geth-classic-${VERSION}-linux.tar.gz > ./geth-classic-${VERSION}-linux.sha256
-            popd
-      - store_artifacts:
-          path: ~/go-ethereum/artifacts
-      - save_cache:
-          key: go-mod-v4-{{ checksum "go.sum" }}
-          paths:
-            - "/go/pkg/mod"
-  tests-linux-go-1.12:
-    working_directory: ~/go-ethereum
-    docker:
-      - image: circleci/golang:1.12
+          command: echo "Compile Binaries"
+  tests:
     steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - go-mod-v4-{{ checksum "go.sum" }}
       - run:
           name: Run All Tests
-          command: make test
-      - save_cache:
-          key: go-mod-v4-{{ checksum "go.sum" }}
-          paths:
-            - "/go/pkg/mod"
+          command: echo "Run All Tests"
+  build:
+    steps:
+      - run:
+          name: Release Artifacts
+          command: echo "Release Artifacts"
 
 workflows:
   version: 2
-  release:
+  minimal:
     jobs:
-      - tests-linux-go-1.12
-          filters:
-            branches:
-              only: /.*/
-      - build-linux-go-1.12
+      - build
+      - tests
+          requires:
+            - build
+      - release
+          requires:
+            - tests
           filters:
             tags:
-              only: /^v.*/
-            branches:
-              ignore: /.*/
+              only: /^v.*$/
