@@ -1,15 +1,4 @@
-version: 2
 jobs:
-  build:
-    steps:
-      - run:
-          name: Compile Binaries
-          command: echo "Compile Binaries"
-  tests:
-    steps:
-      - run:
-          name: Run All Tests
-          command: echo "Run All Tests"
   build:
     steps:
       - run:
@@ -17,16 +6,9 @@ jobs:
           command: echo "Release Artifacts"
 
 workflows:
-  version: 2
   minimal:
     jobs:
-      - build
-      - tests
-          requires:
-            - build
       - release
-          requires:
-            - tests
           filters:
             tags:
               only: /^v.*$/
