@@ -130,7 +130,11 @@ func (evm *EVM) Run(contract *Contract, input []byte, readOnly bool) (ret []byte
 		op = contract.GetOp(pc)
 		operation := evm.jumpTable[op]
 		// calculate the new memory size and gas price for the current executing opcode
+		fmt.Println("OP: ", op.String())
+		// fmt.Println("Code: ", contract.Code)
+		fmt.Println("STACK: ", stack.Data())
 		newMemSize, cost, err = calculateGasAndSize(&evm.gasTable, evm.env, contract, caller, op, statedb, mem, stack)
+		fmt.Println(newMemSize, cost, err)
 		if err != nil {
 			return nil, err
 		}
@@ -146,6 +150,8 @@ func (evm *EVM) Run(contract *Contract, input []byte, readOnly bool) (ret []byte
 				return nil, errWriteProtection
 			}
 		}
+
+		fmt.Printf("\t\tpc: %v, gas: %s, memSize: %v, stack: %v, depth: %v, opName: %s, err: %s\n", pc, common.ToHex(contract.Gas.Bytes()), mem.Len(), stack.Data(), evm.env.Depth(), op.String(), err)
 
 		// Use the calculated gas. When insufficient gas is present, use all gas and return an
 		// Out Of Gas error
@@ -229,6 +235,7 @@ func calculateGasAndSize(gasTable *GasTable, env Environment, contract *Contract
 		gas.Set(gasTable.SLoad)
 	case SWAP1, SWAP2, SWAP3, SWAP4, SWAP5, SWAP6, SWAP7, SWAP8, SWAP9, SWAP10, SWAP11, SWAP12, SWAP13, SWAP14, SWAP15, SWAP16:
 		n := int(op - SWAP1 + 2)
+		fmt.Println("1")
 		err := stack.require(n)
 		if err != nil {
 			return nil, nil, err
@@ -236,6 +243,7 @@ func calculateGasAndSize(gasTable *GasTable, env Environment, contract *Contract
 		gas.Set(GasFastestStep)
 	case DUP1, DUP2, DUP3, DUP4, DUP5, DUP6, DUP7, DUP8, DUP9, DUP10, DUP11, DUP12, DUP13, DUP14, DUP15, DUP16:
 		n := int(op - DUP1 + 1)
+		fmt.Println("2")
 		err := stack.require(n)
 		if err != nil {
 			return nil, nil, err
@@ -243,6 +251,7 @@ func calculateGasAndSize(gasTable *GasTable, env Environment, contract *Contract
 		gas.Set(GasFastestStep)
 	case LOG0, LOG1, LOG2, LOG3, LOG4:
 		n := int(op - LOG0)
+		fmt.Println("3")
 		err := stack.require(n + 2)
 		if err != nil {
 			return nil, nil, err
@@ -264,6 +273,7 @@ func calculateGasAndSize(gasTable *GasTable, env Environment, contract *Contract
 		expByteLen := int64(len(stack.back(1).Bytes()))
 		gas.Add(gas, new(big.Int).Mul(big.NewInt(expByteLen), gasTable.ExpByte))
 	case SSTORE:
+		fmt.Println("4")
 		err := stack.require(2)
 		if err != nil {
 			return nil, nil, err
@@ -338,9 +348,17 @@ func calculateGasAndSize(gasTable *GasTable, env Environment, contract *Contract
 	case CREATE2:
 		newMemSize = calcMemSize(stack.back(1), stack.back(2))
 
+		words := toWordSize(stack.back(2))
+		gas.Add(gas, words.Mul(words, big.NewInt(6)))
 		quadMemGas(mem, newMemSize, gas)
 
 		//TODO: Add gas cost of GSHA3WORD*ceil(len(init_code) / 32)
+
+		// quadMemGas(mem, newMemSize, gas)
+
+		// wordGas := toWordSize(stack.back(2))
+		// gas.Add(gas, )
+
 	case CALL, CALLCODE:
 		gas.Set(gasTable.Calls)
 
