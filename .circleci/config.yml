@@ -60,4 +60,12 @@ workflows:
   release:
     jobs:
       - tests-linux-go-1.12
+          filters:
+            branches:
+              only: /.*/
       - build-linux-go-1.12
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/
