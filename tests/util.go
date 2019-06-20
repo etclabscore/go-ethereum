@@ -406,8 +406,7 @@ func (self *Env) Create2(caller vm.ContractRef, data []byte, gas, price, salt, v
 	if self.vmTest {
 		caller.ReturnGas(gas, price)
 
-		nonce := self.state.GetNonce(caller.Address())
-		obj := self.state.GetOrNewStateObject(crypto.CreateAddress(caller.Address(), nonce))
+		obj := self.state.GetOrNewStateObject(crypto.CreateAddress2(caller.Address(), common.BigToHash(salt).Bytes(), crypto.Keccak256(data)))
 
 		return nil, obj.Address(), nil
 	} else {
