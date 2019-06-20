@@ -18,11 +18,9 @@ package vm
 
 import (
 	"errors"
-	"fmt"
 	"math/big"
 
 	"github.com/eth-classic/go-ethereum/common"
-	"github.com/eth-classic/go-ethereum/common/hexutil"
 	"github.com/eth-classic/go-ethereum/crypto"
 )
 
@@ -47,6 +45,7 @@ var (
 	errWriteProtection       = errors.New("evm: write protection")
 	errReturnDataOutOfBounds = errors.New("evm: return data out of bounds")
 	errInvalidJump           = errors.New("evm: invalid jump destination")
+	ErrRevert                = errors.New("Execution reverted")
 )
 
 func (instr instruction) halts() bool {
@@ -539,14 +538,7 @@ func opCreate2(pc *uint64, env Environment, contract *Contract, memory *Memory, 
 		gas = gas.Sub(contract.Gas, gas)
 	}
 
-	//Add extra gas calculation for the extra hashing that must be performed
-	// hashcost := params.Sha3WordGas * uint64(math.Ceil(float64(len(contract.Code))/32))
-	// fmt.Println("HASHCOST ", new(big.Int).SetUint64(hashcost))
-	// gas = gas.Sub(contract.Gas, new(big.Int).SetUint64(hashcost))
-	// contract.UseGas(gas2)
-
 	contract.UseGas(gas)
-	// ret, addr, suberr := env.Create2(contract, input, gas, contract.Price, salt, value)
 	ret, addr, suberr := env.Create2(contract, input, gas, contract.Price, salt, value)
 	// Push item on the stack based on the returned error. If the ruleset is
 	// homestead we must check for CodeStoreOutOfGasError (homestead only
@@ -555,7 +547,6 @@ func opCreate2(pc *uint64, env Environment, contract *Contract, memory *Memory, 
 	if suberr != nil {
 		stack.push(new(big.Int))
 	} else {
-		fmt.Println("ADDR: " + hexutil.Encode(addr.Bytes()))
 		stack.push(addr.Big())
 	}
 

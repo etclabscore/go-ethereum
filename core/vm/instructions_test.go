@@ -83,10 +83,6 @@ func TestCreate2Addresses(t *testing.T) {
 		codeHash := crypto.Keccak256(code)
 
 		address := crypto.CreateAddress2(origin, salt, codeHash)
-		// address := crypto.CreateAddress(origin, uint64(10))
-		// crypto.CreateAddress2
-		// opCreate2()
-		// crypto.s
 
 		/*
 			stack          := newstack()
@@ -99,9 +95,6 @@ func TestCreate2Addresses(t *testing.T) {
 		*/
 		expected := common.BytesToAddress(common.FromHex(tt.expected))
 
-		// fmt.Println("------------------------------------------------------------------------------------------------------------------------------------")
-		// fmt.Println("EXPECTED: ", expected.Bytes())
-		// fmt.Println("ACTUAL: ", address.Bytes())
 		if !bytes.Equal(expected.Bytes(), address.Bytes()) {
 			t.Errorf("test %d: expected %s, got %s", i, expected.Str(), address.Str())
 		}

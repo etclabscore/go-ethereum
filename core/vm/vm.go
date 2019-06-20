@@ -23,6 +23,7 @@ import (
 	"time"
 
 	"github.com/eth-classic/go-ethereum/common"
+	"github.com/eth-classic/go-ethereum/common/hexutil"
 	"github.com/eth-classic/go-ethereum/crypto"
 	"github.com/eth-classic/go-ethereum/logger"
 	"github.com/eth-classic/go-ethereum/logger/glog"
@@ -31,7 +32,6 @@ import (
 var (
 	OutOfGasError          = errors.New("Out of gas")
 	CodeStoreOutOfGasError = errors.New("Contract creation code storage out of gas")
-	ErrRevert              = errors.New("Execution reverted")
 )
 
 // VirtualMachine is an EVM interface
@@ -134,7 +134,7 @@ func (evm *EVM) Run(contract *Contract, input []byte, readOnly bool) (ret []byte
 		// fmt.Println("Code: ", contract.Code)
 		fmt.Println("STACK: ", stack.Data())
 		newMemSize, cost, err = calculateGasAndSize(&evm.gasTable, evm.env, contract, caller, op, statedb, mem, stack)
-		fmt.Println(newMemSize, cost, err)
+		fmt.Println("newMemSize: ", newMemSize, "Cost: ", cost, "Error: ", err)
 		if err != nil {
 			return nil, err
 		}
@@ -155,9 +155,13 @@ func (evm *EVM) Run(contract *Contract, input []byte, readOnly bool) (ret []byte
 
 		// Use the calculated gas. When insufficient gas is present, use all gas and return an
 		// Out Of Gas error
+		fmt.Println("TEST WHICH GAS")
+		fmt.Println("GAS before mem/size gas usage: ", hexutil.Encode(contract.Gas.Bytes()))
 		if !contract.UseGas(cost) {
 			return nil, OutOfGasError
 		}
+
+		fmt.Println("GAS after mem/size gas usage: ", hexutil.Encode(contract.Gas.Bytes()))
 
 		// Resize the memory calculated previously
 		mem.Resize(newMemSize.Uint64())
@@ -166,6 +170,8 @@ func (evm *EVM) Run(contract *Contract, input []byte, readOnly bool) (ret []byte
 		}
 
 		res, err := operation.fn(&pc, evm.env, contract, mem, stack)
+
+		fmt.Println("GAS RIGHT AFTER FN: ", common.ToHex(contract.Gas.Bytes()))
 
 		if operation.returns {
 			evm.env.SetReturnData(res)
@@ -251,7 +257,6 @@ func calculateGasAndSize(gasTable *GasTable, env Environment, contract *Contract
 		gas.Set(GasFastestStep)
 	case LOG0, LOG1, LOG2, LOG3, LOG4:
 		n := int(op - LOG0)
-		fmt.Println("3")
 		err := stack.require(n + 2)
 		if err != nil {
 			return nil, nil, err
@@ -273,7 +278,6 @@ func calculateGasAndSize(gasTable *GasTable, env Environment, contract *Contract
 		expByteLen := int64(len(stack.back(1).Bytes()))
 		gas.Add(gas, new(big.Int).Mul(big.NewInt(expByteLen), gasTable.ExpByte))
 	case SSTORE:
-		fmt.Println("4")
 		err := stack.require(2)
 		if err != nil {
 			return nil, nil, err
