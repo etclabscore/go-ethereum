@@ -35,10 +35,6 @@ var (
 	errMaxCodeSizeExceeded = fmt.Errorf("Max Code Size exceeded (%d)", maxCodeSize)
 
 	ErrCodeStoreOutOfGas        = errors.New("contract creation code storage out of gas")
-<<<<<<< HEAD
-=======
-	errExecutionReverted        = errors.New("evm: execution reverted")
->>>>>>> Implemented create function for Create2 contracts
 	ErrContractAddressCollision = errors.New("contract address collision")
 )
 
@@ -89,47 +85,7 @@ func Create(env vm.Environment, caller vm.ContractRef, code []byte, gas, gasPric
 // Create2 creates a new contract with the given code
 func Create2(env vm.Environment, caller vm.ContractRef, code []byte, gas, gasPrice, salt, value *big.Int) (ret []byte, address common.Address, err error) {
 	addr := crypto.CreateAddress2(caller.Address(), common.BigToHash(salt).Bytes(), crypto.Keccak256(code))
-<<<<<<< HEAD
 	ret, address, err = create(env, caller, &addr, nil, crypto.Keccak256Hash(code), nil, code, gas, gasPrice, value, false)
-=======
-	fmt.Println("BLAH: " + hexutil.Encode(addr.Bytes()))
-	// addr := crypto.CreateAddress2(caller.Address(), common.BigToHash(salt).Bytes(), crypto.Keccak256(code)[31:])
-	ret, address, err = create(env, caller, &addr, nil, crypto.Keccak256Hash(code), nil, code, gas, gasPrice, value, false)
-	fmt.Println("VALUE: ", value)
-	// ret, address, err = exec(env, caller, &addr, nil, crypto.Keccak256Hash(code), nil, code, gas, gasPrice, value, false)
-	fmt.Println("RESULTADDR: ", hexutil.Encode(addr.Bytes()))
-	fmt.Println("ERROR: ", err)
-	fmt.Println("CODE: ", ret)
-
-	/*
-		fmt.Println("oldAddress: ", hexutil.Encode(caller.Address().Bytes()))
-		fmt.Println("SALT: " + salt.String())
-		fmt.Println("Keccak256(init_code): ", hexutil.Encode(crypto.Keccak256Hash(code).Bytes()))
-		// common.BigToHash()
-		// hash := common.BytesToHash(crypto.aaaKeccak256([]byte{0xff}, caller.Address().Bytes(), common.BigToHash(salt).Bytes(), crypto.Keccak256Hash(code).Bytes())[12:])
-		hash := common.BytesToHash(Keccak256([]byte{0xff}, []byte{0x0000000000000000000000000000000000000000}, []byte{0x0000000000000000000000000000000000000000000000000000000000000000}, crypto.Keccak256([]byte{0x00}))[12:])
-		fmt.Println("Keccak256(0x00): ", crypto.Keccak256([]byte{0x00}))
-		fmt.Println("Keccak256(0x00): ", string(crypto.Keccak256([]byte{0x00})))
-		fmt.Println("Keccak256(0x00): ", hexutil.Encode(crypto.Keccak256([]byte{0x00})))
-		fmt.Println("Keccak256(0x0000): ", crypto.Keccak256([]byte{0x000000000000}))
-		fmt.Println("Resulting Hash: ", hexutil.Encode(hash.Bytes()))
-
-		// hash := crypto.Keccak256Hash(code)
-
-		// hash2 := crypto.Keccak256([]byte{0xff}, caller.Address().Bytes(), common.BigToAddress(salt).Bytes(), crypto.Keccak256Hash(code).Bytes())[12:]
-		// addr := common.BytesToAddress(crypto.Keccak256([]byte{0xff}, caller.Address().Bytes(), common.BigToHash(salt).Bytes(), crypto.Keccak256Hash(code).Bytes())[12:])
-		addr := common.BytesToAddress(crypto.Keccak256([]byte{0xff}, []byte{0x0000000000000000000000000000000000000000}, []byte{0x0000000000000000000000000000000000000000000000000000000000000000}, crypto.Keccak256([]byte{0x00}))[12:])
-		fmt.Println("ADDR: ", hexutil.Encode(addr.Bytes()))
-		// crypto.Keccak256Hash()
-		// fmt.Println("HASH1: " + crypto.Keccak256Hash(code).Str())
-		// fmt.Println("HASH2: " + common.BytesToAddress(hash2).Str())
-
-		// hash := common.BytesToHash((crypto.Keccak256([]byte{0xff}, salt.Bytes(), crypto.Keccak256Hash(code).Bytes())[12:]))
-		// addr := common.BytesToAddress((crypto.Keccak256([]byte{0xff}, salt.Bytes(), crypto.Keccak256Hash(code).Bytes())[12:]))
-		// ret, address, err = exec(env, caller, &addr, nil, hash, nil, code, gas, gasPrice, value, false)
-		ret, address, err = create(env, caller, &addr, nil, hash, nil, code, gas, gasPrice, value, false)
-		fmt.Println("ADDRESS: " + hexutil.Encode(address.Bytes()))*/
->>>>>>> Implemented create function for Create2 contracts
 	// Here we get an error if we run into maximum stack depth,
 	// See: https://github.com/ethereum/yellowpaper/pull/131
 	// and YP definitions for CREATE
@@ -151,22 +107,11 @@ func create(env vm.Environment, caller vm.ContractRef, address, codeAddr *common
 
 		return nil, common.Address{}, errCallCreateDepth
 	}
-<<<<<<< HEAD
-=======
-	// if !evm.CanTransfer(evm.StateDB, caller.Address(), value) {
-	// 	return nil, common.Address{}, gas, ErrInsufficientBalance
-	// }
->>>>>>> Implemented create function for Create2 contracts
 	if !env.CanTransfer(caller.Address(), value) {
 		caller.ReturnGas(gas, gasPrice)
 
 		return nil, common.Address{}, ErrInsufficientFunds
 	}
-<<<<<<< HEAD
-=======
-	////////////////////////////////////////////////////////////////////////////////////
-
->>>>>>> Implemented create function for Create2 contracts
 	nonce := env.Db().GetNonce(caller.Address())
 	env.Db().SetNonce(caller.Address(), nonce+1)
 
@@ -178,29 +123,9 @@ func create(env vm.Environment, caller vm.ContractRef, address, codeAddr *common
 	}
 	// Create a new account on the state
 	snapshot := env.SnapshotDatabase()
-<<<<<<< HEAD
 
 	//Create account with address
 	to := env.Db().CreateAccount(*address)
-=======
-	// env.Db().CreateAccount(*address)
-
-	//TODO: Wrap with check of EIP
-	// if env.RuleSet().IsAtlantis(env.BlockNumber()) {
-	// 	env.Db().SetNonce(*address, 1)
-	// }
-
-	// if evm.ChainConfig().IsEIP158(evm.BlockNumber) {
-	// 	evm.StateDB.SetNonce(address, 1)
-	// }
-	// evm.Transfer(evm.StateDB, caller.Address(), address, value)
-
-	// var from = env.Db().GetAccount(caller.Address())
-	var to vm.Account
-
-	//Create account with address
-	to = env.Db().CreateAccount(*address)
->>>>>>> Implemented create function for Create2 contracts
 
 	if env.RuleSet().IsAtlantis(env.BlockNumber()) {
 		env.Db().SetNonce(*address, 1)
@@ -208,36 +133,12 @@ func create(env vm.Environment, caller vm.ContractRef, address, codeAddr *common
 
 	env.Transfer(env.Db().GetAccount(caller.Address()), env.Db().GetAccount(*address), value)
 
-<<<<<<< HEAD
-=======
-	// env.Transfer(caller.)
-
-	// contract := vm.NewContract(caller, to, value, gas, gasPrice)
-
-	// env.Transfer(from, to, value)
-
->>>>>>> Implemented create function for Create2 contracts
 	// Initialise a new contract and set the code that is to be used by the EVM.
 	// The contract is a scoped environment for this execution context only.
 	contract := vm.NewContract(caller, to, value, gas, gasPrice)
 	contract.SetCallCode(codeAddr, codeHash, code)
-<<<<<<< HEAD
 	defer contract.Finalise()
 
-=======
-	fmt.Println("CODE!!:", code)
-	defer contract.Finalise()
-
-	// if evm.vmConfig.NoRecursion && evm.depth > 0 {
-	// 	return nil, address, gas, nil
-	// }
-
-	// if evm.vmConfig.Debug && evm.depth == 0 {
-	// 	evm.vmConfig.Tracer.CaptureStart(caller.Address(), address, true, codeAndHash.code, gas, value)
-	// }
-	// start := time.Now()
-
->>>>>>> Implemented create function for Create2 contracts
 	ret, err := evm.Run(contract, input, readOnly)
 
 	// check whether the max code size has been exceeded
