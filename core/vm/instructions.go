@@ -21,7 +21,6 @@ import (
 	"math/big"
 
 	"github.com/eth-classic/go-ethereum/common"
-	"github.com/eth-classic/go-ethereum/common/hexutil"
 	"github.com/eth-classic/go-ethereum/crypto"
 )
 
