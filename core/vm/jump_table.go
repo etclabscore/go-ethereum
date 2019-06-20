@@ -72,8 +72,6 @@ func newJumpTable(ruleset RuleSet, blockNumber *big.Int) vmJumpTable {
 			valid:   true,
 			writes:  true,
 			returns: true,
-			// reverts: true,
-			// returns: true,
 		}
 	}
 
@@ -297,12 +295,6 @@ func newFrontierInstructionSet() vmJumpTable {
 			writes:  true,
 			returns: true,
 		},
-		// CREATE2: {
-		// 	fn:      opCreate2,
-		// 	valid:   true,
-		// 	writes:  true,
-		// 	returns: true,
-		// },
 		CALL: {
 			fn:      opCall,
 			valid:   true,

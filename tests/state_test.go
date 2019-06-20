@@ -706,19 +706,15 @@ func TestAllETH(t *testing.T) {
 	skipTests["RevertPrefoundEmptyOOG.json"] = "State trie clearing unimplemented"
 	skipTests["FailedCreateRevertsDeletion.json"] = "State trie clearing unimplemented"
 
-	skipTests["create2noCash.json"] = "Bug"
-
 	unsupportedDirs := map[string]bool{
 		"stZeroKnowledge":  true,
 		"stZeroKnowledge2": true,
-<<<<<<< HEAD
 		"stReturnDataTest": true,
 		"stCodeSizeLimit":  true,
 		"stSStoreTest":     true,
 		// "stCreate2":        true,
-=======
-		"stCreate2":        true,
->>>>>>> Added error handling for precompiles and removed skipped tests (#54)
+		"stCreate2": true,
+		// "stCreate2":        true,
 	}
 
 	for _, dn := range dirNames {
@@ -737,7 +733,7 @@ func TestAllETH(t *testing.T) {
 func runETHTests(t *testing.T, fileNames []string, skipTests map[string]string) {
 	unsupportedForkConfigs := map[string]bool{
 		// "Constantinople":               true,
-		"ConstantinopleFix":            true,
+		// "ConstantinopleFix":            true,
 		"EIP158":                       true,
 		"FrontierToHomesteadAt5":       true,
 		"HomesteadToEIP150At5":         true,
