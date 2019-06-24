@@ -708,9 +708,6 @@ func TestAllETH(t *testing.T) {
 
 	skipTests["create2noCash.json"] = "Bug"
 	skipTests["stCreate2/Constantinople"] = "Only testing for ConstantinopleFix"
-	skipTests["stExtCodeHash"] = "Not Implemented"
-	skipTests["stShift"] = "Not Implemented"
-	skipTests["stBugs"] = "Not Implemented (Includes EXTCODEHASH opcode)"
 
 	unsupportedDirs := map[string]bool{
 		"stZeroKnowledge":  true,
@@ -718,6 +715,9 @@ func TestAllETH(t *testing.T) {
 		"stReturnDataTest": true,
 		"stCodeSizeLimit":  true,
 		"stSStoreTest":     true,
+		"stShift":          true,
+		"stBugs":           true,
+		"stExtCodeHash":    true,
 		// "stCreate2":        true,
 
 	}
