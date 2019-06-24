@@ -22,7 +22,6 @@ import (
 	"math/big"
 
 	"github.com/eth-classic/go-ethereum/common"
-	"github.com/eth-classic/go-ethereum/common/hexutil"
 	"github.com/eth-classic/go-ethereum/core/vm"
 	"github.com/eth-classic/go-ethereum/crypto"
 )
@@ -68,6 +67,7 @@ func StaticCall(env vm.Environment, caller vm.ContractRef, addr common.Address, 
 
 // Create creates a new contract with the given code
 func Create(env vm.Environment, caller vm.ContractRef, code []byte, gas, gasPrice, value *big.Int) (ret []byte, address common.Address, err error) {
+	// addr := crypto.CreateAddress(caller.Address(), env.Db().GetNonce(caller.Address()))
 	ret, address, err = exec(env, caller, nil, nil, crypto.Keccak256Hash(code), nil, code, gas, gasPrice, value, false)
 	// Here we get an error if we run into maximum stack depth,
 	// See: https://github.com/ethereum/yellowpaper/pull/131
@@ -80,12 +80,11 @@ func Create(env vm.Environment, caller vm.ContractRef, code []byte, gas, gasPric
 	return ret, address, err
 }
 
-//They're Not using Sender nonce hash?
-
 // Create2 creates a new contract with the given code
 func Create2(env vm.Environment, caller vm.ContractRef, code []byte, gas, gasPrice, salt, value *big.Int) (ret []byte, address common.Address, err error) {
 	addr := crypto.CreateAddress2(caller.Address(), common.BigToHash(salt).Bytes(), crypto.Keccak256(code))
 	ret, address, err = create(env, caller, &addr, nil, crypto.Keccak256Hash(code), nil, code, gas, gasPrice, value, false)
+	// ret, address, err = exec(env, caller, &addr, nil, crypto.Keccak256Hash(code), nil, code, gas, gasPrice, value, false)
 	// Here we get an error if we run into maximum stack depth,
 	// See: https://github.com/ethereum/yellowpaper/pull/131
 	// and YP definitions for CREATE
@@ -195,9 +194,8 @@ func exec(env vm.Environment, caller vm.ContractRef, address, codeAddr *common.A
 		return nil, common.Address{}, ValueTransferErr("insufficient funds to transfer value. Req %v, has %v", value, env.Db().GetBalance(caller.Address()))
 	}
 
-	var createAccount bool = false
+	var createAccount bool
 	if address == nil {
-		fmt.Println("Creating new Address")
 		// Create a new account on the state
 		nonce := env.Db().GetNonce(caller.Address())
 		env.Db().SetNonce(caller.Address(), nonce+1)
@@ -237,29 +235,10 @@ func exec(env vm.Environment, caller vm.ContractRef, address, codeAddr *common.A
 	// EVM. The contract is a scoped environment for this execution context
 	// only.
 	contract := vm.NewContract(caller, to, value, gas, gasPrice)
-
-	// if codeAddr == nil {
-	// 	fmt.Println("CODEADDR IS NIL")
-	// }
 	contract.SetCallCode(codeAddr, codeHash, code)
 	defer contract.Finalise()
 
-	fmt.Println("Contract.Caller: ", hexutil.Encode(contract.Caller().Bytes()))
-	// fmt.Println("Contract.to: ", contract.toAddr)
-	fmt.Println("Contract.Value: ", contract.Value())
-	// fmt.Println("Contract.Gas: ", hexutil.Encode(contract.Gas.Bytes()))
-	if address == nil {
-		fmt.Println("CODEADDR NIL")
-	} else {
-		fmt.Println("CODEADDR NOT NIL")
-		fmt.Println("ADDRESS: ", hexutil.Encode(address.Bytes()))
-	}
-
-	// fmt.Println("Contract.codeAddr: ", *codeAddr)
-	// fmt.Println("Contract.Value: ", contract.g)
 	ret, err = evm.Run(contract, input, readOnly)
-	fmt.Println("ret: ", ret)
-	fmt.Println("err: ", err)
 
 	maxCodeSizeExceeded := len(ret) > maxCodeSize && env.RuleSet().IsAtlantis(env.BlockNumber())
 	// if the contract creation ran successfully and no errors were returned

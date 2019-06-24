@@ -45,7 +45,6 @@ var (
 	errWriteProtection       = errors.New("evm: write protection")
 	errReturnDataOutOfBounds = errors.New("evm: return data out of bounds")
 	errInvalidJump           = errors.New("evm: invalid jump destination")
-	ErrRevert                = errors.New("Execution reverted")
 )
 
 func (instr instruction) halts() bool {
@@ -531,7 +530,6 @@ func opCreate2(pc *uint64, env Environment, contract *Contract, memory *Memory, 
 		salt         = stack.pop()
 		input        = memory.Get(offset.Int64(), size.Int64())
 		gas          = new(big.Int).Set(contract.Gas)
-		// gas2         = new(big.Int).Set(contract.Gas)
 	)
 	if env.RuleSet().GasTable(env.BlockNumber()).CreateBySuicide != nil {
 		gas.Div(gas, n64)
@@ -539,7 +537,6 @@ func opCreate2(pc *uint64, env Environment, contract *Contract, memory *Memory, 
 	}
 
 	contract.UseGas(gas)
-	// ret, addr, suberr := env.Create2(contract, input, gas, contract.Price, salt, value)
 	ret, addr, suberr := env.Create2(contract, input, gas, contract.Price, salt, value)
 	// Push item on the stack based on the returned error. If the ruleset is
 	// homestead we must check for CodeStoreOutOfGasError (homestead only
