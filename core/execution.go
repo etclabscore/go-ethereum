@@ -67,7 +67,6 @@ func StaticCall(env vm.Environment, caller vm.ContractRef, addr common.Address, 
 
 // Create creates a new contract with the given code
 func Create(env vm.Environment, caller vm.ContractRef, code []byte, gas, gasPrice, value *big.Int) (ret []byte, address common.Address, err error) {
-	// addr := crypto.CreateAddress(caller.Address(), env.Db().GetNonce(caller.Address()))
 	ret, address, err = exec(env, caller, nil, nil, crypto.Keccak256Hash(code), nil, code, gas, gasPrice, value, false)
 	// Here we get an error if we run into maximum stack depth,
 	// See: https://github.com/ethereum/yellowpaper/pull/131
@@ -171,9 +170,6 @@ func create(env vm.Environment, caller vm.ContractRef, address, codeAddr *common
 		err = errMaxCodeSizeExceeded
 	}
 
-	// if evm.vmConfig.Debug && env.Depth() == 0 {
-	// 	evm.vmConfig.Tracer.CaptureEnd(ret, gas-contract.Gas, time.Since(start), err)
-	// }
 	return ret, *address, err
 
 }

@@ -1,19 +1,14 @@
 module github.com/eth-classic/go-ethereum
 
 require (
-	github.com/allegro/bigcache v1.2.0 // indirect
-	github.com/aristanetworks/goarista v0.0.0-20190607111240-52c2a7864a08 // indirect
 	github.com/boltdb/bolt v1.3.1
 	github.com/davecgh/go-spew v1.1.1
-	github.com/deckarep/golang-set v1.7.1 // indirect
 	github.com/denisbrodbeck/machineid v0.8.0 //mark
 	github.com/eth-classic/benchmark v0.0.0-20190401191651-0f5bf26f7cd8
 	github.com/eth-classic/ethash v0.0.0-20190401191819-b3fdb17512de
 	github.com/eth-classic/go-ethereum/accounts/abi/bind v0.0.0-20190521151733-fe17e9e1e2ce
-	github.com/ethereum/go-ethereum v1.8.27
 	github.com/fatih/color v1.7.0
 	github.com/gizak/termui v2.3.0+incompatible
-	github.com/go-stack/stack v1.8.0 // indirect
 	github.com/hashicorp/golang-lru v0.5.1
 	github.com/huin/goupnp v1.0.0
 	github.com/jackpal/go-nat-pmp v1.0.1
