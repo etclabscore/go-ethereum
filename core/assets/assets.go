@@ -414,7 +414,7 @@ func init() {
 					0x20, 0x22, 0x41, 0x74, 0x6c, 0x61, 0x6e, 0x74, 0x69, 0x73, 0x22, 0x2c,
 					0x0a, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20,
 					0x20, 0x20, 0x20, 0x20, 0x20, 0x22, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x22,
-					0x3a, 0x20, 0x38, 0x35, 0x30, 0x30, 0x30, 0x30, 0x30, 0x2c, 0x0a, 0x20,
+					0x3a, 0x20, 0x38, 0x37, 0x37, 0x32, 0x30, 0x30, 0x30, 0x2c, 0x0a, 0x20,
 					0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20,
 					0x20, 0x20, 0x20, 0x22, 0x66, 0x65, 0x61, 0x74, 0x75, 0x72, 0x65, 0x73,
 					0x22, 0x3a, 0x20, 0x5b, 0x0a, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20,
@@ -464,7 +464,7 @@ func init() {
 				fi: FileInfo{
 					name:    "mainnet.json",
 					size:    3848,
-					modTime: time.Unix(0, 1560181764438416644),
+					modTime: time.Unix(0, 1561044227338883150),
 					isDir:   false,
 				},
 			}, "/core/config/mainnet_bootnodes.json": File{
@@ -616,7 +616,7 @@ func init() {
 				fi: FileInfo{
 					name:    "mainnet_bootnodes.json",
 					size:    1715,
-					modTime: time.Unix(0, 1557151641841114111),
+					modTime: time.Unix(0, 1554277211828363145),
 					isDir:   false,
 				},
 			}, "/core/config/mainnet_genesis.json": File{
@@ -652,7 +652,7 @@ func init() {
 				fi: FileInfo{
 					name:    "mainnet_genesis.json",
 					size:    313,
-					modTime: time.Unix(0, 1557151641841269630),
+					modTime: time.Unix(0, 1554277211828363145),
 					isDir:   false,
 				},
 			}, "/core/config/mainnet_genesis_alloc.csv": File{
@@ -50770,7 +50770,7 @@ func init() {
 				fi: FileInfo{
 					name:    "mainnet_genesis_alloc.csv",
 					size:    601300,
-					modTime: time.Unix(0, 1557151641845138227),
+					modTime: time.Unix(0, 1554277211828363145),
 					isDir:   false,
 				},
 			}, "/core/config/morden.json": File{
@@ -51115,7 +51115,7 @@ func init() {
 				fi: FileInfo{
 					name:    "morden.json",
 					size:    4027,
-					modTime: time.Unix(0, 1560181783605550267),
+					modTime: time.Unix(0, 1560368869652706922),
 					isDir:   false,
 				},
 			}, "/core/config/morden_bootnodes.json": File{
@@ -51337,7 +51337,7 @@ func init() {
 				fi: FileInfo{
 					name:    "morden_bootnodes.json",
 					size:    2552,
-					modTime: time.Unix(0, 1557151641845727425),
+					modTime: time.Unix(0, 1554277211828363145),
 					isDir:   false,
 				},
 			}, "/core/config/morden_genesis.json": File{
@@ -51377,7 +51377,7 @@ func init() {
 				fi: FileInfo{
 					name:    "morden_genesis.json",
 					size:    364,
-					modTime: time.Unix(0, 1557151641845960509),
+					modTime: time.Unix(0, 1554277211828363145),
 					isDir:   false,
 				},
 			}, "/core/config/morden_genesis_alloc.csv": File{
@@ -51411,7 +51411,7 @@ func init() {
 				fi: FileInfo{
 					name:    "morden_genesis_alloc.csv",
 					size:    295,
-					modTime: time.Unix(0, 1557151641846116887),
+					modTime: time.Unix(0, 1554277211828363145),
 					isDir:   false,
 				},
 			},
