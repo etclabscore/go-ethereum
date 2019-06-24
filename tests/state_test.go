@@ -707,6 +707,10 @@ func TestAllETH(t *testing.T) {
 	skipTests["FailedCreateRevertsDeletion.json"] = "State trie clearing unimplemented"
 
 	skipTests["create2noCash.json"] = "Bug"
+	skipTests["stCreate2/Constantinople"] = "Only testing for ConstantinopleFix"
+	skipTests["stExtCodeHash"] = "Not Implemented"
+	skipTests["stShift"] = "Not Implemented"
+	skipTests["stBugs"] = "Not Implemented (Includes EXTCODEHASH opcode)"
 
 	unsupportedDirs := map[string]bool{
 		"stZeroKnowledge":  true,
@@ -733,7 +737,7 @@ func TestAllETH(t *testing.T) {
 
 func runETHTests(t *testing.T, fileNames []string, skipTests map[string]string) {
 	unsupportedForkConfigs := map[string]bool{
-		// "Constantinople":               true,
+		"Constantinople": true,
 		// "ConstantinopleFix":            true,
 		"EIP158":                       true,
 		"FrontierToHomesteadAt5":       true,
