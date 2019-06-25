@@ -82,7 +82,7 @@ func TestCreate2Addresses(t *testing.T) {
 		code := common.FromHex(tt.code)
 		codeHash := crypto.Keccak256(code)
 
-		address := crypto.CreateAddress2(origin, salt, codeHash)
+		address := crypto.CreateAddress2(origin, salt.Bytes(), codeHash)
 
 		expected := common.BytesToAddress(common.FromHex(tt.expected))
 
