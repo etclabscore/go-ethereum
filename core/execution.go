@@ -33,8 +33,8 @@ var (
 	maxCodeSize            = 24576
 	errMaxCodeSizeExceeded = fmt.Errorf("Max Code Size exceeded (%d)", maxCodeSize)
 
-	ErrCodeStoreOutOfGas        = errors.New("contract creation code storage out of gas")
-	ErrContractAddressCollision = errors.New("contract address collision")
+	errCodeStoreOutOfGas        = errors.New("contract creation code storage out of gas")
+	errContractAddressCollision = errors.New("contract address collision")
 )
 
 // Call executes within the given contract
