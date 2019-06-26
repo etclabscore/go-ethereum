@@ -1,4 +1,7 @@
 # Geth Classic 
+
+[![Join the chat at https://gitter.im/eth-classic/go-ethereum](https://badges.gitter.im/eth-classic/go-ethereum.svg)](https://gitter.im/eth-classic/go-ethereum?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Official Go-language implementation of the Ethereum Classic protocol. Ethereum Classic (ETC) offers a censorship-resistant and powerful application platform for developers in parallel to the Ethereum Foundation network (ETH), while differentially rejecting the DAO transition.
 
 ## Install Geth Classic
