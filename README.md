@@ -1,8 +1,8 @@
 # Geth Classic 
 
 [![GitHub release](https://img.shields.io/github/release-pre/eth-classic/go-ethereum.svg)](https://github.com/eth-classic/go-ethereum/releases/latest)
-![LICENSE](https://img.shields.io/github/license/eth-classic/go-ethereum.svg)
 ![GitHub All Releases](https://img.shields.io/github/downloads/eth-classic/go-ethereum/total.svg)
+![LICENSE](https://img.shields.io/github/license/eth-classic/go-ethereum.svg)
 
 
 [![CircleCI](https://img.shields.io/circleci/build/gh/eth-classic/go-ethereum/development.svg)](https://circleci.com/gh/eth-classic/go-ethereum/tree/development) 
