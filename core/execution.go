@@ -117,7 +117,7 @@ func create(env vm.Environment, caller vm.ContractRef, address, codeAddr *common
 	// contractHash := evm.StateDB.GetCodeHash(address)
 	contractHash := env.Db().GetCodeHash(*address)
 	if env.Db().GetNonce(*address) != 0 || env.Db().GetCode(*address) != nil || (contractHash != (common.Hash{}) && contractHash != crypto.Keccak256Hash(nil)) {
-		return nil, common.Address{}, ErrContractAddressCollision
+		return nil, common.Address{}, errContractAddressCollision
 	}
 	// Create a new account on the state
 	snapshot := env.SnapshotDatabase()
@@ -159,7 +159,7 @@ func create(env vm.Environment, caller vm.ContractRef, address, codeAddr *common
 	// When an error was returned by the EVM or when setting the creation code
 	// above we revert to the snapshot and consume any gas remaining. Additionally
 	// when we're in homestead this also counts for code storage gas errors.
-	if maxCodeSizeExceeded || (err != nil && (env.RuleSet().IsHomestead(env.BlockNumber()) || err != ErrCodeStoreOutOfGas)) {
+	if maxCodeSizeExceeded || (err != nil && (env.RuleSet().IsHomestead(env.BlockNumber()) || err != errCodeStoreOutOfGas)) {
 		env.RevertToSnapshot(snapshot)
 		if err != vm.ErrRevert {
 			contract.UseGas(contract.Gas)
