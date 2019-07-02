@@ -707,9 +707,10 @@ func TestAllETH(t *testing.T) {
 	skipTests["FailedCreateRevertsDeletion.json"] = "State trie clearing unimplemented"
 
 	unsupportedDirs := map[string]bool{
-		"stZeroKnowledge":  true,
-		"stZeroKnowledge2": true,
-		"stCreate2":        true,
+		// "stZeroKnowledge":  true,
+		// "stZeroKnowledge2": true,
+		// "stCreate2":        true,
+		"stExtCodeHash":	   true,
 	}
 
 	for _, dn := range dirNames {
@@ -727,8 +728,8 @@ func TestAllETH(t *testing.T) {
 
 func runETHTests(t *testing.T, fileNames []string, skipTests map[string]string) {
 	unsupportedForkConfigs := map[string]bool{
-		"Constantinople":               true,
-		"ConstantinopleFix":            true,
+		// "Constantinople":               true,
+		// "ConstantinopleFix":            true,
 		"EIP158":                       true,
 		"FrontierToHomesteadAt5":       true,
 		"HomesteadToEIP150At5":         true,

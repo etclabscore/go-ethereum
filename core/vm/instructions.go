@@ -367,6 +367,21 @@ func opExtCodeCopy(pc *uint64, env Environment, contract *Contract, memory *Memo
 	return nil, nil
 }
 
+func opExtCodeHash(pc *uint64, env Environment, contract *Contract, memory *Memory, stack *stack) ([]byte, error) {
+	slot := stack.peek()
+	address := common.BigToAddress(slot)
+
+	//extcodehash of a non-existent account is 0
+	if env.Db().Empty(address){
+		slot.SetUint64(0)
+	} else {
+		//else extcodehash is keccak256 hash of contract's bytecode
+		slot.SetBytes(env.Db().GetCodeHash(common.BigToAddress(slot)).Bytes())
+	}
+	
+	return nil, nil
+}
+
 func opGasprice(pc *uint64, env Environment, contract *Contract, memory *Memory, stack *stack) ([]byte, error) {
 	stack.push(new(big.Int).Set(contract.Price))
 	return nil, nil

@@ -66,6 +66,15 @@ func newJumpTable(ruleset RuleSet, blockNumber *big.Int) vmJumpTable {
 		}
 	}
 
+	if ruleset.IsAgharta(blockNumber) {
+		jumpTable[EXTCODEHASH] = jumpPtr{
+			fn: 	 opExtCodeHash,
+			valid: 	 true,
+			
+		}
+	}
+
+
 	return jumpTable
 }
 
@@ -211,6 +220,7 @@ func newFrontierInstructionSet() vmJumpTable {
 			fn:    opExtCodeCopy,
 			valid: true,
 		},
+
 		GASPRICE: {
 			fn:    opGasprice,
 			valid: true,
@@ -604,4 +614,5 @@ func newFrontierInstructionSet() vmJumpTable {
 			halts: true,
 		},
 	}
+
 }
