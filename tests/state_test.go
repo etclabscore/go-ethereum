@@ -705,32 +705,6 @@ func TestAllETH(t *testing.T) {
 	// EIP 158/161 skipped tests
 	skipTests["RevertPrefoundEmptyOOG.json"] = "State trie clearing unimplemented"
 	skipTests["FailedCreateRevertsDeletion.json"] = "State trie clearing unimplemented"
-
-	//Constantinople gas calculation skipped tests
-	skipTests["extCodeHashAccountWithoutCode.json/Constantinople/0"] = "Unsupported Gas Calculations"
-	skipTests["extCodeHashDynamicArgument.json/Constantinople/0"] = "Unsupported Gas Calculations"
-	skipTests["extCodeHashDynamicArgument.json/Constantinople/1"] = "Unsupported Gas Calculations"
-	skipTests["extCodeHashDynamicArgument.json/Constantinople/2"] = "Unsupported Gas Calculations"
-	skipTests["extCodeHashDynamicArgument.json/Constantinople/3"] = "Unsupported Gas Calculations"
-	skipTests["extCodeHashDynamicArgument.json/Constantinople/4"] = "Unsupported Gas Calculations"
-	skipTests["extCodeHashNonExistingAccount.json/Constantinople/0"] = "Unsupported Gas Calculations"
-	skipTests["extCodeHashPrecompiles.json/Constantinople/0"] = "Unsupported Gas Calculations"
-	skipTests["extCodeHashPrecompiles.json/Constantinople/1"] = "Unsupported Gas Calculations"
-	skipTests["extCodeHashPrecompiles.json/Constantinople/2"] = "Unsupported Gas Calculations"
-	skipTests["extCodeHashPrecompiles.json/Constantinople/3"] = "Unsupported Gas Calculations"
-	skipTests["extCodeHashPrecompiles.json/Constantinople/4"] = "Unsupported Gas Calculations"
-	skipTests["extCodeHashPrecompiles.json/Constantinople/5"] = "Unsupported Gas Calculations"
-	skipTests["extCodeHashPrecompiles.json/Constantinople/6"] = "Unsupported Gas Calculations"
-	skipTests["extCodeHashPrecompiles.json/Constantinople/7"] = "Unsupported Gas Calculations"
-	skipTests["extCodeHashPrecompiles.json/Constantinople/8"] = "Unsupported Gas Calculations"
-	skipTests["extCodeHashSubcallOOG.json/Constantinople/0"] = "Unsupported Gas Calculations"
-	skipTests["extCodeHashSubcallOOG.json/Constantinople/1"] = "Unsupported Gas Calculations"
-	skipTests["extCodeHashSubcallOOG.json/Constantinople/2"] = "Unsupported Gas Calculations"
-	skipTests["extCodeHashSubcallOOG.json/Constantinople/3"] = "Unsupported Gas Calculations"
-	skipTests["extCodeHashSubcallOOG.json/Constantinople/4"] = "Unsupported Gas Calculations"
-	skipTests["extCodeHashSubcallOOG.json/Constantinople/5"] = "Unsupported Gas Calculations"
-	skipTests["extCodeCopyBounds.json/Constantinople/0"] = "Unsupported Gas Calculations"
-	
 	
 	//Create2 related skipped tests, all these tests use Create2 opcode
 	skipTests["codeCopyZero.json"] = "Create2 unimplemented"
