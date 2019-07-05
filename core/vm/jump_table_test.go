@@ -24,6 +24,7 @@ import (
 type ruleSet struct {
 	hs *big.Int
 	at *big.Int
+	ag *big.Int
 }
 
 func (r ruleSet) IsHomestead(n *big.Int) bool { return n.Cmp(r.hs) >= 0 }
