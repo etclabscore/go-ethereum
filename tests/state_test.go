@@ -746,7 +746,17 @@ func runETHTests(t *testing.T, fileNames []string, skipTests map[string]string) 
 			}
 
 			for _, test := range stateTests {
+				//Loop through test's forks to check if ConstantinopleFix is tested
+				//If so, don't test Constantinople
+				originalConstantinopleSupported := unsupportedForkConfigs["Constantinople"]
 				for _, subtest := range test.Subtests() {
+					if subtest.Fork == "ConstantinopleFix" {
+						//Includes constantinopleFix, don't test Constantinople
+						unsupportedForkConfigs["Constantinople"] = true
+					}
+				}
+				for _, subtest := range test.Subtests() {
+
 					key := fmt.Sprintf("%s/%d", subtest.Fork, subtest.Index)
 
 					// Not supported implementations to test
@@ -766,6 +776,8 @@ func runETHTests(t *testing.T, fileNames []string, skipTests map[string]string) 
 						}
 					})
 				}
+				//Set Constantinople fork support back to original value
+				unsupportedForkConfigs["Constantinople"] = originalConstantinopleSupported
 			}
 		})
 	}
