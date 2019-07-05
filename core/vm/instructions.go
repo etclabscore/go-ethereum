@@ -274,10 +274,7 @@ func opMulmod(pc *uint64, env Environment, contract *Contract, memory *Memory, s
 	return nil, nil
 }
 
-<<<<<<< HEAD
-func opSha3(pc *uint64, env Environment, contract *Contract, memory *Memory, stack *stack) ([]byte, error) {
-=======
-func opSHL(instr instruction, pc *uint64, env Environment, contract *Contract, memory *Memory, stack *stack) {
+func opSHL(pc *uint64, env Environment, contract *Contract, memory *Memory, stack *stack) ([]byte, error) {
 	shift, value := math.U256(stack.pop()), math.U256(stack.pop())
 
 	if shift.Cmp(big.NewInt(256)) >= 0 {
@@ -287,9 +284,10 @@ func opSHL(instr instruction, pc *uint64, env Environment, contract *Contract, m
 		math.U256(value.Lsh(value, n))
 	}
 	stack.push(value)
+	return nil, nil
 }
 
-func opSHR(instr instruction, pc *uint64, env Environment, contract *Contract, memory *Memory, stack *stack) {
+func opSHR(pc *uint64, env Environment, contract *Contract, memory *Memory, stack *stack) ([]byte, error) {
 	shift, value := math.U256(stack.pop()), math.U256(stack.pop())
 
 	if shift.Cmp(big.NewInt(256)) >= 0 {
@@ -299,9 +297,10 @@ func opSHR(instr instruction, pc *uint64, env Environment, contract *Contract, m
 		math.U256(value.Rsh(value, n))
 	}
 	stack.push(value)
+	return nil, nil
 }
 
-func opSAR(instr instruction, pc *uint64, env Environment, contract *Contract, memory *Memory, stack *stack) {
+func opSAR(pc *uint64, env Environment, contract *Contract, memory *Memory, stack *stack) ([]byte, error) {
 	shift, value := math.U256(stack.pop()), math.S256(stack.pop())
 
 	if shift.Cmp(big.NewInt(256)) >= 0 {
@@ -318,10 +317,10 @@ func opSAR(instr instruction, pc *uint64, env Environment, contract *Contract, m
 		value.Rsh(value, n)
 		stack.push(math.U256(value))
 	}
+	return nil, nil
 }
 
-func opSha3(instr instruction, pc *uint64, env Environment, contract *Contract, memory *Memory, stack *stack) {
->>>>>>> Finished SAR, SHR, SHL opcodes. EIP 145
+func opSha3(pc *uint64, env Environment, contract *Contract, memory *Memory, stack *stack) ([]byte, error) {
 	offset, size := stack.pop(), stack.pop()
 	hash := crypto.Keccak256(memory.Get(offset.Int64(), size.Int64()))
 
