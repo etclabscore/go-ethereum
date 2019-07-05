@@ -19,7 +19,6 @@ package vm
 import (
 	"errors"
 	"math/big"
-	"fmt"
 
 	"github.com/eth-classic/go-ethereum/common"
 	"github.com/eth-classic/go-ethereum/crypto"
