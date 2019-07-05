@@ -19,6 +19,7 @@ package vm
 import (
 	"errors"
 	"math/big"
+	"fmt"
 
 	"github.com/eth-classic/go-ethereum/common"
 	"github.com/eth-classic/go-ethereum/crypto"
@@ -336,6 +337,21 @@ func opExtCodeSize(pc *uint64, env Environment, contract *Contract, memory *Memo
 	return nil, nil
 }
 
+func opExtCodeHash(pc *uint64, env Environment, contract *Contract, memory *Memory, stack *stack) ([]byte, error) {
+	//get address placed on stack
+	slot := stack.peek()
+	address := common.BigToAddress(slot)
+
+	//The EXTCODEHASH of non-existent account is 0
+	if !(env.Db().Exist(address)) {
+		slot.SetUint64(0)
+	} else {
+		slot.SetBytes(env.Db().GetCodeHash(address).Bytes())
+		fmt.Println(env.Db().GetCodeHash(address).Bytes())
+	}
+	return nil, nil
+}
+
 func opCodeSize(pc *uint64, env Environment, contract *Contract, memory *Memory, stack *stack) ([]byte, error) {
 	l := big.NewInt(int64(len(contract.Code)))
 	stack.push(l)
@@ -364,21 +380,6 @@ func opExtCodeCopy(pc *uint64, env Environment, contract *Contract, memory *Memo
 	codeCopy := getData(env.Db().GetCode(addr), cOff, l)
 
 	memory.Set(mOff.Uint64(), l.Uint64(), codeCopy)
-	return nil, nil
-}
-
-func opExtCodeHash(pc *uint64, env Environment, contract *Contract, memory *Memory, stack *stack) ([]byte, error) {
-	slot := stack.peek()
-	address := common.BigToAddress(slot)
-
-	//extcodehash of a non-existent account is 0
-	if env.Db().Empty(address){
-		slot.SetUint64(0)
-	} else {
-		//else extcodehash is keccak256 hash of contract's bytecode
-		slot.SetBytes(env.Db().GetCodeHash(common.BigToAddress(slot)).Bytes())
-	}
-	
 	return nil, nil
 }
 

@@ -24,14 +24,13 @@ import (
 type ruleSet struct {
 	hs *big.Int
 	at *big.Int
-	ag *big.Int
 }
 
 func (r ruleSet) IsHomestead(n *big.Int) bool { return n.Cmp(r.hs) >= 0 }
 
 func (r ruleSet) IsAtlantis(n *big.Int) bool { return n.Cmp(r.at) >= 0 }
 
-func (r ruleSet) IsAgharta(n *big.Int) bool { return n.Cmp(r.ag) >= 0 } 
+func (r ruleSet) IsAgharta(n *big.Int) bool { return n.Cmp(r.at) >= 0}
 
 func (r ruleSet) GasTable(*big.Int) *GasTable {
 	return &GasTable{
@@ -53,7 +52,6 @@ func TestInit(t *testing.T) {
 
 	for _, n := range []int64{1, 2, 100} {
 		jumpTable := newJumpTable(ruleSet{big.NewInt(1), big.NewInt(1), big.NewInt(1)}, big.NewInt(n))
-
 		if !jumpTable[DELEGATECALL].valid {
 			t.Error("Expected DELEGATECALL to be present for block", n)
 		}

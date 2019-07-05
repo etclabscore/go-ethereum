@@ -223,12 +223,6 @@ func calculateGasAndSize(gasTable *GasTable, env Environment, contract *Contract
 		}
 	case EXTCODESIZE:
 		gas.Set(gasTable.ExtcodeSize)
-	case EXTCODEHASH:
-		newMemSize = calcMemSize(stack.back(1), stack.back(3))
-
-		words := toWordSize(stack.back(3))
-		gas.Add(gas, words.Mul(words, big.NewInt(3)))
-		gas.Set(gasTable.ExtcodeHash)
 	case BALANCE:
 		gas.Set(gasTable.Balance)
 	case SLOAD:
@@ -258,9 +252,9 @@ func calculateGasAndSize(gasTable *GasTable, env Environment, contract *Contract
 
 		// log gas
 		gas.Add(gas, big.NewInt(375))
-		// log topic gas
+		// log topic gass
 		gas.Add(gas, new(big.Int).Mul(big.NewInt(int64(n)), big.NewInt(375)))
-		// log data gas
+		// log data gass
 		gas.Add(gas, new(big.Int).Mul(mSize, big.NewInt(8)))
 
 		newMemSize = calcMemSize(mStart, mSize)

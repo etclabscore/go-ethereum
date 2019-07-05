@@ -343,7 +343,8 @@ func (c *ChainConfig) IsAtlantis(num *big.Int) bool {
 	return num.Cmp(fork.Block) >= 0
 }
 
-// IsAgharta returns true if num is greater than the Agharta config block
+
+// IsAgharta returns true if num is greater than atlantic config block
 func (c *ChainConfig) IsAgharta(num *big.Int) bool {
 	fork := c.ForkByName("Agharta")
 	if fork.Block == nil || num == nil {
@@ -351,8 +352,6 @@ func (c *ChainConfig) IsAgharta(num *big.Int) bool {
 	}
 	return num.Cmp(fork.Block) >= 0
 }
-
-
 
 // ForkByName looks up a Fork by its name, assumed to be unique
 func (c *ChainConfig) ForkByName(name string) *Fork {

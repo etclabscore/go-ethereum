@@ -155,7 +155,7 @@ type RuleSet struct {
 	DiehardBlock             *big.Int
 	ExplosionBlock           *big.Int
 	AtlantisBlock            *big.Int
-	AghartaBlock             *big.Int
+	AghartaBlock            *big.Int
 }
 
 // StateTest object that matches the General State Test json file
@@ -165,13 +165,6 @@ type StateTest struct {
 	Tx   stTransaction            `json:"transaction"`
 	Out  string                   `json:"out"`
 	Post map[string][]stPostState `json:"post"`
-}
-
-type ShiftTest struct {
-	Env         VmEnv                    `json:"env"`
-	Pre         map[string]Account       `json:"pre"`
-	Post        map[string][]stPostState `json:"post"`
-	Transaction map[string]string
 }
 
 // GenesisAccount is an account in the state of the genesis block.
@@ -241,9 +234,23 @@ func (r RuleSet) GasTable(num *big.Int) *vm.GasTable {
 		}
 	}
 
+	if r.AtlantisBlock == nil || num == nil || num.Cmp(r.AtlantisBlock) < 0 {
+		return &vm.GasTable{
+			ExtcodeSize:     big.NewInt(700),
+			ExtcodeCopy:     big.NewInt(700),
+			Balance:         big.NewInt(400),
+			SLoad:           big.NewInt(200),
+			Calls:           big.NewInt(700),
+			Suicide:         big.NewInt(5000),
+			ExpByte:         big.NewInt(50),
+			CreateBySuicide: big.NewInt(25000),
+		}
+	}
+
 	return &vm.GasTable{
 		ExtcodeSize:     big.NewInt(700),
 		ExtcodeCopy:     big.NewInt(700),
+		ExtcodeHash:	 big.NewInt(400),
 		Balance:         big.NewInt(400),
 		SLoad:           big.NewInt(200),
 		Calls:           big.NewInt(700),
@@ -429,4 +436,4 @@ func (self Message) GasPrice() *big.Int                    { return self.price }
 func (self Message) Gas() *big.Int                         { return self.gas }
 func (self Message) Value() *big.Int                       { return self.value }
 func (self Message) Nonce() uint64                         { return self.nonce }
-func (self Message) Data() []byte { return self.data }
+func (self Message) Data() []byte                          { return self.data }
