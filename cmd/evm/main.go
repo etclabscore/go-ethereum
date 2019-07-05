@@ -234,6 +234,19 @@ func (ruleSet) IsAtlantis(*big.Int) bool { return true }
 func (ruleSet) IsAgharta(*big.Int) bool { return true }
 
 func (ruleSet) GasTable(*big.Int) *vm.GasTable {
+	
+	if r.AtlantisBlock == nil || num == nil || num.Cmp(r.AtlantisBlock) < 0 {
+		return &vm.GasTable{
+			ExtcodeSize:     big.NewInt(700),
+			ExtcodeCopy:     big.NewInt(700),
+			Balance:         big.NewInt(400),
+			SLoad:           big.NewInt(200),
+			Calls:           big.NewInt(700),
+			Suicide:         big.NewInt(5000),
+			ExpByte:         big.NewInt(50),
+			CreateBySuicide: big.NewInt(25000),
+		}
+	}
 	return &vm.GasTable{
 		ExtcodeSize:     big.NewInt(700),
 		ExtcodeCopy:     big.NewInt(700),
