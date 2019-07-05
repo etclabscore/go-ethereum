@@ -342,12 +342,12 @@ func opExtCodeHash(pc *uint64, env Environment, contract *Contract, memory *Memo
 	slot := stack.peek()
 	address := common.BigToAddress(slot)
 
-	//The EXTCODEHASH of non-existent account is 0
-	if !(env.Db().Exist(address)) {
+	//The EXTCODEHASH of non-existent OR empty account is 0
+	//see issue https://github.com/ethereum/tests/pull/569
+	if env.Db().Empty(address) {
 		slot.SetUint64(0)
 	} else {
 		slot.SetBytes(env.Db().GetCodeHash(address).Bytes())
-		fmt.Println(env.Db().GetCodeHash(address).Bytes())
 	}
 	return nil, nil
 }

@@ -706,28 +706,72 @@ func TestAllETH(t *testing.T) {
 	skipTests["RevertPrefoundEmptyOOG.json"] = "State trie clearing unimplemented"
 	skipTests["FailedCreateRevertsDeletion.json"] = "State trie clearing unimplemented"
 
+	//Constantinople gas calculation skipped tests
+	skipTests["extCodeHashAccountWithoutCode.json/Constantinople/0"] = "Unsupported Gas Calculations"
+	skipTests["extCodeHashDynamicArgument.json/Constantinople/0"] = "Unsupported Gas Calculations"
+	skipTests["extCodeHashDynamicArgument.json/Constantinople/1"] = "Unsupported Gas Calculations"
+	skipTests["extCodeHashDynamicArgument.json/Constantinople/2"] = "Unsupported Gas Calculations"
+	skipTests["extCodeHashDynamicArgument.json/Constantinople/3"] = "Unsupported Gas Calculations"
+	skipTests["extCodeHashDynamicArgument.json/Constantinople/4"] = "Unsupported Gas Calculations"
+	skipTests["extCodeHashNonExistingAccount.json/Constantinople/0"] = "Unsupported Gas Calculations"
+	skipTests["extCodeHashPrecompiles.json/Constantinople/0"] = "Unsupported Gas Calculations"
+	skipTests["extCodeHashPrecompiles.json/Constantinople/1"] = "Unsupported Gas Calculations"
+	skipTests["extCodeHashPrecompiles.json/Constantinople/2"] = "Unsupported Gas Calculations"
+	skipTests["extCodeHashPrecompiles.json/Constantinople/3"] = "Unsupported Gas Calculations"
+	skipTests["extCodeHashPrecompiles.json/Constantinople/4"] = "Unsupported Gas Calculations"
+	skipTests["extCodeHashPrecompiles.json/Constantinople/5"] = "Unsupported Gas Calculations"
+	skipTests["extCodeHashPrecompiles.json/Constantinople/6"] = "Unsupported Gas Calculations"
+	skipTests["extCodeHashPrecompiles.json/Constantinople/7"] = "Unsupported Gas Calculations"
+	skipTests["extCodeHashPrecompiles.json/Constantinople/8"] = "Unsupported Gas Calculations"
+	skipTests["extCodeHashSubcallOOG.json/Constantinople/0"] = "Unsupported Gas Calculations"
+	skipTests["extCodeHashSubcallOOG.json/Constantinople/1"] = "Unsupported Gas Calculations"
+	skipTests["extCodeHashSubcallOOG.json/Constantinople/2"] = "Unsupported Gas Calculations"
+	skipTests["extCodeHashSubcallOOG.json/Constantinople/3"] = "Unsupported Gas Calculations"
+	skipTests["extCodeHashSubcallOOG.json/Constantinople/4"] = "Unsupported Gas Calculations"
+	skipTests["extCodeHashSubcallOOG.json/Constantinople/5"] = "Unsupported Gas Calculations"
+	skipTests["extCodeCopyBounds.json/Constantinople/0"] = "Unsupported Gas Calculations"
+	
+	
+	//Create2 related skipped tests, all these tests use Create2 opcode
+	skipTests["codeCopyZero.json"] = "Create2 unimplemented"
+	skipTests["dynamicAccountOverwriteEmpty.json"] = "Create2 unimplemented"
+	skipTests["extCodeHashNewAccount.json"] = "Create2 unimplemented"
+	skipTests["extCodeHashSelfInInit.json"] = "Create2 unimplemented"
+	skipTests["extCodeHashSubcallOOG.json/ConstantinopleFix/0"] = "Create2 unimplemented"
+	skipTests["extCodeHashSubcallOOG.json/ConstantinopleFix/1"] = "Create2 unimplemented"
+	skipTests["extCodeHashSubcallOOG.json/ConstantinopleFix/2"] = "Create2 unimplemented"
+	skipTests["extCodeHashCreatedAndDeletedAccount.json"] = "Create2 unimplemented"
+	skipTests["extCodeHashCreatedAndDeletedAccountCall.json"] = "Create2 unimplemented"
+	skipTests["extCodeHashCreatedAndDeletedAccountRecheckInOuterCall.json"] = "Create2 unimplemented"
+	skipTests["extCodeHashCreatedAndDeletedAccountStaticCall.json"] = "Create2 unimplemented"
+	skipTests["extCodeHashDeletedAccount3.json"] = "Create2 unimplemented"
+	skipTests["extCodeHashDeletedAccount4.json"] = "Create2 unimplemented"
+	skipTests["extCodeHashInInitCode.json/ConstantinopleFix/1"] = "Create2 unimplemented"
+	skipTests["extCodeHashInInitCode.json/Constantinople/1"] = "Create2 unimplemented"	
+
 	unsupportedDirs := map[string]bool{
-		// "stZeroKnowledge":  true,
-		// "stZeroKnowledge2": true,
-		// "stCreate2":        true,
-		 "stExtCodeHash":	   true,
+		"stZeroKnowledge":  true,
+		"stZeroKnowledge2": true,
+		"stCreate2":        true,
 	}
 
 	for _, dn := range dirNames {
 		dirName := dn[strings.LastIndex(dn, "/")+1 : len(dn)]
 		if unsupportedDirs[dirName] {
-			t.Run(dirName, func(t *testing.T) {
-				fns, _ := filepath.Glob(filepath.Join(ethGeneralStateDir, dirName, "*"))
-				runETHTests(t, fns, skipTests)
-			})
+			continue
 		}
+
+		t.Run(dirName, func(t *testing.T) {
+			fns, _ := filepath.Glob(filepath.Join(ethGeneralStateDir, dirName, "*"))
+			runETHTests(t, fns, skipTests)
+		})
 	}
 }
 
 func runETHTests(t *testing.T, fileNames []string, skipTests map[string]string) {
 	unsupportedForkConfigs := map[string]bool{
-		//"Constantinople":               true,
-		//"ConstantinopleFix":            true,
+		"Constantinople":               true,
+		"ConstantinopleFix":            true,
 		"EIP158":                       true,
 		"FrontierToHomesteadAt5":       true,
 		"HomesteadToEIP150At5":         true,
