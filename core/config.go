@@ -475,6 +475,8 @@ func (c *ChainConfig) GasTable(num *big.Int) *vm.GasTable {
 		name = ""
 	} // will wall to default panic
 	switch name {
+	case "agharta":
+		return DefaultAghartaGasTable	
 	case "homestead":
 		return DefaultHomeSteadGasTable
 	case "eip150":

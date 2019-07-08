@@ -464,7 +464,7 @@ func init() {
 				fi: FileInfo{
 					name:    "mainnet.json",
 					size:    3848,
-					modTime: time.Unix(0, 1561044227338883150),
+					modTime: time.Unix(0, 1562326313060048281),
 					isDir:   false,
 				},
 			}, "/core/config/mainnet_bootnodes.json": File{
@@ -616,7 +616,7 @@ func init() {
 				fi: FileInfo{
 					name:    "mainnet_bootnodes.json",
 					size:    1715,
-					modTime: time.Unix(0, 1554277211828363145),
+					modTime: time.Unix(0, 1554137989014568964),
 					isDir:   false,
 				},
 			}, "/core/config/mainnet_genesis.json": File{
@@ -652,7 +652,7 @@ func init() {
 				fi: FileInfo{
 					name:    "mainnet_genesis.json",
 					size:    313,
-					modTime: time.Unix(0, 1554277211828363145),
+					modTime: time.Unix(0, 1554137989014568964),
 					isDir:   false,
 				},
 			}, "/core/config/mainnet_genesis_alloc.csv": File{
@@ -50770,7 +50770,7 @@ func init() {
 				fi: FileInfo{
 					name:    "mainnet_genesis_alloc.csv",
 					size:    601300,
-					modTime: time.Unix(0, 1554277211828363145),
+					modTime: time.Unix(0, 1554137989018569011),
 					isDir:   false,
 				},
 			}, "/core/config/morden.json": File{
@@ -51115,7 +51115,7 @@ func init() {
 				fi: FileInfo{
 					name:    "morden.json",
 					size:    4027,
-					modTime: time.Unix(0, 1560368869652706922),
+					modTime: time.Unix(0, 1562326313060048281),
 					isDir:   false,
 				},
 			}, "/core/config/morden_bootnodes.json": File{
@@ -51337,7 +51337,7 @@ func init() {
 				fi: FileInfo{
 					name:    "morden_bootnodes.json",
 					size:    2552,
-					modTime: time.Unix(0, 1554277211828363145),
+					modTime: time.Unix(0, 1554137989018569011),
 					isDir:   false,
 				},
 			}, "/core/config/morden_genesis.json": File{
@@ -51377,7 +51377,7 @@ func init() {
 				fi: FileInfo{
 					name:    "morden_genesis.json",
 					size:    364,
-					modTime: time.Unix(0, 1554277211828363145),
+					modTime: time.Unix(0, 1554137989018569011),
 					isDir:   false,
 				},
 			}, "/core/config/morden_genesis_alloc.csv": File{
@@ -51411,7 +51411,7 @@ func init() {
 				fi: FileInfo{
 					name:    "morden_genesis_alloc.csv",
 					size:    295,
-					modTime: time.Unix(0, 1554277211828363145),
+					modTime: time.Unix(0, 1554137989018569011),
 					isDir:   false,
 				},
 			},

@@ -155,7 +155,7 @@ type RuleSet struct {
 	DiehardBlock             *big.Int
 	ExplosionBlock           *big.Int
 	AtlantisBlock            *big.Int
-	AghartaBlock            *big.Int
+	AghartaBlock             *big.Int
 }
 
 // StateTest object that matches the General State Test json file
