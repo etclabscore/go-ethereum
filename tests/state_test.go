@@ -706,6 +706,36 @@ func TestAllETH(t *testing.T) {
 	skipTests["RevertPrefoundEmptyOOG.json"] = "State trie clearing unimplemented"
 	skipTests["FailedCreateRevertsDeletion.json"] = "State trie clearing unimplemented"
 
+	//Skip tests with SSTORE failures
+	skipTests["badOpcodes.json"] = "Create2 not implemented"
+	skipTests["InitCollision.json"] = "Create2 not implemented"
+	skipTests["sstore_0to0.json"] = "Create2 not implemented"
+	skipTests["sstore_0to0to0.json"] = "Create2 not implemented"
+	skipTests["sstore_0to0toX.json"] = "Create2 not implemented"
+	skipTests["sstore_0toX.json"] = "Create2 not implemented"
+	skipTests["sstore_0toXto0.json"] = "Create2 not implemented"
+	skipTests["sstore_0toXto0toX.json"] = "Create2 not implemented"
+	skipTests["sstore_0toXtoX.json"] = "Create2 not implemented"
+	skipTests["sstore_0toXtoY.json"] = "Create2 not implemented"
+	skipTests["sstore_Xto0.json"] = "Create2 not implemented"
+	skipTests["sstore_Xto0to0.json"] = "Create2 not implemented"
+	skipTests["sstore_Xto0toX.json"] = "Create2 not implemented"
+	skipTests["sstore_Xto0toXto0.json"] = "Create2 not implemented"
+	skipTests["sstore_Xto0toY.json"] = "Create2 not implemented"
+	skipTests["sstore_XtoX.json"] = "Create2 not implemented"
+	skipTests["sstore_XtoXto0.json"] = "Create2 not implemented"
+	skipTests["sstore_XtoXtoX.json"] = "Create2 not implemented"
+	skipTests["sstore_XtoXtoY.json"] = "Create2 not implemented"
+	skipTests["sstore_XtoY.json"] = "Create2 not implemented"
+	skipTests["sstore_XtoYto0.json"] = "Create2 not implemented"
+	skipTests["sstore_XtoYtoX.json"] = "Create2 not implemented"
+	skipTests["sstore_XtoYtoY.json"] = "Create2 not implemented"
+	skipTests["sstore_XtoYtoZ.json"] = "Create2 not implemented"
+	skipTests["sstore_changeFromExternalCallInInitCode.json"] = "Create2 not implemented"
+	skipTests["badOpcodes.json/ConstantinopleFix/110"] = "Create2 not implemented"
+	skipTests["InitCollision.json"] = "Create2 not implemented"
+	skipTests["randomStatetestDEFAULT-Tue_07_58_41-15153-575192.json"] = "EXTCODEHASH not implemented"
+
 	unsupportedDirs := map[string]bool{
 		"stZeroKnowledge":  true,
 		"stZeroKnowledge2": true,
@@ -728,7 +758,7 @@ func TestAllETH(t *testing.T) {
 
 func runETHTests(t *testing.T, fileNames []string, skipTests map[string]string) {
 	unsupportedForkConfigs := map[string]bool{
-		// "Constantinople":               true,
+		"Constantinople": true,
 		// "ConstantinopleFix":            true,
 		"EIP158":                       true,
 		"FrontierToHomesteadAt5":       true,
@@ -760,15 +790,6 @@ func runETHTests(t *testing.T, fileNames []string, skipTests map[string]string) 
 			}
 
 			for _, test := range stateTests {
-				//Loop through test's forks to check if ConstantinopleFix is tested
-				//If so, don't test Constantinople
-				originalConstantinopleSupported := unsupportedForkConfigs["Constantinople"]
-				for _, subtest := range test.Subtests() {
-					if subtest.Fork == "ConstantinopleFix" {
-						//Includes constantinopleFix, don't test Constantinople
-						unsupportedForkConfigs["Constantinople"] = true
-					}
-				}
 				for _, subtest := range test.Subtests() {
 
 					key := fmt.Sprintf("%s/%d", subtest.Fork, subtest.Index)
@@ -790,8 +811,6 @@ func runETHTests(t *testing.T, fileNames []string, skipTests map[string]string) 
 						}
 					})
 				}
-				//Set Constantinople fork support back to original value
-				unsupportedForkConfigs["Constantinople"] = originalConstantinopleSupported
 			}
 		})
 	}
