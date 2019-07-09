@@ -83,7 +83,6 @@ func Create(env vm.Environment, caller vm.ContractRef, code []byte, gas, gasPric
 func Create2(env vm.Environment, caller vm.ContractRef, code []byte, gas, gasPrice, salt, value *big.Int) (ret []byte, address common.Address, err error) {
 	addr := crypto.CreateAddress2(caller.Address(), common.BigToHash(salt).Bytes(), crypto.Keccak256(code))
 	ret, address, err = create(env, caller, &addr, nil, crypto.Keccak256Hash(code), nil, code, gas, gasPrice, value, false)
-	// ret, address, err = exec(env, caller, &addr, nil, crypto.Keccak256Hash(code), nil, code, gas, gasPrice, value, false)
 	// Here we get an error if we run into maximum stack depth,
 	// See: https://github.com/ethereum/yellowpaper/pull/131
 	// and YP definitions for CREATE
@@ -113,12 +112,6 @@ func create(env vm.Environment, caller vm.ContractRef, address, codeAddr *common
 	nonce := env.Db().GetNonce(caller.Address())
 	env.Db().SetNonce(caller.Address(), nonce+1)
 
-	// Ensure there's no existing contract already at the designated address
-	// contractHash := evm.StateDB.GetCodeHash(address)
-	contractHash := env.Db().GetCodeHash(*address)
-	if env.Db().GetNonce(*address) != 0 || env.Db().GetCode(*address) != nil || (contractHash != (common.Hash{}) && contractHash != crypto.Keccak256Hash(nil)) {
-		return nil, common.Address{}, errContractAddressCollision
-	}
 	// Create a new account on the state
 	snapshot := env.SnapshotDatabase()
 
@@ -146,7 +139,6 @@ func create(env vm.Environment, caller vm.ContractRef, address, codeAddr *common
 	// be stored due to not enough gas set an error and let it be handled
 	// by the error checking condition below.
 	if err == nil && !maxCodeSizeExceeded {
-		// createDataGas := big.NewInt(int64(len(ret)) * int64(params.CreateDataGas))
 		createDataGas := big.NewInt(int64(len(ret)))
 		createDataGas.Mul(createDataGas, big.NewInt(200))
 		if contract.UseGas(createDataGas) {

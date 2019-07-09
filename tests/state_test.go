@@ -697,6 +697,14 @@ func TestAllETH(t *testing.T) {
 	skipTests["CreateHashCollision.json"] = "Not Implemented"
 	skipTests["createJS_ExampleContract.json"] = "Not Implemented"
 	skipTests["RevertDepthCreateAddressCollision.json"] = "Not Implemented"
+	skipTests["create2collisionCode.json"] = "Not Implemented"
+	skipTests["create2collisionCode2.json"] = "Not Implemented"
+	skipTests["create2collisionNonce.json"] = "Not Implemented"
+	skipTests["create2collisionSelfdestructed.json"] = "Not Implemented"
+	skipTests["create2collisionSelfdestructed2.json"] = "Not Implemented"
+	skipTests["create2collisionSelfdestructedOOG.json"] = "Not Implemented"
+	skipTests["create2collisionSelfdestructedRevert.json"] = "Not Implemented"
+	skipTests["InitCollision.json"] = "Not Implemented"
 
 	// Random Test failures
 	skipTests["randomStatetest644.json"] = "random unimplemented"
@@ -707,19 +715,15 @@ func TestAllETH(t *testing.T) {
 	skipTests["FailedCreateRevertsDeletion.json"] = "State trie clearing unimplemented"
 
 	skipTests["create2noCash.json"] = "Bug"
-	skipTests["stCreate2/Constantinople"] = "Only testing for ConstantinopleFix"
+
+	skipTests["randomStatetestDEFAULT-Tue_07_58_41-15153-575192.json"] = "EXTCODEHASH not implemented"
+	skipTests["create2SmartInitCode.json/ConstantinopleFix/0"] = "EXTCODEHASH not implemented"
 
 	unsupportedDirs := map[string]bool{
 		"stZeroKnowledge":  true,
 		"stZeroKnowledge2": true,
-		"stReturnDataTest": true,
-		"stCodeSizeLimit":  true,
-		"stSStoreTest":     true,
 		"stShift":          true,
-		"stBugs":           true,
 		"stExtCodeHash":    true,
-		// "stCreate2":        true,
-
 	}
 
 	for _, dn := range dirNames {
