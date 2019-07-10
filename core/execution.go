@@ -67,7 +67,9 @@ func StaticCall(env vm.Environment, caller vm.ContractRef, addr common.Address, 
 
 // Create creates a new contract with the given code
 func Create(env vm.Environment, caller vm.ContractRef, code []byte, gas, gasPrice, value *big.Int) (ret []byte, address common.Address, err error) {
-	ret, address, err = exec(env, caller, nil, nil, crypto.Keccak256Hash(code), nil, code, gas, gasPrice, value, false)
+	nonce := env.Db().GetNonce(caller.Address())
+	addr := crypto.CreateAddress(caller.Address(), nonce)
+	ret, address, err = create(env, caller, &addr, nil, crypto.Keccak256Hash(code), nil, code, gas, gasPrice, value, false)
 	// Here we get an error if we run into maximum stack depth,
 	// See: https://github.com/ethereum/yellowpaper/pull/131
 	// and YP definitions for CREATE
@@ -122,7 +124,7 @@ func create(env vm.Environment, caller vm.ContractRef, address, codeAddr *common
 		env.Db().SetNonce(*address, 1)
 	}
 
-	env.Transfer(env.Db().GetAccount(caller.Address()), env.Db().GetAccount(*address), value)
+	env.Transfer(env.Db().GetAccount(caller.Address()), to, value)
 
 	// Initialise a new contract and set the code that is to be used by the EVM.
 	// The contract is a scoped environment for this execution context only.
@@ -151,7 +153,7 @@ func create(env vm.Environment, caller vm.ContractRef, address, codeAddr *common
 	// When an error was returned by the EVM or when setting the creation code
 	// above we revert to the snapshot and consume any gas remaining. Additionally
 	// when we're in homestead this also counts for code storage gas errors.
-	if maxCodeSizeExceeded || (err != nil && (env.RuleSet().IsHomestead(env.BlockNumber()) || err != errCodeStoreOutOfGas)) {
+	if maxCodeSizeExceeded || (err != nil && (env.RuleSet().IsHomestead(env.BlockNumber()) || err != vm.CodeStoreOutOfGasError)) {
 		env.RevertToSnapshot(snapshot)
 		if err != vm.ErrRevert {
 			contract.UseGas(contract.Gas)
