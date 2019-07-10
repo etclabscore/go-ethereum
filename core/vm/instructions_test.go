@@ -18,8 +18,8 @@ package vm
 
 import (
 	"bytes"
-	"testing"
 	"math/big"
+	"testing"
 
 	"github.com/eth-classic/go-ethereum/common"
 	"github.com/eth-classic/go-ethereum/crypto"
@@ -93,7 +93,6 @@ func TestCreate2Addresses(t *testing.T) {
 
 	}
 }
-
 
 type TwoOperandTestcase struct {
 	X        string

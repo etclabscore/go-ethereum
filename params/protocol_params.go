@@ -15,5 +15,5 @@ var (
 	MinimumDifficulty = big.NewInt(131072) // The minimum that the difficulty may ever be.
 	Sha3WordGas       = big.NewInt(6)      // Once per word of the SHA3 operation's data.
 	CreateDataGas     = big.NewInt(200)
-	Sha3WordGas       = big.NewInt(6)      // Once per word of the SHA3 operation's data.
+	Sha3WordGas       = big.NewInt(6) // Once per word of the SHA3 operation's data.
 )

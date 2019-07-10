@@ -8,6 +8,7 @@ require (
 	github.com/eth-classic/benchmark v0.0.0-20190401191651-0f5bf26f7cd8
 	github.com/eth-classic/ethash v0.0.0-20190401191819-b3fdb17512de
 	github.com/eth-classic/go-ethereum/accounts/abi/bind v0.0.0-20190521151733-fe17e9e1e2ce
+	github.com/ethereum/go-ethereum v1.9.5
 	github.com/fatih/color v1.7.0
 	github.com/gizak/termui v2.3.0+incompatible
 	github.com/hashicorp/golang-lru v0.5.1
@@ -35,5 +36,3 @@ require (
 	gopkg.in/karalabe/cookiejar.v2 v2.0.0-20150724131613-8dcd6a7f4951
 	gopkg.in/urfave/cli.v1 v1.17.0
 )
-
-replace github.com/eth-classic/go-ethereum/accounts/abi/bind v0.0.0-20190521151733-fe17e9e1e2ce => ./accounts/abi/bind
