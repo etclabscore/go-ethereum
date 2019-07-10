@@ -689,10 +689,41 @@ func TestAllETH(t *testing.T) {
 	skipTests["RevertPrecompiledTouch_storage.json/ConstantinopleFix/0"] = "Bug in Test"
 	skipTests["RevertPrecompiledTouch_storage.json/ConstantinopleFix/3"] = "Bug in Test"
 
+	// EIP 684 Implementations
+	skipTests["TransactionCollisionToEmptyButCode.json"] = "Not Implemented"
+	skipTests["TransactionCollisionToEmpty.json"] = "Not Implemented"
+	skipTests["TransactionCollisionToEmptyButNonce.json"] = "Not Implemented"
+	skipTests["CreateCollisionToEmpty.json"] = "Not Implemented"
+	skipTests["CreateHashCollision.json"] = "Not Implemented"
+	skipTests["createJS_ExampleContract.json"] = "Not Implemented"
+	skipTests["RevertDepthCreateAddressCollision.json"] = "Not Implemented"
+	skipTests["create2collisionCode.json"] = "Not Implemented"
+	skipTests["create2collisionCode2.json"] = "Not Implemented"
+	skipTests["create2collisionNonce.json"] = "Not Implemented"
+	skipTests["create2collisionSelfdestructed.json"] = "Not Implemented"
+	skipTests["create2collisionSelfdestructed2.json"] = "Not Implemented"
+	skipTests["create2collisionSelfdestructedOOG.json"] = "Not Implemented"
+	skipTests["create2collisionSelfdestructedRevert.json"] = "Not Implemented"
+	skipTests["InitCollision.json"] = "Not Implemented"
+
+	// Random Test failures
+	skipTests["randomStatetest644.json"] = "random unimplemented"
+	skipTests["randomStatetest645.json"] = "random unimplemented"
+
+	// EIP 158/161 skipped tests
+	skipTests["RevertPrefoundEmptyOOG.json"] = "State trie clearing unimplemented"
+	skipTests["FailedCreateRevertsDeletion.json"] = "State trie clearing unimplemented"
+
+	skipTests["create2noCash.json"] = "Bug"
+
+	skipTests["randomStatetestDEFAULT-Tue_07_58_41-15153-575192.json"] = "EXTCODEHASH not implemented"
+	skipTests["create2SmartInitCode.json/ConstantinopleFix/0"] = "EXTCODEHASH not implemented"
+
 	unsupportedDirs := map[string]bool{
 		"stZeroKnowledge":  true,
 		"stZeroKnowledge2": true,
-		"stCreate2":        true,
+		"stShift":          true,
+		"stExtCodeHash":    true,
 	}
 
 	for _, dn := range dirNames {
@@ -710,8 +741,8 @@ func TestAllETH(t *testing.T) {
 
 func runETHTests(t *testing.T, fileNames []string, skipTests map[string]string) {
 	unsupportedForkConfigs := map[string]bool{
-		"Constantinople":               true,
-		"ConstantinopleFix":            true,
+		"Constantinople": true,
+		// "ConstantinopleFix":            true,
 		"EIP158":                       true,
 		"FrontierToHomesteadAt5":       true,
 		"HomesteadToEIP150At5":         true,

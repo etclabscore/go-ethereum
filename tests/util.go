@@ -155,6 +155,7 @@ type RuleSet struct {
 	DiehardBlock             *big.Int
 	ExplosionBlock           *big.Int
 	AtlantisBlock            *big.Int
+	AghartaBlock             *big.Int
 }
 
 // StateTest object that matches the General State Test json file
@@ -201,6 +202,10 @@ func (r RuleSet) IsHomestead(n *big.Int) bool {
 
 func (r RuleSet) IsAtlantis(n *big.Int) bool {
 	return r.AtlantisBlock != nil && n.Cmp(r.AtlantisBlock) >= 0
+}
+
+func (r RuleSet) IsAgharta(n *big.Int) bool {
+	return r.AghartaBlock != nil && n.Cmp(r.AghartaBlock) >= 0
 }
 
 func (r RuleSet) GasTable(num *big.Int) *vm.GasTable {
@@ -394,6 +399,18 @@ func (self *Env) Create(caller vm.ContractRef, data []byte, gas, price, value *b
 		return nil, obj.Address(), nil
 	} else {
 		return core.Create(self, caller, data, gas, price, value)
+	}
+}
+
+func (self *Env) Create2(caller vm.ContractRef, data []byte, gas, price, salt, value *big.Int) ([]byte, common.Address, error) {
+	if self.vmTest {
+		caller.ReturnGas(gas, price)
+
+		obj := self.state.GetOrNewStateObject(crypto.CreateAddress2(caller.Address(), common.BigToHash(salt).Bytes(), crypto.Keccak256(data)))
+
+		return nil, obj.Address(), nil
+	} else {
+		return core.Create2(self, caller, data, gas, price, salt, value)
 	}
 }
 
