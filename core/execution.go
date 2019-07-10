@@ -17,6 +17,7 @@
 package core
 
 import (
+	"errors"
 	"fmt"
 	"math/big"
 
@@ -31,6 +32,9 @@ var (
 
 	maxCodeSize            = 24576
 	errMaxCodeSizeExceeded = fmt.Errorf("Max Code Size exceeded (%d)", maxCodeSize)
+
+	errCodeStoreOutOfGas        = errors.New("contract creation code storage out of gas")
+	errContractAddressCollision = errors.New("contract address collision")
 )
 
 // Call executes within the given contract
@@ -63,7 +67,9 @@ func StaticCall(env vm.Environment, caller vm.ContractRef, addr common.Address, 
 
 // Create creates a new contract with the given code
 func Create(env vm.Environment, caller vm.ContractRef, code []byte, gas, gasPrice, value *big.Int) (ret []byte, address common.Address, err error) {
-	ret, address, err = exec(env, caller, nil, nil, crypto.Keccak256Hash(code), nil, code, gas, gasPrice, value, false)
+	nonce := env.Db().GetNonce(caller.Address())
+	addr := crypto.CreateAddress(caller.Address(), nonce)
+	ret, address, err = create(env, caller, &addr, nil, crypto.Keccak256Hash(code), nil, code, gas, gasPrice, value, false)
 	// Here we get an error if we run into maximum stack depth,
 	// See: https://github.com/ethereum/yellowpaper/pull/131
 	// and YP definitions for CREATE
@@ -73,6 +79,93 @@ func Create(env vm.Environment, caller vm.ContractRef, code []byte, gas, gasPric
 		return nil, address, err
 	}
 	return ret, address, err
+}
+
+// Create2 creates a new contract with the given code
+func Create2(env vm.Environment, caller vm.ContractRef, code []byte, gas, gasPrice, salt, value *big.Int) (ret []byte, address common.Address, err error) {
+	addr := crypto.CreateAddress2(caller.Address(), common.BigToHash(salt).Bytes(), crypto.Keccak256(code))
+	ret, address, err = create(env, caller, &addr, nil, crypto.Keccak256Hash(code), nil, code, gas, gasPrice, value, false)
+	// Here we get an error if we run into maximum stack depth,
+	// See: https://github.com/ethereum/yellowpaper/pull/131
+	// and YP definitions for CREATE
+
+	//if there's an error we return nothing
+	if err != nil && err != vm.ErrRevert {
+		return nil, address, err
+	}
+	return ret, address, err
+}
+
+// create creates a new contract using code as deployment code.
+func create(env vm.Environment, caller vm.ContractRef, address, codeAddr *common.Address, codeHash common.Hash, input, code []byte, gas, gasPrice, value *big.Int, readOnly bool) ([]byte, common.Address, error) {
+	evm := env.Vm()
+	// Depth check execution. Fail if we're trying to execute above the
+	// limit.
+	if env.Depth() > callCreateDepthMax {
+		caller.ReturnGas(gas, gasPrice)
+
+		return nil, common.Address{}, errCallCreateDepth
+	}
+	if !env.CanTransfer(caller.Address(), value) {
+		caller.ReturnGas(gas, gasPrice)
+
+		return nil, common.Address{}, ErrInsufficientFunds
+	}
+	nonce := env.Db().GetNonce(caller.Address())
+	env.Db().SetNonce(caller.Address(), nonce+1)
+
+	// Create a new account on the state
+	snapshot := env.SnapshotDatabase()
+
+	//Create account with address
+	to := env.Db().CreateAccount(*address)
+
+	if env.RuleSet().IsAtlantis(env.BlockNumber()) {
+		env.Db().SetNonce(*address, 1)
+	}
+
+	env.Transfer(env.Db().GetAccount(caller.Address()), to, value)
+
+	// Initialise a new contract and set the code that is to be used by the EVM.
+	// The contract is a scoped environment for this execution context only.
+	contract := vm.NewContract(caller, to, value, gas, gasPrice)
+	contract.SetCallCode(codeAddr, codeHash, code)
+	defer contract.Finalise()
+
+	ret, err := evm.Run(contract, input, readOnly)
+
+	// check whether the max code size has been exceeded
+	maxCodeSizeExceeded := len(ret) > maxCodeSize && env.RuleSet().IsAtlantis(env.BlockNumber())
+	// if the contract creation ran successfully and no errors were returned
+	// calculate the gas required to store the code. If the code could not
+	// be stored due to not enough gas set an error and let it be handled
+	// by the error checking condition below.
+	if err == nil && !maxCodeSizeExceeded {
+		createDataGas := big.NewInt(int64(len(ret)))
+		createDataGas.Mul(createDataGas, big.NewInt(200))
+		if contract.UseGas(createDataGas) {
+			env.Db().SetCode(*address, ret)
+		} else {
+			err = vm.CodeStoreOutOfGasError
+		}
+	}
+
+	// When an error was returned by the EVM or when setting the creation code
+	// above we revert to the snapshot and consume any gas remaining. Additionally
+	// when we're in homestead this also counts for code storage gas errors.
+	if maxCodeSizeExceeded || (err != nil && (env.RuleSet().IsHomestead(env.BlockNumber()) || err != vm.CodeStoreOutOfGasError)) {
+		env.RevertToSnapshot(snapshot)
+		if err != vm.ErrRevert {
+			contract.UseGas(contract.Gas)
+		}
+	}
+	// Assign err if contract code size exceeds the max while the err is still empty.
+	if maxCodeSizeExceeded && err == nil {
+		err = errMaxCodeSizeExceeded
+	}
+
+	return ret, *address, err
+
 }
 
 func exec(env vm.Environment, caller vm.ContractRef, address, codeAddr *common.Address, codeHash common.Hash, input, code []byte, gas, gasPrice, value *big.Int, readOnly bool) (ret []byte, addr common.Address, err error) {

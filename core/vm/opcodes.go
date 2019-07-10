@@ -203,6 +203,7 @@ const (
 	CALLCODE
 	RETURN
 	DELEGATECALL
+	CREATE2
 	STATICCALL = 0xfa
 
 	REVERT  = 0xfd
@@ -361,6 +362,7 @@ var opCodeToString = map[OpCode]string{
 	RETURN:       "RETURN",
 	CALLCODE:     "CALLCODE",
 	DELEGATECALL: "DELEGATECALL",
+	CREATE2:      "CREATE2",
 	STATICCALL:   "STATICCALL",
 	REVERT:       "REVERT",
 	SUICIDE:      "SUICIDE",
@@ -508,6 +510,7 @@ var stringToOp = map[string]OpCode{
 	"LOG3":           LOG3,
 	"LOG4":           LOG4,
 	"CREATE":         CREATE,
+	"CREATE2":        CREATE2,
 	"CALL":           CALL,
 	"RETURN":         RETURN,
 	"CALLCODE":       CALLCODE,
