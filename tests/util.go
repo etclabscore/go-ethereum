@@ -416,6 +416,18 @@ func (self *Env) Create(caller vm.ContractRef, data []byte, gas, price, value *b
 	}
 }
 
+func (self *Env) Create2(caller vm.ContractRef, data []byte, gas, price, salt, value *big.Int) ([]byte, common.Address, error) {
+	if self.vmTest {
+		caller.ReturnGas(gas, price)
+
+		obj := self.state.GetOrNewStateObject(crypto.CreateAddress2(caller.Address(), common.BigToHash(salt).Bytes(), crypto.Keccak256(data)))
+
+		return nil, obj.Address(), nil
+	} else {
+		return core.Create2(self, caller, data, gas, price, salt, value)
+	}
+}
+
 type Message struct {
 	from              common.Address
 	to                *common.Address

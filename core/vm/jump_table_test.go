@@ -31,7 +31,7 @@ func (r ruleSet) IsHomestead(n *big.Int) bool { return n.Cmp(r.hs) >= 0 }
 
 func (r ruleSet) IsAtlantis(n *big.Int) bool { return n.Cmp(r.at) >= 0 }
 
-func (r ruleSet) IsAgharta(n *big.Int) bool { return n.Cmp(r.at) >= 0}
+func (r ruleSet) IsAgharta(n *big.Int) bool { return n.Cmp(r.ag) >= 0 }
 
 func (r ruleSet) GasTable(*big.Int) *GasTable {
 	return &GasTable{

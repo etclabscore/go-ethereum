@@ -233,6 +233,10 @@ func (ruleSet) IsAtlantis(*big.Int) bool { return true }
 //set IsAgharta to true by default for tests
 func (ruleSet) IsAgharta(*big.Int) bool { return true }
 
+func (ruleSet) IsAgharta(*big.Int) bool {
+	return true
+}
+
 func (ruleSet) GasTable(*big.Int) *vm.GasTable {
 	//IsAgharta will always return true here, 
 	//just have gastable default to returning the Agharta GasTable
@@ -303,4 +307,8 @@ func (self *VMEnv) StaticCall(caller vm.ContractRef, addr common.Address, data [
 
 func (self *VMEnv) Create(caller vm.ContractRef, data []byte, gas, price, value *big.Int) ([]byte, common.Address, error) {
 	return core.Create(self, caller, data, gas, price, value)
+}
+
+func (self *VMEnv) Create2(caller vm.ContractRef, data []byte, gas, price, salt, value *big.Int) ([]byte, common.Address, error) {
+	return core.Create2(self, caller, data, gas, price, salt, value)
 }
