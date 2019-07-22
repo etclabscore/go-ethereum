@@ -1,3 +1,5 @@
+#!/bin/bash
+
 set -ev
 
 JWT=$1
