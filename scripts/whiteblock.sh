@@ -1,4 +1,4 @@
-set -e
+set -ev
 
 JWT=$1
 BRANCH=$2
