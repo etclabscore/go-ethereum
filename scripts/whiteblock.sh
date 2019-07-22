@@ -8,7 +8,7 @@ BRANCH=$2
 curl 'https://storage.googleapis.com/genesis-public/cli/dev/bin/linux/amd64/whiteblock' --output ./wb
 chmod +x ./wb
 
-./wb login $JWT 0
+./wb login $JWT 2265
 echo "logged into whiteblock"
 
 echo "building gethc node..."
