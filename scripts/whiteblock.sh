@@ -1,7 +1,7 @@
 set -e
 
 JWT=$1
-BRANCH = $2
+BRANCH=$2
 
 wb login $JWT
 echo "logged into whiteblock"
