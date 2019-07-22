@@ -6,9 +6,10 @@ JWT=$1
 BRANCH=$2
 
 go get github.com/whiteblock/genesis
-pushd $GOPATH/src/github.com/whiteblock/genesis
+WORKING_DIR=(pwd)
+cd $GOPATH/src/github.com/whiteblock/genesis
 go build
-popd
+cd $WORKING_DIR
 
 wb login $JWT
 echo "logged into whiteblock"
