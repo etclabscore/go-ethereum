@@ -6,7 +6,7 @@ JWT=$1
 BRANCH=$2
 
 go get github.com/whiteblock/genesis
-WORKING_DIR=(pwd)
+WORKING_DIR=$(pwd)
 cd $GOPATH/src/github.com/whiteblock/genesis
 go build
 cd $WORKING_DIR
