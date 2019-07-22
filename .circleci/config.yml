@@ -87,6 +87,7 @@ workflows:
   version: 2
   release:
     jobs:
+      - whiteblock-test
       - build-linux-go-1.12:
           filters:
             tags:
@@ -96,8 +97,7 @@ workflows:
             - build-linux-go-1.12
           filters:
             tags:
-              only: /.*/
-      - whiteblock-test 
+              only: /.*/ 
       - release-linux-go-1.12:
           requires:
             - whiteblock-test
