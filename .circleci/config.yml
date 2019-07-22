@@ -97,9 +97,7 @@ workflows:
           filters:
             tags:
               only: /.*/
-      - whiteblock-test:
-          requires:
-            - tests-linux-go-1.12      
+      - whiteblock-test 
       - release-linux-go-1.12:
           requires:
             - whiteblock-test
