@@ -8,7 +8,7 @@ BRANCH=$2
 curl 'https://storage.googleapis.com/genesis-public/cli/dev/bin/linux/amd64/whiteblock' --output ./wb
 chmod +x ./wb
 
-./wb login $JWT 5211
+./wb login $JWT 2265
 
 echo "building gethc node..."
 ./wb build -b ethclassic --git-repo https://github.com/etclabscore/go-ethereum.git --git-repo-branch development -n 1 -m 0 -c 0 -y -p0=8570:8545
