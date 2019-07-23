@@ -14,7 +14,7 @@ echo "building gethc node..."
 ./wb build -b ethclassic --git-repo https://github.com/etclabscore/go-ethereum.git --git-repo-branch development -n 1 -m 0 -c 0 -y -p0=8570:8545
 
 echo "building parity node..."
-./wb build append -b parity -n 1 -m 0 -c 0 -y -p1=8571:8545
+./wb build append -b parity -n 1 -m 0 -c 0 -y -p0=8571:8545
 
 echo "pulling latest testing script from github..."
 git clone https://github.com/ChainSafe/Attalus.git
