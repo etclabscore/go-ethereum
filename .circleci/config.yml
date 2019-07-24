@@ -42,9 +42,6 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Explicitly set API_URL to whiteblock
-          command: echo 'export API_URL="https://api.whiteblock.io"' >> $BASH_ENV        
-      - run:
           name: Execute whiteblock tests
           command: sh ./scripts/whiteblock.sh ${WB_JWT} ${CIRCLE_BRANCH}          
   release-linux-go-1.12:
