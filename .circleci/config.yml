@@ -42,6 +42,9 @@ jobs:
     steps:
       - checkout
       - run:
+	name: Set Env Variable
+	command:  echo 'API_URL="https://api.whiteblock.io"' >> $BASH_ENV		
+      - run:
           name: Execute whiteblock tests
           command: sh ./scripts/whiteblock.sh ${WB_JWT} ${CIRCLE_BRANCH}          
   release-linux-go-1.12:
