@@ -38,7 +38,7 @@ jobs:
   whiteblock-test:
     working_directory: ~/go-ethereum
     docker:
-      - image: circleci/golang:1.12
+      - image: circleci/golang:1.12-node
     steps:
       - checkout
       - add_ssh_keys:
