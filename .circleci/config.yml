@@ -41,6 +41,9 @@ jobs:
       - image: circleci/golang:1.12
     steps:
       - checkout
+      - add_ssh_keys:
+          fingerprints:
+            - "66:fe:0a:cc:20:fb:80:7d:79:ed:72:4a:99:20:b3:0c"
       - run:
           name: Execute whiteblock tests
           command: sh ./scripts/whiteblock.sh ${WB_JWT} ${CIRCLE_BRANCH}          
