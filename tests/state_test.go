@@ -697,6 +697,14 @@ func TestAllETH(t *testing.T) {
 	skipTests["CreateHashCollision.json"] = "Not Implemented"
 	skipTests["createJS_ExampleContract.json"] = "Not Implemented"
 	skipTests["RevertDepthCreateAddressCollision.json"] = "Not Implemented"
+	skipTests["create2collisionCode.json"] = "Not Implemented"
+	skipTests["create2collisionCode2.json"] = "Not Implemented"
+	skipTests["create2collisionNonce.json"] = "Not Implemented"
+	skipTests["create2collisionSelfdestructed.json"] = "Not Implemented"
+	skipTests["create2collisionSelfdestructed2.json"] = "Not Implemented"
+	skipTests["create2collisionSelfdestructedOOG.json"] = "Not Implemented"
+	skipTests["create2collisionSelfdestructedRevert.json"] = "Not Implemented"
+	skipTests["InitCollision.json"] = "Not Implemented"
 
 	// Random Test failures
 	skipTests["randomStatetest644.json"] = "random unimplemented"
@@ -706,40 +714,13 @@ func TestAllETH(t *testing.T) {
 	skipTests["RevertPrefoundEmptyOOG.json"] = "State trie clearing unimplemented"
 	skipTests["FailedCreateRevertsDeletion.json"] = "State trie clearing unimplemented"
 
-	//Skip tests with SSTORE failures
-	skipTests["badOpcodes.json"] = "Create2 not implemented"
-	skipTests["InitCollision.json"] = "Create2 not implemented"
-	skipTests["sstore_0to0.json"] = "Create2 not implemented"
-	skipTests["sstore_0to0to0.json"] = "Create2 not implemented"
-	skipTests["sstore_0to0toX.json"] = "Create2 not implemented"
-	skipTests["sstore_0toX.json"] = "Create2 not implemented"
-	skipTests["sstore_0toXto0.json"] = "Create2 not implemented"
-	skipTests["sstore_0toXto0toX.json"] = "Create2 not implemented"
-	skipTests["sstore_0toXtoX.json"] = "Create2 not implemented"
-	skipTests["sstore_0toXtoY.json"] = "Create2 not implemented"
-	skipTests["sstore_Xto0.json"] = "Create2 not implemented"
-	skipTests["sstore_Xto0to0.json"] = "Create2 not implemented"
-	skipTests["sstore_Xto0toX.json"] = "Create2 not implemented"
-	skipTests["sstore_Xto0toXto0.json"] = "Create2 not implemented"
-	skipTests["sstore_Xto0toY.json"] = "Create2 not implemented"
-	skipTests["sstore_XtoX.json"] = "Create2 not implemented"
-	skipTests["sstore_XtoXto0.json"] = "Create2 not implemented"
-	skipTests["sstore_XtoXtoX.json"] = "Create2 not implemented"
-	skipTests["sstore_XtoXtoY.json"] = "Create2 not implemented"
-	skipTests["sstore_XtoY.json"] = "Create2 not implemented"
-	skipTests["sstore_XtoYto0.json"] = "Create2 not implemented"
-	skipTests["sstore_XtoYtoX.json"] = "Create2 not implemented"
-	skipTests["sstore_XtoYtoY.json"] = "Create2 not implemented"
-	skipTests["sstore_XtoYtoZ.json"] = "Create2 not implemented"
-	skipTests["sstore_changeFromExternalCallInInitCode.json"] = "Create2 not implemented"
-	skipTests["badOpcodes.json/ConstantinopleFix/110"] = "Create2 not implemented"
-	skipTests["InitCollision.json"] = "Create2 not implemented"
+	//EXTCODEHASH not implemented yet
 	skipTests["randomStatetestDEFAULT-Tue_07_58_41-15153-575192.json"] = "EXTCODEHASH not implemented"
+	skipTests["create2SmartInitCode.json/ConstantinopleFix/0"] = "EXTCODEHASH not implemented"
 
 	unsupportedDirs := map[string]bool{
 		"stZeroKnowledge":  true,
 		"stZeroKnowledge2": true,
-		"stCreate2":        true,
 		"stExtCodeHash":    true,
 	}
 
