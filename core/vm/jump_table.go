@@ -73,7 +73,6 @@ func newJumpTable(ruleset RuleSet, blockNumber *big.Int) vmJumpTable {
 			writes:  true,
 			returns: true,
 		}
-
 		jumpTable[SHL] = jumpPtr{
 			fn:    opSHL,
 			valid: true,

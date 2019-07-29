@@ -20,6 +20,7 @@ import (
 	"bytes"
 	"math/big"
 	"testing"
+	"math/big"
 
 	"github.com/eth-classic/go-ethereum/common"
 	"github.com/eth-classic/go-ethereum/crypto"
@@ -94,6 +95,10 @@ func TestCreate2Addresses(t *testing.T) {
 	}
 }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> Finished SAR, SHR, SHL opcodes. EIP 145
 type TwoOperandTestcase struct {
 	X        string
 	Y        string
