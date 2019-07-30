@@ -18,10 +18,11 @@ echo "building parity node..."
 
 echo "pulling latest testing script from github..."
 git clone https://github.com/ChainSafe/Attalus.git
+git checkout stephanie/
 cd ./Attalus
 yarn install
 
 PK=(whiteblock get account info | jq '.[].privateKey'| sed -e 's/"//g')
 
 echo "running script"
-./attalus --pk $PK && ./wb done
+yarn start $PK && ./wb done
