@@ -167,6 +167,21 @@ func TestCopy(t *testing.T) {
 	}
 }
 
+// TestCopyOfCopy tests that modified objects are carried over to the copy, and the copy of the copy.
+func TestCopyOfCopy(t *testing.T) {
+	db, _ := ethdb.NewMemDatabase()
+	sdb, _ := New(common.Hash{}, NewDatabase(db))
+	addr := common.HexToAddress("aaaa")
+	sdb.SetBalance(addr, big.NewInt(42))
+
+	if got := sdb.Copy().GetBalance(addr).Uint64(); got != 42 {
+		t.Fatalf("1st copy fail, expected 42, got %v", got)
+	}
+	if got := sdb.Copy().Copy().GetBalance(addr).Uint64(); got != 42 {
+		t.Fatalf("2nd copy fail, expected 42, got %v", got)
+	}
+}
+
 func TestSnapshotRandom(t *testing.T) {
 	config := &quick.Config{MaxCount: 1000}
 	err := quick.Check((*snapshotTest).run, config)
