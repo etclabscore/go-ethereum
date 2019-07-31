@@ -18,7 +18,6 @@ echo "building parity node..."
 
 echo "pulling latest testing script from github..."
 git clone https://github.com/ChainSafe/Attalus.git
-git checkout stephanie/
 cd ./Attalus
 yarn install
 
