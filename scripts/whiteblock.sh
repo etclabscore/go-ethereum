@@ -21,7 +21,8 @@ git clone https://github.com/ChainSafe/Attalus.git
 cd ./Attalus
 yarn install
 
-PK=(whiteblock get account info | jq '.[].privateKey'| sed -e 's/"//g')
+PREFIX=0x
+PK=$(../wb get account info | jq '.[].privateKey')
 
 echo "running script"
-yarn start $PK && ./wb done
+yarn start $PREFIX$PK && ./wb done
