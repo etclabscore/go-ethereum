@@ -33,9 +33,64 @@ var (
 	errMaxCodeSizeExceeded = fmt.Errorf("Max Code Size exceeded (%d)", maxCodeSize)
 )
 
-// Call executes within the given contract
+// Call executes the contract associated with the addr with the given input as
+// parameters. It also handles any necessary value transfer required and takes
+// the necessary steps to create accounts and reverses the state in case of an
+// execution error or failed value transfer.
 func Call(env vm.Environment, caller vm.ContractRef, addr common.Address, input []byte, gas, gasPrice, value *big.Int) (ret []byte, err error) {
-	ret, _, err = exec(env, caller, &addr, &addr, env.Db().GetCodeHash(addr), input, env.Db().GetCode(addr), gas, gasPrice, value, false)
+	evm := env.Vm()
+	// Depth check execution. Fail if we're trying to execute above the
+	// limit.
+	if env.Depth() > callCreateDepthMax {
+		caller.ReturnGas(gas, gasPrice)
+
+		return nil, errCallCreateDepth
+	}
+
+	if !env.CanTransfer(caller.Address(), value) {
+		caller.ReturnGas(gas, gasPrice)
+
+		return nil, ValueTransferErr("insufficient funds to transfer value. Req %v, has %v", value, env.Db().GetBalance(caller.Address()))
+	}
+
+	var (
+		from       = env.Db().GetAccount(caller.Address())
+		to         vm.Account
+		snapshot   = env.SnapshotDatabase()
+		isAtlantis = env.RuleSet().IsAtlantis(env.BlockNumber())
+	)
+	if !env.Db().Exist(addr) {
+		precompiles := vm.PrecompiledPreAtlantis
+		if isAtlantis {
+			precompiles = vm.PrecompiledAtlantis
+		}
+		if precompiles[addr.Str()] == nil && isAtlantis && value.BitLen() == 0 {
+			caller.ReturnGas(gas, gasPrice)
+			return nil, nil
+		}
+		to = env.Db().CreateAccount(addr)
+	} else {
+		to = env.Db().GetAccount(addr)
+	}
+	env.Transfer(from, to, value)
+	// Initialise a new contract and set the code that is to be used by the EVM.
+	// The contract is a scoped environment for this execution context only.
+	contract := vm.NewContract(caller, to, value, gas, gasPrice)
+	contract.SetCallCode(&addr, env.Db().GetCodeHash(addr), env.Db().GetCode(addr))
+	defer contract.Finalise()
+
+	// Even if the account has no code, we need to continue because it might be a precompile
+	ret, err = evm.Run(contract, input, false)
+
+	// When an error was returned by the EVM or when setting the creation code
+	// above we revert to the snapshot and consume any gas remaining. Additionally
+	// when we're in homestead this also counts for code storage gas errors.
+	if err != nil {
+		env.RevertToSnapshot(snapshot)
+		if err != vm.ErrRevert {
+			contract.UseGas(contract.Gas)
+		}
+	}
 	return ret, err
 }
 
