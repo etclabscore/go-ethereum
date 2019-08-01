@@ -17,20 +17,26 @@
 package core
 
 import (
+	"errors"
 	"fmt"
 	"math/big"
 
 	"github.com/eth-classic/go-ethereum/common"
 	"github.com/eth-classic/go-ethereum/core/vm"
 	"github.com/eth-classic/go-ethereum/crypto"
+	"github.com/eth-classic/go-ethereum/params"
 )
 
 var (
+	emptyCodeHash = crypto.Keccak256Hash(nil)
+
 	callCreateDepthMax = 1024 // limit call/create stack
 	errCallCreateDepth = fmt.Errorf("Max call depth exceeded (%d)", callCreateDepthMax)
 
 	maxCodeSize            = 24576
 	errMaxCodeSizeExceeded = fmt.Errorf("Max Code Size exceeded (%d)", maxCodeSize)
+
+	errContractAddressCollision = errors.New("contract address collision")
 )
 
 // Call executes the contract associated with the addr with the given input as
@@ -220,7 +226,7 @@ func StaticCall(env vm.Environment, caller vm.ContractRef, addr common.Address, 
 
 // Create creates a new contract with the given code
 func Create(env vm.Environment, caller vm.ContractRef, code []byte, gas, gasPrice, value *big.Int) (ret []byte, address common.Address, err error) {
-	ret, address, err = exec(env, caller, nil, nil, crypto.Keccak256Hash(code), nil, code, gas, gasPrice, value, false)
+	ret, address, err = exec(env, caller, crypto.Keccak256Hash(code), code, gas, gasPrice, value)
 	// Here we get an error if we run into maximum stack depth,
 	// See: https://github.com/ethereum/yellowpaper/pull/131
 	// and YP definitions for CREATE
@@ -232,7 +238,7 @@ func Create(env vm.Environment, caller vm.ContractRef, code []byte, gas, gasPric
 	return ret, address, err
 }
 
-func exec(env vm.Environment, caller vm.ContractRef, address, codeAddr *common.Address, codeHash common.Hash, input, code []byte, gas, gasPrice, value *big.Int, readOnly bool) (ret []byte, addr common.Address, err error) {
+func exec(env vm.Environment, caller vm.ContractRef, codeHash common.Hash, code []byte, gas, gasPrice, value *big.Int) (ret []byte, address common.Address, err error) {
 	evm := env.Vm()
 	// Depth check execution. Fail if we're trying to execute above the
 	// limit.
@@ -248,39 +254,25 @@ func exec(env vm.Environment, caller vm.ContractRef, address, codeAddr *common.A
 		return nil, common.Address{}, ValueTransferErr("insufficient funds to transfer value. Req %v, has %v", value, env.Db().GetBalance(caller.Address()))
 	}
 
-	var createAccount bool
-	if address == nil {
-		// Create a new account on the state
-		nonce := env.Db().GetNonce(caller.Address())
-		env.Db().SetNonce(caller.Address(), nonce+1)
-		addr = crypto.CreateAddress(caller.Address(), nonce)
-		address = &addr
-		createAccount = true
-	}
+	// Create a new account on the state
+	nonce := env.Db().GetNonce(caller.Address())
+	env.Db().SetNonce(caller.Address(), nonce+1)
+	address = crypto.CreateAddress(caller.Address(), nonce)
 
-	snapshotPreTransfer := env.SnapshotDatabase()
+	// // Ensure there's no existing contract already at the designated address
+	// contractHash := env.Db().GetCodeHash(address)
+	// if env.Db().GetNonce(address) != 0 || (contractHash != (common.Hash{}) && contractHash != emptyCodeHash) {
+	// 	return nil, common.Address{}, errContractAddressCollision
+	// }
+
 	var (
-		from = env.Db().GetAccount(caller.Address())
-		to   vm.Account
+		snapshot = env.SnapshotDatabase()
+		from     = env.Db().GetAccount(caller.Address())
+		to       = env.Db().CreateAccount(address)
 	)
 
-	if createAccount {
-		to = env.Db().CreateAccount(*address)
-
-		if env.RuleSet().IsAtlantis(env.BlockNumber()) {
-			env.Db().SetNonce(*address, 1)
-		}
-	} else {
-		if !env.Db().Exist(*address) {
-			//no account may change state from non-existent to existent-but-empty. Refund sender.
-			if vm.PrecompiledAtlantis[(*address).Str()] == nil && env.RuleSet().IsAtlantis(env.BlockNumber()) && value.BitLen() == 0 {
-				caller.ReturnGas(gas, gasPrice)
-				return nil, common.Address{}, nil
-			}
-			to = env.Db().CreateAccount(*address)
-		} else {
-			to = env.Db().GetAccount(*address)
-		}
+	if env.RuleSet().IsAtlantis(env.BlockNumber()) {
+		env.Db().SetNonce(address, 1)
 	}
 
 	env.Transfer(from, to, value)
@@ -289,22 +281,22 @@ func exec(env vm.Environment, caller vm.ContractRef, address, codeAddr *common.A
 	// EVM. The contract is a scoped environment for this execution context
 	// only.
 	contract := vm.NewContract(caller, to, value, gas, gasPrice)
-	contract.SetCallCode(codeAddr, codeHash, code)
+	contract.SetCallCode(nil, codeHash, code)
 	defer contract.Finalise()
 
-	ret, err = evm.Run(contract, input, readOnly)
+	ret, err = evm.Run(contract, nil, false)
 
 	maxCodeSizeExceeded := len(ret) > maxCodeSize && env.RuleSet().IsAtlantis(env.BlockNumber())
 	// if the contract creation ran successfully and no errors were returned
 	// calculate the gas required to store the code. If the code could not
 	// be stored due to not enough gas set an error and let it be handled
 	// by the error checking condition below.
-	if err == nil && createAccount && !maxCodeSizeExceeded {
+	if err == nil && !maxCodeSizeExceeded {
 		dataGas := big.NewInt(int64(len(ret)))
 		// create data gas
-		dataGas.Mul(dataGas, big.NewInt(200))
+		dataGas.Mul(dataGas, params.CreateDataGas)
 		if contract.UseGas(dataGas) {
-			env.Db().SetCode(*address, ret)
+			env.Db().SetCode(address, ret)
 		} else {
 			err = vm.CodeStoreOutOfGasError
 		}
@@ -313,8 +305,8 @@ func exec(env vm.Environment, caller vm.ContractRef, address, codeAddr *common.A
 	// When an error was returned by the EVM or when setting the creation code
 	// above we revert to the snapshot and consume any gas remaining. Additionally
 	// when we're in homestead this also counts for code storage gas errors.
-	if createAccount && maxCodeSizeExceeded || (err != nil && (env.RuleSet().IsHomestead(env.BlockNumber()) || err != vm.CodeStoreOutOfGasError)) {
-		env.RevertToSnapshot(snapshotPreTransfer)
+	if maxCodeSizeExceeded || (err != nil && (env.RuleSet().IsHomestead(env.BlockNumber()) || err != vm.CodeStoreOutOfGasError)) {
+		env.RevertToSnapshot(snapshot)
 		if err != vm.ErrRevert {
 			contract.UseGas(contract.Gas)
 		}
@@ -325,7 +317,7 @@ func exec(env vm.Environment, caller vm.ContractRef, address, codeAddr *common.A
 		err = errMaxCodeSizeExceeded
 	}
 
-	return ret, addr, err
+	return ret, address, err
 }
 
 // generic transfer method
