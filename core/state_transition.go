@@ -226,6 +226,10 @@ func (st *StateTransition) TransitionDb() (ret []byte, gas *big.Int, failed bool
 	var vmerr error
 	if contractCreation {
 		ret, _, vmerr = vmenv.Create(sender, st.data, st.gas, st.gasPrice, st.value)
+
+		if vmerr == errContractAddressCollision {
+			st.gas = big.NewInt(0)
+		}
 		if homestead && vmerr == vm.CodeStoreOutOfGasError {
 			st.gas = big.NewInt(0)
 		}
