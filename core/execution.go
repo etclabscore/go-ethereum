@@ -133,10 +133,42 @@ func CallCode(env vm.Environment, caller vm.ContractRef, addr common.Address, in
 
 // DelegateCall is equivalent to CallCode except that sender and value propagates from parent scope to child scope
 func DelegateCall(env vm.Environment, caller vm.ContractRef, addr common.Address, input []byte, gas, gasPrice *big.Int) (ret []byte, err error) {
-	callerAddr := caller.Address()
-	originAddr := env.Origin()
-	callerValue := caller.Value()
-	ret, _, err = execDelegateCall(env, caller, &originAddr, &callerAddr, &addr, env.Db().GetCodeHash(addr), input, env.Db().GetCode(addr), gas, gasPrice, callerValue)
+	evm := env.Vm()
+	// Depth check execution. Fail if we're trying to execute above the limit.
+	if env.Depth() > callCreateDepthMax {
+		caller.ReturnGas(gas, gasPrice)
+
+		return nil, errCallCreateDepth
+	}
+
+	var (
+		to       vm.Account
+		snapshot = env.SnapshotDatabase()
+	)
+	if !env.Db().Exist(caller.Address()) {
+		to = env.Db().CreateAccount(caller.Address())
+	} else {
+		to = env.Db().GetAccount(caller.Address())
+	}
+
+	// Initialise a new contract and set the code that is to be used by the EVM.
+	// The contract is a scoped environment for this execution context only.
+	contract := vm.NewContract(caller, to, caller.Value(), gas, gasPrice).AsDelegate()
+	contract.SetCallCode(&addr, env.Db().GetCodeHash(addr), env.Db().GetCode(addr))
+	defer contract.Finalise()
+
+	// Even if the account has no code, we need to continue because it might be a precompile
+	ret, err = evm.Run(contract, input, false)
+
+	// When an error was returned by the EVM or when setting the creation code
+	// above we revert to the snapshot and consume any gas remaining. Additionally
+	// when we're in homestead this also counts for code storage gas errors.
+	if err != nil {
+		env.RevertToSnapshot(snapshot)
+		if err != vm.ErrRevert {
+			contract.UseGas(contract.Gas)
+		}
+	}
 	return ret, err
 }
 
@@ -251,41 +283,6 @@ func exec(env vm.Environment, caller vm.ContractRef, address, codeAddr *common.A
 	// When there are no errors but the maxCodeSize is still exceeded, makes more sense than just failing
 	if maxCodeSizeExceeded && err == nil {
 		err = errMaxCodeSizeExceeded
-	}
-
-	return ret, addr, err
-}
-
-func execDelegateCall(env vm.Environment, caller vm.ContractRef, originAddr, toAddr, codeAddr *common.Address, codeHash common.Hash, input, code []byte, gas, gasPrice, value *big.Int) (ret []byte, addr common.Address, err error) {
-	evm := env.Vm()
-	// Depth check execution. Fail if we're trying to execute above the
-	// limit.
-	if env.Depth() > callCreateDepthMax {
-		caller.ReturnGas(gas, gasPrice)
-		return nil, common.Address{}, errCallCreateDepth
-	}
-
-	snapshot := env.SnapshotDatabase()
-
-	var to vm.Account
-	if !env.Db().Exist(*toAddr) {
-		to = env.Db().CreateAccount(*toAddr)
-	} else {
-		to = env.Db().GetAccount(*toAddr)
-	}
-
-	// Iinitialise a new contract and make initialise the delegate values
-	contract := vm.NewContract(caller, to, value, gas, gasPrice).AsDelegate()
-	contract.SetCallCode(codeAddr, codeHash, code)
-	defer contract.Finalise()
-
-	ret, err = evm.Run(contract, input, false)
-
-	if err != nil {
-		env.RevertToSnapshot(snapshot)
-		if err != vm.ErrRevert {
-			contract.UseGas(contract.Gas)
-		}
 	}
 
 	return ret, addr, err
