@@ -36,7 +36,56 @@ var (
 // Call executes within the given contract
 func Call(env vm.Environment, caller vm.ContractRef, addr common.Address, input []byte, gas, gasPrice, value *big.Int) (ret []byte, err error) {
 	ret, _, err = exec(env, caller, &addr, &addr, env.Db().GetCodeHash(addr), input, env.Db().GetCode(addr), gas, gasPrice, value, false)
+
+	// Depth check. Fail if we're trying to execute above the call depth limit
+	if env.Depth() > callCreateDepthMax {
+		caller.ReturnGas(gas, gasPrice)
+
+		return nil, errCallCreateDepth
+	}
+
+	// Balance check. Fail if we're trying to transfer more than the available balance
+	if !env.CanTransfer(caller.Address(), value) {
+		caller.ReturnGas(gas, gasPrice)
+		return nil,  ValueTransferErr("insufficient funds to transfer value. Req %v, has %v", value, env.Db().GetBalance(caller.Address()))
+	}
+
+	var (
+		snapshotPreTransfer = env.SnapshotDatabase()
+		to   vm.Account
+		from = env.Db().GetAccount(caller.Address())
+	)
+
+	if !env.Db().Exist(addr) {
+		//no account may change state from non-existent to existent-but-empty. Refund sender.
+		if vm.PrecompiledAtlantis[(addr).Str()] == nil && env.RuleSet().IsAtlantis(env.BlockNumber()) && value.BitLen() == 0 {
+			caller.ReturnGas(gas, gasPrice)
+			return nil, nil
+		}
+		to = env.Db().CreateAccount(addr)
+	} else {
+		to = env.Db().GetAccount(addr)
+	}
+
+	env.Transfer(from, to, value)
+
+	// initialise a new contract and set the code that is to be used by the EVM.
+	// The contract is a scoped environment for this execution context only.
+	contract := vm.NewContract(caller, to, value, gas, gasPrice)
+	contract.SetCallCode(&addr, env.Db().GetCodeHash(addr), env.Db().GetCode(addr))
+	defer contract.Finalise()
+
+	ret, err = env.Vm().Run(contract, input, false)
+
+	if err != nil {
+		if err != vm.ErrRevert {
+			contract.UseGas(contract.Gas)
+		}
+		env.RevertToSnapshot(snapshotPreTransfer)
+	}
 	return ret, err
+	return ret, err
+
 }
 
 // CallCode executes the given address' code as the given contract address
