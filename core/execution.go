@@ -259,11 +259,11 @@ func exec(env vm.Environment, caller vm.ContractRef, codeHash common.Hash, code 
 	env.Db().SetNonce(caller.Address(), nonce+1)
 	address = crypto.CreateAddress(caller.Address(), nonce)
 
-	// // Ensure there's no existing contract already at the designated address
-	// contractHash := env.Db().GetCodeHash(address)
-	// if env.Db().GetNonce(address) != 0 || (contractHash != (common.Hash{}) && contractHash != emptyCodeHash) {
-	// 	return nil, common.Address{}, errContractAddressCollision
-	// }
+	// Ensure there's no existing contract already at the designated address
+	contractHash := env.Db().GetCodeHash(address)
+	if env.Db().GetNonce(address) != 0 || (contractHash != (common.Hash{}) && contractHash != emptyCodeHash) {
+		return nil, common.Address{}, errContractAddressCollision
+	}
 
 	var (
 		snapshot = env.SnapshotDatabase()

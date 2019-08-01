@@ -691,12 +691,8 @@ func TestAllETH(t *testing.T) {
 
 	// EIP 684 Implementations
 	skipTests["TransactionCollisionToEmptyButCode.json"] = "Not Implemented"
-	skipTests["TransactionCollisionToEmpty.json"] = "Not Implemented"
 	skipTests["TransactionCollisionToEmptyButNonce.json"] = "Not Implemented"
-	skipTests["CreateCollisionToEmpty.json"] = "Not Implemented"
-	skipTests["CreateHashCollision.json"] = "Not Implemented"
 	skipTests["createJS_ExampleContract.json"] = "Not Implemented"
-	skipTests["RevertDepthCreateAddressCollision.json"] = "Not Implemented"
 
 	unsupportedDirs := map[string]bool{
 		"stZeroKnowledge":  true,
