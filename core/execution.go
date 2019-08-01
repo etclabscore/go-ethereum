@@ -39,8 +39,7 @@ var (
 // execution error or failed value transfer.
 func Call(env vm.Environment, caller vm.ContractRef, addr common.Address, input []byte, gas, gasPrice, value *big.Int) (ret []byte, err error) {
 	evm := env.Vm()
-	// Depth check execution. Fail if we're trying to execute above the
-	// limit.
+	// Depth check execution. Fail if we're trying to execute above the limit.
 	if env.Depth() > callCreateDepthMax {
 		caller.ReturnGas(gas, gasPrice)
 
@@ -96,8 +95,39 @@ func Call(env vm.Environment, caller vm.ContractRef, addr common.Address, input 
 
 // CallCode executes the given address' code as the given contract address
 func CallCode(env vm.Environment, caller vm.ContractRef, addr common.Address, input []byte, gas, gasPrice, value *big.Int) (ret []byte, err error) {
-	callerAddr := caller.Address()
-	ret, _, err = exec(env, caller, &callerAddr, &addr, env.Db().GetCodeHash(addr), input, env.Db().GetCode(addr), gas, gasPrice, value, false)
+	evm := env.Vm()
+	// Depth check execution. Fail if we're trying to execute above the limit.
+	if env.Depth() > callCreateDepthMax {
+		caller.ReturnGas(gas, gasPrice)
+
+		return nil, errCallCreateDepth
+	}
+
+	if !env.CanTransfer(caller.Address(), value) {
+		caller.ReturnGas(gas, gasPrice)
+
+		return nil, ValueTransferErr("insufficient funds to transfer value. Req %v, has %v", value, env.Db().GetBalance(caller.Address()))
+	}
+
+	var (
+		to       = env.Db().GetAccount(caller.Address())
+		snapshot = env.SnapshotDatabase()
+	)
+	// Initialise a new contract and set the code that is to be used by the EVM.
+	// The contract is a scoped environment for this execution context only.
+	contract := vm.NewContract(caller, to, value, gas, gasPrice)
+	contract.SetCallCode(&addr, env.Db().GetCodeHash(addr), env.Db().GetCode(addr))
+	defer contract.Finalise()
+
+	// Even if the account has no code, we need to continue because it might be a precompile
+	ret, err = evm.Run(contract, input, false)
+
+	if err != nil {
+		env.RevertToSnapshot(snapshot)
+		if err != vm.ErrRevert {
+			contract.UseGas(contract.Gas)
+		}
+	}
 	return ret, err
 }
 
