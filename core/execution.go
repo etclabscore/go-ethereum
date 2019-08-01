@@ -174,7 +174,47 @@ func DelegateCall(env vm.Environment, caller vm.ContractRef, addr common.Address
 
 // StaticCall executes within the given contract and throws exception if state is attempted to be changed
 func StaticCall(env vm.Environment, caller vm.ContractRef, addr common.Address, input []byte, gas, gasPrice *big.Int) (ret []byte, err error) {
-	ret, _, err = exec(env, caller, &addr, &addr, env.Db().GetCodeHash(addr), input, env.Db().GetCode(addr), gas, gasPrice, new(big.Int), true)
+	evm := env.Vm()
+	// Depth check execution. Fail if we're trying to execute above the limit.
+	if env.Depth() > callCreateDepthMax {
+		caller.ReturnGas(gas, gasPrice)
+
+		return nil, errCallCreateDepth
+	}
+
+	var (
+		to       vm.Account
+		snapshot = env.SnapshotDatabase()
+	)
+	if !env.Db().Exist(addr) {
+		to = env.Db().CreateAccount(addr)
+	} else {
+		to = env.Db().GetAccount(addr)
+	}
+
+	// Initialise a new contract and set the code that is to be used by the EVM.
+	// The contract is a scoped environment for this execution context only.
+	contract := vm.NewContract(caller, to, new(big.Int), gas, gasPrice)
+	contract.SetCallCode(&addr, env.Db().GetCodeHash(addr), env.Db().GetCode(addr))
+	defer contract.Finalise()
+
+	// We do an AddBalance of zero here, just in order to trigger a touch.
+	// This is done to keep consensus with other clients since empty objects
+	// get touched to be deleted even in a StaticCall context
+	env.Db().AddBalance(addr, big.NewInt(0))
+
+	// Even if the account has no code, we need to continue because it might be a precompile
+	ret, err = evm.Run(contract, input, true)
+
+	// When an error was returned by the EVM or when setting the creation code
+	// above we revert to the snapshot and consume any gas remaining. Additionally
+	// when we're in homestead this also counts for code storage gas errors.
+	if err != nil {
+		env.RevertToSnapshot(snapshot)
+		if err != vm.ErrRevert {
+			contract.UseGas(contract.Gas)
+		}
+	}
 	return ret, err
 }
 
