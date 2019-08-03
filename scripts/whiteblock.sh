@@ -25,4 +25,4 @@ PREFIX=0x
 PK=$(../wb get account info | jq '.[].privateKey')
 
 echo "running script"
-yarn start $PREFIX$PK && ./wb done
+yarn start --pk $PREFIX$PK --rpcport http://localhost:8570 && ./wb done
