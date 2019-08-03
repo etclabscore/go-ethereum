@@ -21,8 +21,7 @@ git clone https://github.com/ChainSafe/Attalus.git
 cd ./Attalus
 yarn install
 
-PREFIX=0x
-PK=$(../wb get account info | jq '.[].privateKey')
+PK=0x$(../wb get account info | jq '.[].privateKey' | tr -d '"')
 
 echo "running script"
-yarn start --pk $PREFIX$PK --rpcport http://localhost:8570 && ./wb done
+yarn start --pk $PK --rpcport http://localhost:8570 && ./wb done
