@@ -226,7 +226,7 @@ func StaticCall(env vm.Environment, caller vm.ContractRef, addr common.Address, 
 
 // Create creates a new contract with the given code
 func Create(env vm.Environment, caller vm.ContractRef, code []byte, gas, gasPrice, value *big.Int) (ret []byte, address common.Address, err error) {
-	ret, address, err = exec(env, caller, crypto.Keccak256Hash(code), code, gas, gasPrice, value)
+	ret, address, err = create(env, caller, crypto.Keccak256Hash(code), code, gas, gasPrice, value)
 	// Here we get an error if we run into maximum stack depth,
 	// See: https://github.com/ethereum/yellowpaper/pull/131
 	// and YP definitions for CREATE
@@ -238,10 +238,9 @@ func Create(env vm.Environment, caller vm.ContractRef, code []byte, gas, gasPric
 	return ret, address, err
 }
 
-func exec(env vm.Environment, caller vm.ContractRef, codeHash common.Hash, code []byte, gas, gasPrice, value *big.Int) (ret []byte, address common.Address, err error) {
+func create(env vm.Environment, caller vm.ContractRef, codeHash common.Hash, code []byte, gas, gasPrice, value *big.Int) (ret []byte, address common.Address, err error) {
 	evm := env.Vm()
-	// Depth check execution. Fail if we're trying to execute above the
-	// limit.
+	// Depth check execution. Fail if we're trying to execute above the limit.
 	if env.Depth() > callCreateDepthMax {
 		caller.ReturnGas(gas, gasPrice)
 
