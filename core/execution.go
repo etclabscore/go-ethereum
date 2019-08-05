@@ -25,6 +25,7 @@ import (
 	"github.com/eth-classic/go-ethereum/core/vm"
 	"github.com/eth-classic/go-ethereum/crypto"
 	"github.com/eth-classic/go-ethereum/params"
+	"github.com/eth-classic/go-ethereum/core/state"
 )
 
 var (
@@ -260,7 +261,7 @@ func create(env vm.Environment, caller vm.ContractRef, codeHash common.Hash, cod
 
 	// Ensure there's no existing contract already at the designated address
 	contractHash := env.Db().GetCodeHash(address)
-	if env.Db().GetNonce(address) != 0 || (contractHash != (common.Hash{}) && contractHash != emptyCodeHash) {
+	if env.Db().GetNonce(address) != state.StartingNonce || (contractHash != (common.Hash{}) && contractHash != emptyCodeHash) {
 		return nil, common.Address{}, errContractAddressCollision
 	}
 
