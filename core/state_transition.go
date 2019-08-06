@@ -212,8 +212,12 @@ func (st *StateTransition) TransitionDb() (ret []byte, gas *big.Int, failed bool
 	if err != nil {
 		return nil, nil, false, err
 	}
-	sender := st.state.GetAccount(address)
-
+	var sender vm.Account
+	if !st.state.Exist(address) {
+		sender = st.state.CreateAccount(address)
+	} else {
+		sender = st.state.GetAccount(address)
+	}
 	homestead := st.env.RuleSet().IsHomestead(st.env.BlockNumber())
 	contractCreation := MessageCreatesContract(msg)
 	// Pay intrinsic gas
