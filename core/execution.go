@@ -22,10 +22,10 @@ import (
 	"math/big"
 
 	"github.com/eth-classic/go-ethereum/common"
+	"github.com/eth-classic/go-ethereum/core/state"
 	"github.com/eth-classic/go-ethereum/core/vm"
 	"github.com/eth-classic/go-ethereum/crypto"
 	"github.com/eth-classic/go-ethereum/params"
-	"github.com/eth-classic/go-ethereum/core/state"
 )
 
 var (
@@ -272,7 +272,7 @@ func create(env vm.Environment, caller vm.ContractRef, codeHash common.Hash, cod
 	)
 
 	if env.RuleSet().IsAtlantis(env.BlockNumber()) {
-		env.Db().SetNonce(address, 1)
+		env.Db().SetNonce(address, state.StartingNonce+1)
 	}
 
 	env.Transfer(from, to, value)
