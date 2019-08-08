@@ -18,6 +18,9 @@ export GOPATH?=${HOME}/go
 build: cmd/abigen cmd/bootnode cmd/disasm cmd/ethtest cmd/evm cmd/gethrpctest cmd/rlpdump cmd/geth ## Build a local snapshot binary version of all commands
 	@ls -ld $(BINARY)/*
 
+win/build: win/abigen win/bootnode win/disasm win/ethtest win/evm win/gethrpctest win/rlpdump win/geth ## Build a local snapshot binary version of all commands
+	@ls -ld $(BINARY)/*
+
 cmd/geth: chainconfig ## Build a local snapshot binary version of geth.
 	mkdir -p ./${BINARY}
 	${GO_MOD} go build ${LDFLAGS} -o ${BINARY}/geth -tags="netgo" ./cmd/geth
@@ -56,6 +59,47 @@ cmd/gethrpctest: ## Build a local snapshot of gethrpctest.
 
 cmd/rlpdump: ## Build a local snapshot of rlpdump.
 	mkdir -p ./${BINARY} && ${GO_MOD} go build ${LDFLAGS} -o ${BINARY}/rlpdump ./cmd/rlpdump
+	@echo "Done building rlpdump."
+	@echo "Run \"$(BINARY)/rlpdump\" to launch rlpdump."
+
+win/geth: chainconfig ## Build a local snapshot binary version of geth.
+	mkdir -p ./${BINARY}
+	${GO_MOD} GOOS=windows go build ${LDFLAGS} -o ${BINARY}/geth.exe -tags="netgo" ./cmd/geth
+	@echo "Done building geth."
+	@echo "Run \"$(BINARY)/geth\" to launch geth."
+
+win/abigen: ## Build a local snapshot binary version of abigen.
+	mkdir -p ./${BINARY} && ${GO_MOD} GOOS=windows go build ${LDFLAGS} -o ${BINARY}/abigen.exe ./cmd/abigen
+	@echo "Done building abigen."
+	@echo "Run \"$(BINARY)/abigen\" to launch abigen."
+
+win/bootnode: ## Build a local snapshot of bootnode.
+	mkdir -p ./${BINARY} && ${GO_MOD} GOOS=windows go build ${LDFLAGS} -o ${BINARY}/bootnode.exe ./cmd/bootnode
+	@echo "Done building bootnode."
+	@echo "Run \"$(BINARY)/bootnode\" to launch bootnode."
+
+win/disasm: ## Build a local snapshot of disasm.
+	mkdir -p ./${BINARY} && ${GO_MOD} GOOS=windows go build ${LDFLAGS} -o ${BINARY}/disasm.exe ./cmd/disasm
+	@echo "Done building disasm."
+	@echo "Run \"$(BINARY)/disasm\" to launch disasm."
+
+win/ethtest: ## Build a local snapshot of ethtest.
+	mkdir -p ./${BINARY} && ${GO_MOD} GOOS=windows go build ${LDFLAGS} -o ${BINARY}/ethtest.exe ./cmd/ethtest
+	@echo "Done building ethtest."
+	@echo "Run \"$(BINARY)/ethtest\" to launch ethtest."
+
+win/evm: ## Build a local snapshot of evm.
+	mkdir -p ./${BINARY} && ${GO_MOD} GOOS=windows go build ${LDFLAGS} -o ${BINARY}/evm.exe ./cmd/evm
+	@echo "Done building evm."
+	@echo "Run \"$(BINARY)/evm\" to launch evm."
+
+win/gethrpctest: ## Build a local snapshot of gethrpctest.
+	mkdir -p ./${BINARY} && ${GO_MOD} GOOS=windows go build ${LDFLAGS} -o ${BINARY}/gethrpctest.exe ./cmd/gethrpctest
+	@echo "Done building gethrpctest."
+	@echo "Run \"$(BINARY)/gethrpctest\" to launch gethrpctest."
+
+win/rlpdump: ## Build a local snapshot of rlpdump.
+	mkdir -p ./${BINARY} && ${GO_MOD} GOOS=windows go build ${LDFLAGS} -o ${BINARY}/rlpdump.exe ./cmd/rlpdump
 	@echo "Done building rlpdump."
 	@echo "Run \"$(BINARY)/rlpdump\" to launch rlpdump."
 
