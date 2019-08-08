@@ -57,7 +57,7 @@ type Receipt struct {
 
 // storedReceiptRLP is the storage encoding of a receipt.
 type storedReceiptRLP struct {
-	PostStateOrStatus []byte
+	PostState         []byte
 	CumulativeGasUsed *big.Int
 	Bloom             Bloom
 	TxHash            common.Hash
@@ -66,9 +66,9 @@ type storedReceiptRLP struct {
 	GasUsed           *big.Int
 }
 
-// storedReceiptRLP is the storage encoding of a receipt.
-type oldStoredReceiptRLP struct {
-	PostStateOrStatus []byte
+// storedReceiptRLPv2 is the storage encoding of a receipt.
+type storedReceiptRLPv2 struct {
+	PostState         []byte
 	CumulativeGasUsed *big.Int
 	Bloom             Bloom
 	TxHash            common.Hash
@@ -159,14 +159,15 @@ func (r *ReceiptForStorage) EncodeRLP(w io.Writer) error {
 	for i, log := range r.Logs {
 		logs[i] = (*vm.LogForStorage)(log)
 	}
-	receiptToStore := &storedReceiptRLP{
-		PostStateOrStatus: (*Receipt)(r).statusEncoding(),
+	receiptToStore := &storedReceiptRLPv2{
+		PostState:         r.PostState,
 		CumulativeGasUsed: r.CumulativeGasUsed,
 		Logs:              logs,
 		Bloom:             r.Bloom,
 		TxHash:            r.TxHash,
 		ContractAddress:   r.ContractAddress,
 		GasUsed:           r.GasUsed,
+		Status:            r.Status,
 	}
 	return rlp.Encode(w, receiptToStore)
 }
@@ -179,12 +180,12 @@ func (r *ReceiptForStorage) DecodeRLP(s *rlp.Stream) error {
 		return err
 	}
 
-	// Try decoding the receipt without Status first
-	if err := decodeStoredReceiptRLP(r, raw); err == nil {
+	// Try decoding the receipt with Status first
+	if err := decodeStoredReceiptRLPv2(r, raw); err == nil {
 		return nil
 	}
 
-	return decodeOldStoredReceiptRLP(r, raw)
+	return decodeStoredReceiptRLP(r, raw)
 }
 
 // Decode stored receipt
@@ -205,7 +206,7 @@ func decodeStoredReceiptRLP(r *ReceiptForStorage, raw []byte) error {
 		r.Logs[i] = (*vm.Log)(log)
 	}
 
-	if err := (*Receipt)(r).setStatus(receipt.PostStateOrStatus); err != nil {
+	if err := (*Receipt)(r).setStatus(receipt.PostState); err != nil {
 		return err
 	}
 
@@ -213,13 +214,13 @@ func decodeStoredReceiptRLP(r *ReceiptForStorage, raw []byte) error {
 }
 
 // Decode with status field included in storage
-func decodeOldStoredReceiptRLP(r *ReceiptForStorage, raw []byte) error {
-	var receipt oldStoredReceiptRLP
+func decodeStoredReceiptRLPv2(r *ReceiptForStorage, raw []byte) error {
+	var receipt storedReceiptRLPv2
 	if err := rlp.DecodeBytes(raw, &receipt); err != nil {
 		return err
 	}
 
-	r.PostState = receipt.PostStateOrStatus
+	r.PostState = receipt.PostState
 	r.Status = receipt.Status
 	r.CumulativeGasUsed = receipt.CumulativeGasUsed
 	r.Bloom = receipt.Bloom
