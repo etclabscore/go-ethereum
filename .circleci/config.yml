@@ -16,6 +16,22 @@ jobs:
           key: go-mod-v4-{{ checksum "go.sum" }}
           paths:
             - "/go/pkg/mod"
+  build-windows-go-1.12:
+    working_directory: ~/go-ethereum
+    docker:
+      - image: circleci/golang:1.12
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - go-mod-v4-{{ checksum "go.sum" }}
+      - run:
+          name: Compile Binaries
+          command: make win/build
+      - save_cache:
+          key: go-mod-v4-{{ checksum "go.sum" }}
+          paths:
+            - "/go/pkg/mod"
   tests-linux-go-1.12:
     working_directory: ~/go-ethereum
     docker:
@@ -73,12 +89,57 @@ jobs:
           key: go-mod-v4-{{ checksum "go.sum" }}
           paths:
             - "/go/pkg/mod"
+  release-windows-go-1.12:
+    working_directory: ~/go-ethereum
+    docker:
+      - image: circleci/golang:1.12
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - go-mod-v4-{{ checksum "go.sum" }}
+      - run:
+          name: Compile Binaries
+          command: |
+            make cmd/geth
+            make win/build
+      - run:
+          name: Release Artifacts
+          command: |
+            pushd ./bin/
+            sha256sum ./abigen.exe > ./abigen.exe.sha256
+            sha256sum ./bootnode.exe > ./bootnode.exe.sha256
+            sha256sum ./disasm.exe > ./disasm.exe.sha256
+            sha256sum ./ethtest.exe > ./ethtest.exe.sha256
+            sha256sum ./evm.exe > ./evm.exe.sha256
+            sha256sum ./geth.exe > ./geth.exe.sha256
+            sha256sum ./rlpdump.exe > ./rlpdump.exe.sha256
+            popd
+            mkdir ./artifacts/
+            VERSION=$(bin/geth version | grep -i version | head -n1 | awk '{print $2}')
+            rm ./bin/geth
+            cp -rv ./bin ./geth-classic-${VERSION}-windows
+            tar -zcvf geth-classic-${VERSION}-windows.tar.gz geth-classic-${VERSION}-windows
+            cp -v ./geth-classic-${VERSION}-windows.tar.gz ./artifacts/
+            pushd ./artifacts
+            sha256sum ./geth-classic-${VERSION}-windows.tar.gz > ./geth-classic-${VERSION}-windows.sha256
+            popd
+      - store_artifacts:
+          path: ~/go-ethereum/artifacts
+      - save_cache:
+          key: go-mod-v4-{{ checksum "go.sum" }}
+          paths:
+            - "/go/pkg/mod"
 
 workflows:
   version: 2
   release:
     jobs:
       - build-linux-go-1.12:
+          filters:
+            tags:
+              only: /.*/
+      - build-windows-go-1.12:
           filters:
             tags:
               only: /.*/
@@ -90,6 +151,15 @@ workflows:
               only: /.*/
       - release-linux-go-1.12:
           requires:
+            - tests-linux-go-1.12
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/
+      - release-windows-go-1.12:
+          requires:
+            - build-windows-go-1.12
             - tests-linux-go-1.12
           filters:
             tags:
