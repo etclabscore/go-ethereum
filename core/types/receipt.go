@@ -206,11 +206,23 @@ func decodeStoredReceiptRLP(r *ReceiptForStorage, raw []byte) error {
 		r.Logs[i] = (*vm.Log)(log)
 	}
 
-	if err := (*Receipt)(r).setStatus(receipt.PostState); err != nil {
-		return err
-	}
+	r.decodePostStateOrStatus(receipt)
 
 	return nil
+}
+
+// Previous version encoded tx Status in place of PostState, to ensure compatibility,
+// this status needs to be decoded from PostState
+func (r *ReceiptForStorage) decodePostStateOrStatus(sr storedReceiptRLP) {
+	if bytes.Equal(sr.PostState, receiptStatusSuccessfulRLP) {
+		r.Status = TxSuccess
+		return
+	} else if bytes.Equal(sr.PostState, receiptStatusFailedRLP) {
+		r.Status = TxFailure
+		return
+	}
+	r.PostState = sr.PostState
+	r.Status = TxStatusUnknown
 }
 
 // Decode with status field included in storage
