@@ -16,6 +16,22 @@ jobs:
           key: go-mod-v4-{{ checksum "go.sum" }}
           paths:
             - "/go/pkg/mod"
+  build-darwin-go-1.12:
+    working_directory: ~/go-ethereum
+    docker:
+      - image: circleci/golang:1.12
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - go-mod-v4-{{ checksum "go.sum" }}
+      - run:
+          name: Compile Binaries
+          command: make mac/build
+      - save_cache:
+          key: go-mod-v4-{{ checksum "go.sum" }}
+          paths:
+            - "/go/pkg/mod"
   build-windows-go-1.12:
     working_directory: ~/go-ethereum
     docker:
@@ -89,6 +105,44 @@ jobs:
           key: go-mod-v4-{{ checksum "go.sum" }}
           paths:
             - "/go/pkg/mod"
+  release-darwin-go-1.12:
+    working_directory: ~/go-ethereum
+    docker:
+      - image: circleci/golang:1.12
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - go-mod-v4-{{ checksum "go.sum" }}
+      - run:
+          name: Release Binaries
+          command: |
+            make cmd/geth
+            VERSION=$(bin/geth version | grep -i version | head -n1 | awk '{print $2}')
+            rm ./bin/geth
+            make mac/build
+            pushd ./bin/
+            sha256sum ./abigen > ./abigen.sha256
+            sha256sum ./bootnode > ./bootnode.sha256
+            sha256sum ./disasm > ./disasm.sha256
+            sha256sum ./ethtest > ./ethtest.sha256
+            sha256sum ./evm > ./evm.sha256
+            sha256sum ./geth > ./geth.sha256
+            sha256sum ./rlpdump > ./rlpdump.sha256
+            popd
+            mkdir ./artifacts/
+            cp -rv ./bin ./geth-classic-${VERSION}-darwin
+            tar -zcvf geth-classic-${VERSION}-darwin.tar.gz geth-classic-${VERSION}-darwin
+            cp -v ./geth-classic-${VERSION}-darwin.tar.gz ./artifacts/
+            pushd ./artifacts
+            sha256sum ./geth-classic-${VERSION}-darwin.tar.gz > ./geth-classic-${VERSION}-darwin.sha256
+            popd
+      - store_artifacts:
+          path: ~/go-ethereum/artifacts
+      - save_cache:
+          key: go-mod-v4-{{ checksum "go.sum" }}
+          paths:
+            - "/go/pkg/mod"
   release-windows-go-1.12:
     working_directory: ~/go-ethereum
     docker:
@@ -139,6 +193,10 @@ workflows:
           filters:
             tags:
               only: /.*/
+      - build-darwin-go-1.12:
+          filters:
+            tags:
+              only: /.*/
       - build-windows-go-1.12:
           filters:
             tags:
@@ -151,6 +209,15 @@ workflows:
               only: /.*/
       - release-linux-go-1.12:
           requires:
+            - tests-linux-go-1.12
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/
+      - release-darwin-go-1.12:
+          requires:
+            - build-darwin-go-1.12
             - tests-linux-go-1.12
           filters:
             tags:
