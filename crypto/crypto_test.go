@@ -27,9 +27,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/eth-classic/go-ethereum/common"
-	"github.com/eth-classic/go-ethereum/common/hexutil"
-	"github.com/eth-classic/go-ethereum/crypto/secp256k1"
+	"github.com/etclabscore/go-ethereum/common"
+	"github.com/etclabscore/go-ethereum/common/hexutil"
+	"github.com/etclabscore/go-ethereum/crypto/secp256k1"
 )
 
 var testAddrHex = "970e8128ab834e8eac17ab8e3812f010678cf791"

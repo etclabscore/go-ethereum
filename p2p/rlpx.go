@@ -34,12 +34,12 @@ import (
 	"sync"
 	"time"
 
-	"github.com/eth-classic/go-ethereum/crypto"
-	"github.com/eth-classic/go-ethereum/crypto/ecies"
-	"github.com/eth-classic/go-ethereum/crypto/secp256k1"
-	"github.com/eth-classic/go-ethereum/crypto/sha3"
-	"github.com/eth-classic/go-ethereum/p2p/discover"
-	"github.com/eth-classic/go-ethereum/rlp"
+	"github.com/etclabscore/go-ethereum/crypto"
+	"github.com/etclabscore/go-ethereum/crypto/ecies"
+	"github.com/etclabscore/go-ethereum/crypto/secp256k1"
+	"github.com/etclabscore/go-ethereum/crypto/sha3"
+	"github.com/etclabscore/go-ethereum/p2p/discover"
+	"github.com/etclabscore/go-ethereum/rlp"
 )
 
 const (

@@ -18,8 +18,8 @@ package trie
 
 import (
 	"fmt"
-	"github.com/eth-classic/go-ethereum/common"
-	"github.com/eth-classic/go-ethereum/logger/glog"
+	"github.com/etclabscore/go-ethereum/common"
+	"github.com/etclabscore/go-ethereum/logger/glog"
 )
 
 var secureKeyPrefix = []byte("secure-key-")

@@ -1,6 +1,6 @@
 package fetcher
 
-import "github.com/eth-classic/go-ethereum/core/types"
+import "github.com/etclabscore/go-ethereum/core/types"
 
 type FetcherInsertBlockEvent struct {
 	Peer  string

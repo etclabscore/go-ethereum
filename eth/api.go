@@ -31,25 +31,25 @@ import (
 	"sync"
 	"time"
 
-	"github.com/eth-classic/ethash"
-	"github.com/eth-classic/go-ethereum/accounts"
-	"github.com/eth-classic/go-ethereum/common"
-	"github.com/eth-classic/go-ethereum/common/compiler"
-	"github.com/eth-classic/go-ethereum/common/hexutil"
-	"github.com/eth-classic/go-ethereum/core"
-	"github.com/eth-classic/go-ethereum/core/state"
-	"github.com/eth-classic/go-ethereum/core/types"
-	"github.com/eth-classic/go-ethereum/core/vm"
-	"github.com/eth-classic/go-ethereum/crypto"
-	"github.com/eth-classic/go-ethereum/ethdb"
-	"github.com/eth-classic/go-ethereum/event"
-	"github.com/eth-classic/go-ethereum/logger"
-	"github.com/eth-classic/go-ethereum/logger/glog"
-	ethMetrics "github.com/eth-classic/go-ethereum/metrics"
-	"github.com/eth-classic/go-ethereum/miner"
-	"github.com/eth-classic/go-ethereum/p2p"
-	"github.com/eth-classic/go-ethereum/rlp"
-	"github.com/eth-classic/go-ethereum/rpc"
+	"github.com/etclabscore/ethash"
+	"github.com/etclabscore/go-ethereum/accounts"
+	"github.com/etclabscore/go-ethereum/common"
+	"github.com/etclabscore/go-ethereum/common/compiler"
+	"github.com/etclabscore/go-ethereum/common/hexutil"
+	"github.com/etclabscore/go-ethereum/core"
+	"github.com/etclabscore/go-ethereum/core/state"
+	"github.com/etclabscore/go-ethereum/core/types"
+	"github.com/etclabscore/go-ethereum/core/vm"
+	"github.com/etclabscore/go-ethereum/crypto"
+	"github.com/etclabscore/go-ethereum/ethdb"
+	"github.com/etclabscore/go-ethereum/event"
+	"github.com/etclabscore/go-ethereum/logger"
+	"github.com/etclabscore/go-ethereum/logger/glog"
+	ethMetrics "github.com/etclabscore/go-ethereum/metrics"
+	"github.com/etclabscore/go-ethereum/miner"
+	"github.com/etclabscore/go-ethereum/p2p"
+	"github.com/etclabscore/go-ethereum/rlp"
+	"github.com/etclabscore/go-ethereum/rpc"
 )
 
 const defaultGas = uint64(90000)
@@ -1756,7 +1756,7 @@ func (api *PublicGethAPI) GetAddressTransactions(address common.Address, blockSt
 	if atxi == nil {
 		return nil, errors.New("addr-tx indexing not enabled")
 	}
-	// Use human-friendly abbreviations, per https://github.com/eth-classic/go-ethereum/pull/475#issuecomment-366065122
+	// Use human-friendly abbreviations, per https://github.com/etclabscore/go-ethereum/pull/475#issuecomment-366065122
 	// so 't' => to, 'f' => from, 'tf|ft' => either/both. Same pattern for txKindOf.
 	// _t_o OR _f_rom
 	if toOrFrom == "tf" || toOrFrom == "ft" {
@@ -1918,7 +1918,7 @@ func (api *PublicDebugAPI) SetHead(number uint64) (bool, error) {
 }
 
 // Metrics return all available registered metrics for the client.
-// See https://github.com/eth-classic/go-ethereum/wiki/Metrics-and-Monitoring for prophetic documentation.
+// See https://github.com/etclabscore/go-ethereum/wiki/Metrics-and-Monitoring for prophetic documentation.
 func (api *PublicDebugAPI) Metrics(raw bool) (map[string]interface{}, error) {
 
 	// Create a rate formatter

@@ -8,11 +8,11 @@ import (
 
 	"path/filepath"
 
-	"github.com/eth-classic/go-ethereum/common"
-	"github.com/eth-classic/go-ethereum/core"
-	"github.com/eth-classic/go-ethereum/eth"
-	"github.com/eth-classic/go-ethereum/logger/glog"
-	"github.com/eth-classic/go-ethereum/rpc"
+	"github.com/etclabscore/go-ethereum/common"
+	"github.com/etclabscore/go-ethereum/core"
+	"github.com/etclabscore/go-ethereum/eth"
+	"github.com/etclabscore/go-ethereum/logger/glog"
+	"github.com/etclabscore/go-ethereum/rpc"
 	"gopkg.in/urfave/cli.v1"
 )
 

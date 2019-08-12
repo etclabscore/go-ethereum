@@ -25,8 +25,8 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/eth-classic/go-ethereum/logger"
-	"github.com/eth-classic/go-ethereum/logger/glog"
+	"github.com/etclabscore/go-ethereum/logger"
+	"github.com/etclabscore/go-ethereum/logger/glog"
 )
 
 const (

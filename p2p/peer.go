@@ -25,11 +25,11 @@ import (
 	"sync"
 	"time"
 
-	"github.com/eth-classic/go-ethereum/event"
-	"github.com/eth-classic/go-ethereum/logger"
-	"github.com/eth-classic/go-ethereum/logger/glog"
-	"github.com/eth-classic/go-ethereum/p2p/discover"
-	"github.com/eth-classic/go-ethereum/rlp"
+	"github.com/etclabscore/go-ethereum/event"
+	"github.com/etclabscore/go-ethereum/logger"
+	"github.com/etclabscore/go-ethereum/logger/glog"
+	"github.com/etclabscore/go-ethereum/p2p/discover"
+	"github.com/etclabscore/go-ethereum/rlp"
 )
 
 const (

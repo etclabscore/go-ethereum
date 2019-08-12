@@ -31,11 +31,11 @@ import (
 	"sync"
 	"time"
 
-	"github.com/eth-classic/go-ethereum/common"
-	"github.com/eth-classic/go-ethereum/crypto"
-	"github.com/eth-classic/go-ethereum/logger"
-	"github.com/eth-classic/go-ethereum/logger/glog"
-	"github.com/eth-classic/go-ethereum/p2p/distip"
+	"github.com/etclabscore/go-ethereum/common"
+	"github.com/etclabscore/go-ethereum/crypto"
+	"github.com/etclabscore/go-ethereum/logger"
+	"github.com/etclabscore/go-ethereum/logger/glog"
+	"github.com/etclabscore/go-ethereum/p2p/distip"
 )
 
 const (

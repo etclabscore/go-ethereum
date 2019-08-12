@@ -27,8 +27,8 @@ import (
 
 	"gopkg.in/fatih/set.v0"
 
-	"github.com/eth-classic/go-ethereum/logger"
-	"github.com/eth-classic/go-ethereum/logger/glog"
+	"github.com/etclabscore/go-ethereum/logger"
+	"github.com/etclabscore/go-ethereum/logger/glog"
 )
 
 const (

@@ -22,12 +22,12 @@ import (
 	"fmt"
 	"math/big"
 
-	"github.com/eth-classic/go-ethereum/accounts"
-	"github.com/eth-classic/go-ethereum/core/state"
-	"github.com/eth-classic/go-ethereum/core/types"
-	"github.com/eth-classic/go-ethereum/core/vm"
-	"github.com/eth-classic/go-ethereum/ethdb"
-	"github.com/eth-classic/go-ethereum/event"
+	"github.com/etclabscore/go-ethereum/accounts"
+	"github.com/etclabscore/go-ethereum/core/state"
+	"github.com/etclabscore/go-ethereum/core/types"
+	"github.com/etclabscore/go-ethereum/core/vm"
+	"github.com/etclabscore/go-ethereum/ethdb"
+	"github.com/etclabscore/go-ethereum/event"
 )
 
 // Validator is an interface which defines the standard for block validation.

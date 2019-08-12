@@ -26,7 +26,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/eth-classic/go-ethereum/core"
+	"github.com/etclabscore/go-ethereum/core"
 )
 
 var (

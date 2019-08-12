@@ -22,15 +22,15 @@ import (
 	"math/big"
 	"sync/atomic"
 
-	"github.com/eth-classic/go-ethereum/common"
-	"github.com/eth-classic/go-ethereum/core"
-	"github.com/eth-classic/go-ethereum/core/state"
-	"github.com/eth-classic/go-ethereum/core/types"
-	"github.com/eth-classic/go-ethereum/eth/downloader"
-	"github.com/eth-classic/go-ethereum/event"
-	"github.com/eth-classic/go-ethereum/logger"
-	"github.com/eth-classic/go-ethereum/logger/glog"
-	"github.com/eth-classic/go-ethereum/pow"
+	"github.com/etclabscore/go-ethereum/common"
+	"github.com/etclabscore/go-ethereum/core"
+	"github.com/etclabscore/go-ethereum/core/state"
+	"github.com/etclabscore/go-ethereum/core/types"
+	"github.com/etclabscore/go-ethereum/eth/downloader"
+	"github.com/etclabscore/go-ethereum/event"
+	"github.com/etclabscore/go-ethereum/logger"
+	"github.com/etclabscore/go-ethereum/logger/glog"
+	"github.com/etclabscore/go-ethereum/pow"
 )
 
 // HeaderExtra is a freeform description.

@@ -20,8 +20,8 @@ import (
 	"errors"
 	"math/big"
 
-	"github.com/eth-classic/go-ethereum/common"
-	"github.com/eth-classic/go-ethereum/crypto"
+	"github.com/etclabscore/go-ethereum/common"
+	"github.com/etclabscore/go-ethereum/crypto"
 )
 
 var callStipend = big.NewInt(2300) // Free gas given at beginning of call.

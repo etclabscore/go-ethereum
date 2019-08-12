@@ -21,7 +21,7 @@ package core
 import (
 	"math/big"
 
-	"github.com/eth-classic/go-ethereum/core/vm"
+	"github.com/etclabscore/go-ethereum/core/vm"
 )
 
 var DefaultHomeSteadGasTable = &vm.GasTable{

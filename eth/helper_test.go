@@ -26,15 +26,15 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/eth-classic/go-ethereum/common"
-	"github.com/eth-classic/go-ethereum/core"
-	"github.com/eth-classic/go-ethereum/core/types"
-	"github.com/eth-classic/go-ethereum/crypto"
-	"github.com/eth-classic/go-ethereum/eth/downloader"
-	"github.com/eth-classic/go-ethereum/ethdb"
-	"github.com/eth-classic/go-ethereum/event"
-	"github.com/eth-classic/go-ethereum/p2p"
-	"github.com/eth-classic/go-ethereum/p2p/discover"
+	"github.com/etclabscore/go-ethereum/common"
+	"github.com/etclabscore/go-ethereum/core"
+	"github.com/etclabscore/go-ethereum/core/types"
+	"github.com/etclabscore/go-ethereum/crypto"
+	"github.com/etclabscore/go-ethereum/eth/downloader"
+	"github.com/etclabscore/go-ethereum/ethdb"
+	"github.com/etclabscore/go-ethereum/event"
+	"github.com/etclabscore/go-ethereum/p2p"
+	"github.com/etclabscore/go-ethereum/p2p/discover"
 )
 
 var (

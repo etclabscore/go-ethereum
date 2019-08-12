@@ -26,11 +26,11 @@ import (
 	"sync"
 	"syscall"
 
-	"github.com/eth-classic/go-ethereum/event"
-	"github.com/eth-classic/go-ethereum/logger"
-	"github.com/eth-classic/go-ethereum/logger/glog"
-	"github.com/eth-classic/go-ethereum/p2p"
-	"github.com/eth-classic/go-ethereum/rpc"
+	"github.com/etclabscore/go-ethereum/event"
+	"github.com/etclabscore/go-ethereum/logger"
+	"github.com/etclabscore/go-ethereum/logger/glog"
+	"github.com/etclabscore/go-ethereum/p2p"
+	"github.com/etclabscore/go-ethereum/rpc"
 )
 
 var (

@@ -22,10 +22,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/eth-classic/go-ethereum/common"
-	"github.com/eth-classic/go-ethereum/core/types"
-	"github.com/eth-classic/go-ethereum/ethdb"
-	"github.com/eth-classic/go-ethereum/pow"
+	"github.com/etclabscore/go-ethereum/common"
+	"github.com/etclabscore/go-ethereum/core/types"
+	"github.com/etclabscore/go-ethereum/ethdb"
+	"github.com/etclabscore/go-ethereum/pow"
 )
 
 // failPow is a non-validating proof of work implementation, that returns true

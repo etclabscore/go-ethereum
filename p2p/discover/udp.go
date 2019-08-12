@@ -25,12 +25,12 @@ import (
 	"net"
 	"time"
 
-	"github.com/eth-classic/go-ethereum/crypto"
-	"github.com/eth-classic/go-ethereum/logger"
-	"github.com/eth-classic/go-ethereum/logger/glog"
-	"github.com/eth-classic/go-ethereum/p2p/distip"
-	"github.com/eth-classic/go-ethereum/p2p/nat"
-	"github.com/eth-classic/go-ethereum/rlp"
+	"github.com/etclabscore/go-ethereum/crypto"
+	"github.com/etclabscore/go-ethereum/logger"
+	"github.com/etclabscore/go-ethereum/logger/glog"
+	"github.com/etclabscore/go-ethereum/p2p/distip"
+	"github.com/etclabscore/go-ethereum/p2p/nat"
+	"github.com/etclabscore/go-ethereum/rlp"
 )
 
 const Version = 4
@@ -343,7 +343,7 @@ func (t *udp) findnode(toid NodeID, toaddr *net.UDPAddr, target NodeID) ([]*Node
 	// attempted discoveries on reserved ips that are not on
 	// our node's network.
 	// > https://en.wikipedia.org/wiki/Reserved_IP_addresses
-	// > https://github.com/eth-classic/go-ethereum/issues/283
+	// > https://github.com/etclabscore/go-ethereum/issues/283
 	// > https://tools.ietf.org/html/rfc5737
 	// > https://tools.ietf.org/html/rfc3849
 	if !isReserved(toaddr.IP) {

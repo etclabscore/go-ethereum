@@ -20,9 +20,9 @@ import (
 	"fmt"
 	"math/big"
 
-	"github.com/eth-classic/go-ethereum/common"
-	"github.com/eth-classic/go-ethereum/core/vm"
-	"github.com/eth-classic/go-ethereum/crypto"
+	"github.com/etclabscore/go-ethereum/common"
+	"github.com/etclabscore/go-ethereum/core/vm"
+	"github.com/etclabscore/go-ethereum/crypto"
 )
 
 const bloomLength = 256

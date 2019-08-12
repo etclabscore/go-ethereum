@@ -21,10 +21,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/eth-classic/go-ethereum/eth/downloader"
-	"github.com/eth-classic/go-ethereum/logger/glog"
-	"github.com/eth-classic/go-ethereum/p2p"
-	"github.com/eth-classic/go-ethereum/p2p/discover"
+	"github.com/etclabscore/go-ethereum/eth/downloader"
+	"github.com/etclabscore/go-ethereum/logger/glog"
+	"github.com/etclabscore/go-ethereum/p2p"
+	"github.com/etclabscore/go-ethereum/p2p/discover"
 )
 
 func init() {

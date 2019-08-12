@@ -1,7 +1,7 @@
 package core
 
 import (
-	"github.com/eth-classic/go-ethereum/logger"
+	"github.com/etclabscore/go-ethereum/logger"
 )
 
 var mlogBlockchain = logger.MLogRegisterAvailable("blockchain", mLogLinesBlockchain)

@@ -3,8 +3,8 @@ package main
 import (
 	"time"
 
-	"github.com/eth-classic/go-ethereum/eth"
-	"github.com/eth-classic/go-ethereum/eth/downloader"
+	"github.com/etclabscore/go-ethereum/eth"
+	"github.com/etclabscore/go-ethereum/eth/downloader"
 	"gopkg.in/urfave/cli.v1"
 )
 

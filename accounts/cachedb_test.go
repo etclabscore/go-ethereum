@@ -10,7 +10,7 @@ import (
 	"time"
 
 	"github.com/davecgh/go-spew/spew"
-	"github.com/eth-classic/go-ethereum/common"
+	"github.com/etclabscore/go-ethereum/common"
 )
 
 var (

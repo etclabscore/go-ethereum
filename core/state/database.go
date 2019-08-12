@@ -20,9 +20,9 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/eth-classic/go-ethereum/common"
-	"github.com/eth-classic/go-ethereum/ethdb"
-	"github.com/eth-classic/go-ethereum/trie"
+	"github.com/etclabscore/go-ethereum/common"
+	"github.com/etclabscore/go-ethereum/ethdb"
+	"github.com/etclabscore/go-ethereum/trie"
 	lru "github.com/hashicorp/golang-lru"
 )
 

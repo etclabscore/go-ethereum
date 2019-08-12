@@ -22,8 +22,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/eth-classic/go-ethereum/p2p"
-	"github.com/eth-classic/go-ethereum/p2p/discover"
+	"github.com/etclabscore/go-ethereum/p2p"
+	"github.com/etclabscore/go-ethereum/p2p/discover"
 )
 
 func startTestCluster(n int) []*Whisper {

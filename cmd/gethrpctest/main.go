@@ -27,16 +27,16 @@ import (
 
 	"path/filepath"
 
-	"github.com/eth-classic/go-ethereum/accounts"
-	"github.com/eth-classic/go-ethereum/common"
-	"github.com/eth-classic/go-ethereum/core"
-	"github.com/eth-classic/go-ethereum/crypto"
-	"github.com/eth-classic/go-ethereum/eth"
-	"github.com/eth-classic/go-ethereum/ethdb"
-	"github.com/eth-classic/go-ethereum/logger/glog"
-	"github.com/eth-classic/go-ethereum/node"
-	"github.com/eth-classic/go-ethereum/tests"
-	"github.com/eth-classic/go-ethereum/whisper"
+	"github.com/etclabscore/go-ethereum/accounts"
+	"github.com/etclabscore/go-ethereum/common"
+	"github.com/etclabscore/go-ethereum/core"
+	"github.com/etclabscore/go-ethereum/crypto"
+	"github.com/etclabscore/go-ethereum/eth"
+	"github.com/etclabscore/go-ethereum/ethdb"
+	"github.com/etclabscore/go-ethereum/logger/glog"
+	"github.com/etclabscore/go-ethereum/node"
+	"github.com/etclabscore/go-ethereum/tests"
+	"github.com/etclabscore/go-ethereum/whisper"
 )
 
 // Version is the application revision identifier. It can be set with the linker

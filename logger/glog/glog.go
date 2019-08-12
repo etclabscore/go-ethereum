@@ -121,7 +121,7 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/eth-classic/go-ethereum/common"
+	"github.com/etclabscore/go-ethereum/common"
 	"github.com/fatih/color"
 )
 
@@ -227,8 +227,8 @@ var severityName = []string{
 // these path prefixes are trimmed for display, but not when
 // matching vmodule filters.
 var trimPrefixes = []string{
-	"/github.com/eth-classic/go-ethereum",
-	"/github.com/eth-classic/ethash",
+	"/github.com/etclabscore/go-ethereum",
+	"/github.com/etclabscore/ethash",
 }
 
 func trimToImportPath(file string) string {

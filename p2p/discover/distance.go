@@ -19,7 +19,7 @@ package discover
 import (
 	"sort"
 
-	"github.com/eth-classic/go-ethereum/common"
+	"github.com/etclabscore/go-ethereum/common"
 )
 
 // node distance computation.

@@ -22,7 +22,7 @@
 package discover
 
 import (
-	"github.com/eth-classic/go-ethereum/logger"
+	"github.com/etclabscore/go-ethereum/logger"
 )
 
 var mlogDiscover = logger.MLogRegisterAvailable("discover", mLogLines)

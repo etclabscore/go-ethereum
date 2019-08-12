@@ -1,6 +1,6 @@
 package fetcher
 
-import "github.com/eth-classic/go-ethereum/logger"
+import "github.com/etclabscore/go-ethereum/logger"
 
 var mlogFetcher = logger.MLogRegisterAvailable("fetcher", mLogLines)
 

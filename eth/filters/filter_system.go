@@ -23,9 +23,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/eth-classic/go-ethereum/core"
-	"github.com/eth-classic/go-ethereum/core/vm"
-	"github.com/eth-classic/go-ethereum/event"
+	"github.com/etclabscore/go-ethereum/core"
+	"github.com/etclabscore/go-ethereum/core/vm"
+	"github.com/etclabscore/go-ethereum/event"
 )
 
 // FilterType determines the type of filter and is used to put the filter in to

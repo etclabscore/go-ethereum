@@ -27,12 +27,12 @@ import (
 
 	"gopkg.in/urfave/cli.v1"
 
-	"github.com/eth-classic/benchmark/rtprof"
-	"github.com/eth-classic/go-ethereum/common"
-	"github.com/eth-classic/go-ethereum/console"
-	"github.com/eth-classic/go-ethereum/core"
-	"github.com/eth-classic/go-ethereum/logger"
-	"github.com/eth-classic/go-ethereum/metrics"
+	"github.com/etclabscore/benchmark/rtprof"
+	"github.com/etclabscore/go-ethereum/common"
+	"github.com/etclabscore/go-ethereum/console"
+	"github.com/etclabscore/go-ethereum/core"
+	"github.com/etclabscore/go-ethereum/logger"
+	"github.com/etclabscore/go-ethereum/metrics"
 )
 
 // Version is the application revision identifier. It can be set with the linker

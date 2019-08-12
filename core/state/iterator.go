@@ -19,9 +19,9 @@ package state
 import (
 	"bytes"
 	"fmt"
-	"github.com/eth-classic/go-ethereum/common"
-	"github.com/eth-classic/go-ethereum/rlp"
-	"github.com/eth-classic/go-ethereum/trie"
+	"github.com/etclabscore/go-ethereum/common"
+	"github.com/etclabscore/go-ethereum/rlp"
+	"github.com/etclabscore/go-ethereum/trie"
 )
 
 // NodeIterator is an iterator to traverse the entire state trie post-order,

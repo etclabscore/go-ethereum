@@ -3,9 +3,9 @@ package main
 import (
 	"math"
 
-	"github.com/eth-classic/go-ethereum/core"
-	"github.com/eth-classic/go-ethereum/ethdb"
-	"github.com/eth-classic/go-ethereum/logger/glog"
+	"github.com/etclabscore/go-ethereum/core"
+	"github.com/etclabscore/go-ethereum/ethdb"
+	"github.com/etclabscore/go-ethereum/logger/glog"
 	"gopkg.in/urfave/cli.v1"
 )
 
