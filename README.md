@@ -1,6 +1,6 @@
 # Geth Classic 
 
-[![GitHub release](https://img.shields.io/github/release-pre/eth-classic/go-ethereum.svg)](https://github.com/eth-classic/go-ethereum/releases/latest)
+[![GitHub release](https://img.shields.io/github/release-pre/eth-classic/go-ethereum.svg)](https://github.com/etclabscore/go-ethereum/releases/latest)
 ![GitHub All Releases](https://img.shields.io/github/downloads/eth-classic/go-ethereum/total.svg)
 ![LICENSE](https://img.shields.io/github/license/eth-classic/go-ethereum.svg)
 
@@ -14,7 +14,7 @@ Official Go-language implementation of the Ethereum Classic protocol. Ethereum C
 ## Install Geth Classic
 
 ### :gift: Official Releases
-Regular releases will be published on the [release page](https://github.com/eth-classic/go-ethereum/releases). Binaries will be provided for all releases that are considered fairly stable.
+Regular releases will be published on the [release page](https://github.com/etclabscore/go-ethereum/releases). Binaries will be provided for all releases that are considered fairly stable.
 
 ### :hammer: Building the source
 If your heart is set on the bleeding edge, install from source. However, please be advised that you may encounter some strange things, and we can't prioritize support beyond the release versions. Recommended for developers only.
@@ -28,7 +28,7 @@ With [Go modules](https://github.com/golang/go/wiki/Modules), dependencies will 
 Clone the repository:
 
 ```
-git clone https://github.com/eth-classic/go-ethereum.git getc && cd getc
+git clone https://github.com/etclabscore/go-ethereum.git getc && cd getc
 ```
 
 Build all executables:
@@ -207,7 +207,7 @@ You'll need to use your own programming environments' capabilities (libraries, t
 > Note: Please understand the security implications of opening up an HTTP/WS based transport before doing so! Hackers on the internet are actively trying to subvert Ethereum nodes with exposed APIs! Further, all browser tabs can access locally running webservers, so malicious webpages could try to subvert locally available APIs!*
 
 ### Operating a private/custom network
-As of [Geth 3.4](https://github.com/eth-classic/go-ethereum/releases) you are now able to configure a private chain by specifying an __external chain configuration__ JSON file, which includes necessary genesis block data as well as feature configurations for protocol forks, bootnodes, and chainID.
+As of [Geth 3.4](https://github.com/etclabscore/go-ethereum/releases) you are now able to configure a private chain by specifying an __external chain configuration__ JSON file, which includes necessary genesis block data as well as feature configurations for protocol forks, bootnodes, and chainID.
 
 Please find full [example  external configuration files representing the Mainnet and Morden Testnet specs in the /config subdirectory of this repo](). You can use either of these files as a starting point for your own customizations.
 
