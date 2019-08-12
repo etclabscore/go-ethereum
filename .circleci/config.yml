@@ -61,11 +61,11 @@ jobs:
             popd
             mkdir ./artifacts/
             VERSION=$(bin/geth version | grep -i version | head -n1 | awk '{print $2}')
-            cp -rv ./bin ./getclabscore-${VERSION}-linux
-            tar -zcvf getclabscore-${VERSION}-linux.tar.gz getclabscore-${VERSION}-linux
-            cp -v ./getclabscore-${VERSION}-linux.tar.gz ./artifacts/
+            cp -rv ./bin ./getc-${VERSION}-linux
+            tar -zcvf getc-${VERSION}-linux.tar.gz getc-${VERSION}-linux
+            cp -v ./getc-${VERSION}-linux.tar.gz ./artifacts/
             pushd ./artifacts
-            sha256sum ./getclabscore-${VERSION}-linux.tar.gz > ./getclabscore-${VERSION}-linux.sha256
+            sha256sum ./getc-${VERSION}-linux.tar.gz > ./getc-${VERSION}-linux.sha256
             popd
       - store_artifacts:
           path: ~/go-ethereum/artifacts
