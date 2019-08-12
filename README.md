@@ -4,7 +4,6 @@
 ![GitHub All Releases](https://img.shields.io/github/downloads/etclabscore/go-ethereum/total.svg)
 ![LICENSE](https://img.shields.io/github/license/etclabscore/go-ethereum.svg)
 
-
 [![CircleCI](https://img.shields.io/circleci/build/gh/etclabscore/go-ethereum/development.svg)](https://circleci.com/gh/etclabscore/go-ethereum/tree/development) 
 ![GitHub last commit](https://img.shields.io/github/last-commit/etclabscore/go-ethereum.svg)
 [![Join the chat at https://gitter.im/etclabscore/go-ethereum](https://badges.gitter.im/etclabscore/go-ethereum.svg)](https://gitter.im/etclabscore/go-ethereum?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
