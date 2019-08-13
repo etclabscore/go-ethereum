@@ -715,26 +715,26 @@ func TestAllETH(t *testing.T) {
 	skipTests["FailedCreateRevertsDeletion.json"] = "State trie clearing unimplemented"
 	
 	//Create2 related skipped tests, all these tests use Create2 opcode
-	skipTests["codeCopyZero.json"] = "Create2 unimplemented"
-	skipTests["dynamicAccountOverwriteEmpty.json"] = "Create2 unimplemented"
-	skipTests["extCodeHashNewAccount.json"] = "Create2 unimplemented"
-	skipTests["extCodeHashSelfInInit.json"] = "Create2 unimplemented"
-	skipTests["extCodeHashSubcallOOG.json/ConstantinopleFix/0"] = "Create2 unimplemented"
-	skipTests["extCodeHashSubcallOOG.json/ConstantinopleFix/1"] = "Create2 unimplemented"
-	skipTests["extCodeHashSubcallOOG.json/ConstantinopleFix/2"] = "Create2 unimplemented"
-	skipTests["extCodeHashCreatedAndDeletedAccount.json"] = "Create2 unimplemented"
-	skipTests["extCodeHashCreatedAndDeletedAccountCall.json"] = "Create2 unimplemented"
-	skipTests["extCodeHashCreatedAndDeletedAccountRecheckInOuterCall.json"] = "Create2 unimplemented"
-	skipTests["extCodeHashCreatedAndDeletedAccountStaticCall.json"] = "Create2 unimplemented"
-	skipTests["extCodeHashDeletedAccount3.json"] = "Create2 unimplemented"
-	skipTests["extCodeHashDeletedAccount4.json"] = "Create2 unimplemented"
-	skipTests["extCodeHashInInitCode.json/ConstantinopleFix/1"] = "Create2 unimplemented"
-	skipTests["extCodeHashInInitCode.json/Constantinople/1"] = "Create2 unimplemented"	
+	// skipTests["codeCopyZero.json"] = "Create2 unimplemented"
+	// skipTests["dynamicAccountOverwriteEmpty.json"] = "Create2 unimplemented"
+	// skipTests["extCodeHashNewAccount.json"] = "Create2 unimplemented"
+	// skipTests["extCodeHashSelfInInit.json"] = "Create2 unimplemented"
+	// skipTests["extCodeHashSubcallOOG.json/ConstantinopleFix/0"] = "Create2 unimplemented"
+	// skipTests["extCodeHashSubcallOOG.json/ConstantinopleFix/1"] = "Create2 unimplemented"
+	// skipTests["extCodeHashSubcallOOG.json/ConstantinopleFix/2"] = "Create2 unimplemented"
+	// skipTests["extCodeHashCreatedAndDeletedAccount.json"] = "Create2 unimplemented"
+	// skipTests["extCodeHashCreatedAndDeletedAccountCall.json"] = "Create2 unimplemented"
+	// skipTests["extCodeHashCreatedAndDeletedAccountRecheckInOuterCall.json"] = "Create2 unimplemented"
+	// skipTests["extCodeHashCreatedAndDeletedAccountStaticCall.json"] = "Create2 unimplemented"
+	// skipTests["extCodeHashDeletedAccount3.json"] = "Create2 unimplemented"
+	// skipTests["extCodeHashDeletedAccount4.json"] = "Create2 unimplemented"
+	// skipTests["extCodeHashInInitCode.json/ConstantinopleFix/1"] = "Create2 unimplemented"
+	// skipTests["extCodeHashInInitCode.json/Constantinople/1"] = "Create2 unimplemented"	
 
 	skipTests["create2noCash.json"] = "Bug"
 
-	skipTests["randomStatetestDEFAULT-Tue_07_58_41-15153-575192.json"] = "EXTCODEHASH not implemented"
-	skipTests["create2SmartInitCode.json/ConstantinopleFix/0"] = "EXTCODEHASH not implemented"
+	// skipTests["randomStatetestDEFAULT-Tue_07_58_41-15153-575192.json"] = "EXTCODEHASH not implemented"
+	// skipTests["create2SmartInitCode.json/ConstantinopleFix/0"] = "EXTCODEHASH not implemented"
 
 	unsupportedDirs := map[string]bool{
 		"stZeroKnowledge":  true,
@@ -759,7 +759,6 @@ func TestAllETH(t *testing.T) {
 func runETHTests(t *testing.T, fileNames []string, skipTests map[string]string) {
 	unsupportedForkConfigs := map[string]bool{
 		"Constantinople": true,
-		// "ConstantinopleFix":            true,
 		"EIP158":                       true,
 		"FrontierToHomesteadAt5":       true,
 		"HomesteadToEIP150At5":         true,
