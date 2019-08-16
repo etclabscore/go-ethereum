@@ -325,8 +325,8 @@ func create(env vm.Environment, caller vm.ContractRef, address, codeAddr *common
 
 }
 
-func exec(env vm.Environment, caller vm.ContractRef, address, codeAddr *common.Address, codeHash common.Hash, input, code []byte, gas, gasPrice, value *big.Int, readOnly bool) (ret []byte, addr common.Address, err error) {
-	evm := env.Vm()
+func exec(env vm.Environment, caller vm.ContractRef, codeAddr *common.Address, codeHash common.Hash, input, code []byte, gas, gasPrice, value *big.Int, readOnly bool) (ret []byte, addr common.Address, err error) {
+	// evm := env.Vm()
 	// Depth check execution. Fail if we're trying to execute above the
 	// limit.
 	if env.Depth() > callCreateDepthMax {
@@ -344,7 +344,7 @@ func exec(env vm.Environment, caller vm.ContractRef, address, codeAddr *common.A
 	// Create a new account on the state
 	nonce := env.Db().GetNonce(caller.Address())
 	env.Db().SetNonce(caller.Address(), nonce+1)
-	address = crypto.CreateAddress(caller.Address(), nonce)
+	address := crypto.CreateAddress(caller.Address(), nonce)
 
 	// Ensure there's no existing contract already at the designated address
 	contractHash := env.Db().GetCodeHash(address)
