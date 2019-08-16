@@ -15,6 +15,7 @@ require (
 	github.com/mailru/easyjson v0.0.0-20190403194419-1ea4449da983
 	github.com/maruel/panicparse v1.2.0 // indirect
 	github.com/mattn/go-colorable v0.1.2 // indirect
+	github.com/nsf/termbox-go v0.0.0-20190624072549-eeb6cd0a1762 // indirect
 	github.com/peterh/liner v1.1.0
 	github.com/rcrowley/go-metrics v0.0.0-20181016184325-3113b8401b8a
 	github.com/rjeczalik/notify v0.9.1
@@ -32,3 +33,5 @@ require (
 	gopkg.in/karalabe/cookiejar.v2 v2.0.0-20150724131613-8dcd6a7f4951
 	gopkg.in/urfave/cli.v1 v1.17.0
 )
+
+replace github.com/eth-classic/go-ethereum/accounts/abi/bind v0.0.0-20190521151733-fe17e9e1e2ce => ./accounts/abi/bind

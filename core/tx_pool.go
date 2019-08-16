@@ -124,6 +124,13 @@ func (pool *TxPool) eventLoop() {
 	}
 }
 
+func (pool *TxPool) lockedReset() {
+	pool.mu.Lock()
+	defer pool.mu.Unlock()
+
+	pool.resetState()
+}
+
 func (pool *TxPool) resetState() {
 	currentState, err := pool.currentState()
 	if err != nil {
@@ -290,7 +297,7 @@ func (pool *TxPool) validateTx(tx *types.Transaction) (e error) {
 		return
 	}
 
-	intrGas := IntrinsicGas(tx.Data(), MessageCreatesContract(tx), pool.homestead)
+	intrGas := IntrinsicGas(tx.Data(), tx.To() == nil, pool.homestead)
 	if tx.Gas().Cmp(intrGas) < 0 {
 		e = ErrIntrinsicGas
 		return
