@@ -67,12 +67,6 @@ func newJumpTable(ruleset RuleSet, blockNumber *big.Int) vmJumpTable {
 	}
 
 	if ruleset.IsAgharta(blockNumber) {
-		jumpTable[CREATE2] = jumpPtr{
-			fn:      opCreate2,
-			valid:   true,
-			writes:  true,
-			returns: true,
-		}
 		
 		jumpTable[SHL] = jumpPtr{
 			fn:    opSHL,

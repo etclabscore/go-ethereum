@@ -122,7 +122,3 @@ func (self *VMEnv) StaticCall(me vm.ContractRef, addr common.Address, data []byt
 func (self *VMEnv) Create(me vm.ContractRef, data []byte, gas, price, value *big.Int) ([]byte, common.Address, error) {
 	return Create(self, me, data, gas, price, value)
 }
-
-func (self *VMEnv) Create2(me vm.ContractRef, data []byte, gas, price, salt, value *big.Int) ([]byte, common.Address, error) {
-	return Create2(self, me, data, gas, price, salt, value)
-}
