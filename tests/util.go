@@ -155,6 +155,7 @@ type RuleSet struct {
 	DiehardBlock             *big.Int
 	ExplosionBlock           *big.Int
 	AtlantisBlock            *big.Int
+	AghartaBlock             *big.Int
 }
 
 // StateTest object that matches the General State Test json file
@@ -208,6 +209,10 @@ func (r RuleSet) IsHomestead(n *big.Int) bool {
 
 func (r RuleSet) IsAtlantis(n *big.Int) bool {
 	return r.AtlantisBlock != nil && n.Cmp(r.AtlantisBlock) >= 0
+}
+
+func (r RuleSet) IsAgharta(n *big.Int) bool {
+	return r.AghartaBlock != nil && n.Cmp(r.AghartaBlock) >= 0
 }
 
 func (r RuleSet) GasTable(num *big.Int) *vm.GasTable {
