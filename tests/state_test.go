@@ -711,8 +711,8 @@ func TestAllETH(t *testing.T) {
 
 func runETHTests(t *testing.T, fileNames []string, skipTests map[string]string) {
 	unsupportedForkConfigs := map[string]bool{
-		"Constantinople":               true,
-		"ConstantinopleFix":            true,
+		"Constantinople": true,
+		// "ConstantinopleFix":            true,
 		"EIP158":                       true,
 		"FrontierToHomesteadAt5":       true,
 		"HomesteadToEIP150At5":         true,
