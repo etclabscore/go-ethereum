@@ -283,6 +283,7 @@ func (t *StateTest) runETHSubtest(subtest StateSubtest) error {
 	// Only delete empty objects for forks which have not implemented EIP158/161
 	blockNum, _ := new(big.Int).SetString(t.Env.CurrentNumber, 0)
 	deleteEmptyObjects := ruleSet.IsAtlantis(blockNum)
+
 	// Commit block
 	statedb.CommitTo(db, deleteEmptyObjects)
 
