@@ -224,36 +224,28 @@ func StaticCall(env vm.Environment, caller vm.ContractRef, addr common.Address, 
 func Create(env vm.Environment, caller vm.ContractRef, code []byte, gas, gasPrice, value *big.Int) (ret []byte, address common.Address, err error) {
 	nonce := env.Db().GetNonce(caller.Address())
 	addr := crypto.CreateAddress(caller.Address(), nonce)
-	ret, address, err = create(env, caller, &addr, nil, crypto.Keccak256Hash(code), nil, code, gas, gasPrice, value, false)
+	ret, address, err = create(env, caller, &addr, code, gas, gasPrice, value)
 	// Here we get an error if we run into maximum stack depth,
 	// See: https://github.com/ethereum/yellowpaper/pull/131
 	// and YP definitions for CREATE
 
-	//if there's an error we return nothing
-	if err != nil && err != vm.ErrRevert {
-		return nil, address, err
-	}
 	return ret, address, err
 }
 
 // Create2 creates a new contract with the given code
 func Create2(env vm.Environment, caller vm.ContractRef, code []byte, gas, gasPrice, salt, value *big.Int) (ret []byte, address common.Address, err error) {
 	addr := crypto.CreateAddress2(caller.Address(), common.BigToHash(salt).Bytes(), crypto.Keccak256(code))
-	ret, address, err = create(env, caller, &addr, nil, crypto.Keccak256Hash(code), nil, code, gas, gasPrice, value, false)
+	ret, address, err = create(env, caller, &addr, code, gas, gasPrice, value)
 	// Here we get an error if we run into maximum stack depth,
 	// See: https://github.com/ethereum/yellowpaper/pull/131
 	// and YP definitions for CREATE
 
-	//if there's an error we return nothing
-	if err != nil && err != vm.ErrRevert {
-		return nil, address, err
-	}
 	return ret, address, err
 }
 
 // create creates a new contract using code as deployment code.
-func create(env vm.Environment, caller vm.ContractRef, address, codeAddr *common.Address, codeHash common.Hash, input, code []byte, gas, gasPrice, value *big.Int, readOnly bool) ([]byte, common.Address, error) {
-	evm := env.Vm()
+//Replace codeHash w/ crypto.Keccak256Hash
+func create(env vm.Environment, caller vm.ContractRef, address *common.Address, code []byte, gas, gasPrice, value *big.Int) ([]byte, common.Address, error) {
 	// Depth check execution. Fail if we're trying to execute above the
 	// limit.
 	if env.Depth() > callCreateDepthMax {
@@ -290,10 +282,10 @@ func create(env vm.Environment, caller vm.ContractRef, address, codeAddr *common
 	// Initialise a new contract and set the code that is to be used by the EVM.
 	// The contract is a scoped environment for this execution context only.
 	contract := vm.NewContract(caller, to, value, gas, gasPrice)
-	contract.SetCallCode(codeAddr, codeHash, code)
+	contract.SetCallCode(nil, crypto.Keccak256Hash(code), code)
 	defer contract.Finalise()
 
-	ret, err := evm.Run(contract, input, readOnly)
+	ret, err := env.Vm().Run(contract, nil, false)
 
 	// check whether the max code size has been exceeded
 	maxCodeSizeExceeded := len(ret) > maxCodeSize && env.RuleSet().IsAtlantis(env.BlockNumber())
@@ -323,6 +315,11 @@ func create(env vm.Environment, caller vm.ContractRef, address, codeAddr *common
 	// Assign err if contract code size exceeds the max while the err is still empty.
 	if maxCodeSizeExceeded && err == nil {
 		err = errMaxCodeSizeExceeded
+	}
+
+	//if there's an error we return nothing
+	if err != nil && err != vm.ErrRevert {
+		return nil, *address, err
 	}
 
 	return ret, *address, err
