@@ -25,6 +25,7 @@ import (
 	"github.com/eth-classic/go-ethereum/core/state"
 	"github.com/eth-classic/go-ethereum/core/vm"
 	"github.com/eth-classic/go-ethereum/crypto"
+	"github.com/eth-classic/go-ethereum/params"
 )
 
 var (
@@ -224,7 +225,7 @@ func StaticCall(env vm.Environment, caller vm.ContractRef, addr common.Address, 
 func Create(env vm.Environment, caller vm.ContractRef, code []byte, gas, gasPrice, value *big.Int) (ret []byte, address common.Address, err error) {
 	nonce := env.Db().GetNonce(caller.Address())
 	addr := crypto.CreateAddress(caller.Address(), nonce)
-	ret, address, err = create(env, caller, &addr, code, gas, gasPrice, value)
+	ret, address, err = create(env, caller, addr, code, gas, gasPrice, value)
 	// Here we get an error if we run into maximum stack depth,
 	// See: https://github.com/ethereum/yellowpaper/pull/131
 	// and YP definitions for CREATE
@@ -235,7 +236,7 @@ func Create(env vm.Environment, caller vm.ContractRef, code []byte, gas, gasPric
 // Create2 creates a new contract with the given code
 func Create2(env vm.Environment, caller vm.ContractRef, code []byte, gas, gasPrice, salt, value *big.Int) (ret []byte, address common.Address, err error) {
 	addr := crypto.CreateAddress2(caller.Address(), common.BigToHash(salt).Bytes(), crypto.Keccak256(code))
-	ret, address, err = create(env, caller, &addr, code, gas, gasPrice, value)
+	ret, address, err = create(env, caller, addr, code, gas, gasPrice, value)
 	// Here we get an error if we run into maximum stack depth,
 	// See: https://github.com/ethereum/yellowpaper/pull/131
 	// and YP definitions for CREATE
@@ -245,7 +246,7 @@ func Create2(env vm.Environment, caller vm.ContractRef, code []byte, gas, gasPri
 
 // create creates a new contract using code as deployment code.
 //Replace codeHash w/ crypto.Keccak256Hash
-func create(env vm.Environment, caller vm.ContractRef, address *common.Address, code []byte, gas, gasPrice, value *big.Int) ([]byte, common.Address, error) {
+func create(env vm.Environment, caller vm.ContractRef, address common.Address, code []byte, gas, gasPrice, value *big.Int) ([]byte, common.Address, error) {
 	// Depth check execution. Fail if we're trying to execute above the
 	// limit.
 	if env.Depth() > callCreateDepthMax {
@@ -262,8 +263,8 @@ func create(env vm.Environment, caller vm.ContractRef, address *common.Address, 
 	env.Db().SetNonce(caller.Address(), nonce+1)
 
 	// Ensure there's no existing contract already at the designated address
-	contractHash := env.Db().GetCodeHash(*address)
-	if env.Db().GetNonce(*address) != state.StartingNonce || (contractHash != (common.Hash{}) && contractHash != emptyCodeHash) {
+	contractHash := env.Db().GetCodeHash(address)
+	if env.Db().GetNonce(address) != state.StartingNonce || (contractHash != (common.Hash{}) && contractHash != emptyCodeHash) {
 		return nil, common.Address{}, errContractAddressCollision
 	}
 
@@ -271,10 +272,10 @@ func create(env vm.Environment, caller vm.ContractRef, address *common.Address, 
 	snapshot := env.SnapshotDatabase()
 
 	//Create account with address
-	to := env.Db().CreateAccount(*address)
+	to := env.Db().CreateAccount(address)
 
 	if env.RuleSet().IsAtlantis(env.BlockNumber()) {
-		env.Db().SetNonce(*address, state.StartingNonce+1)
+		env.Db().SetNonce(address, state.StartingNonce+1)
 	}
 
 	env.Transfer(env.Db().GetAccount(caller.Address()), to, value)
@@ -295,9 +296,9 @@ func create(env vm.Environment, caller vm.ContractRef, address *common.Address, 
 	// by the error checking condition below.
 	if err == nil && !maxCodeSizeExceeded {
 		createDataGas := big.NewInt(int64(len(ret)))
-		createDataGas.Mul(createDataGas, big.NewInt(200))
+		createDataGas.Mul(createDataGas, params.CreateDataGas)
 		if contract.UseGas(createDataGas) {
-			env.Db().SetCode(*address, ret)
+			env.Db().SetCode(address, ret)
 		} else {
 			err = vm.CodeStoreOutOfGasError
 		}
@@ -319,10 +320,10 @@ func create(env vm.Environment, caller vm.ContractRef, address *common.Address, 
 
 	//if there's an error we return nothing
 	if err != nil && err != vm.ErrRevert {
-		return nil, *address, err
+		return nil, address, err
 	}
 
-	return ret, *address, err
+	return ret, address, err
 
 }
 
