@@ -27,7 +27,7 @@ jobs:
             - go-mod-v4-{{ checksum "go.sum" }}
       - run:
           name: Compile Binaries
-          command: make mac/build
+          command: make build
       - save_cache:
           key: go-mod-v4-{{ checksum "go.sum" }}
           paths:
@@ -115,12 +115,11 @@ jobs:
           keys:
             - go-mod-v4-{{ checksum "go.sum" }}
       - run:
+          name: Compile Binaries
+          command: make build
+      - run:
           name: Release Binaries
           command: |
-            make cmd/geth
-            VERSION=$(bin/geth version | grep -i version | head -n1 | awk '{print $2}')
-            rm ./bin/geth
-            make mac/build
             pushd ./bin/
             sha256sum ./abigen > ./abigen.sha256
             sha256sum ./bootnode > ./bootnode.sha256
@@ -154,9 +153,7 @@ jobs:
             - go-mod-v4-{{ checksum "go.sum" }}
       - run:
           name: Compile Binaries
-          command: |
-            make cmd/geth
-            make win/build
+          command: make win/build
       - run:
           name: Release Artifacts
           command: |
