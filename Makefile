@@ -109,7 +109,7 @@ mac/rlpdump: ## Build a local snapshot of rlpdump.
 	@echo "Done building rlpdump."
 	@echo "Run \"$(BINARY)/rlpdump\" to launch rlpdump."
 
-win/geth: chainconfig ## Build a local snapshot binary version of geth.
+win/geth: ## Build a local snapshot binary version of geth.
 	mkdir -p ./${BINARY}
 	${GO_MOD} ${WINFLAGS} go build ${LDFLAGS} -o ${BINARY}/geth.exe -tags="netgo" ./cmd/geth
 	@echo "Done building geth."
