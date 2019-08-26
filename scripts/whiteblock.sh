@@ -19,9 +19,11 @@ echo "building parity node..."
 echo "pulling latest testing script from github..."
 git clone https://github.com/ChainSafe/Attalus.git
 cd ./Attalus
+git fetch origin
+git checkout origin/stephanie/whiteblockChainID
 yarn install
 
 PK=0x$(../wb get account info | jq '.[].privateKey' | tr -d '"')
 
 echo "running script"
-yarn start --pk $PK --rpcport http://localhost:8570 && ./wb done
+yarn start --pk $PK --rpcport http://wbm-greg.boxes.whiteblock.io:8570 --chainid  && ../wb done
