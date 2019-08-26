@@ -25,5 +25,7 @@ yarn install
 
 PK=0x$(../wb get account info | jq '.[].privateKey' | tr -d '"')
 
+echo $PK
+
 echo "running script"
-yarn start --pk $PK --rpcport http://wbm-greg.boxes.whiteblock.io:8570 --chainid  && ../wb done
+yarn start --pk $PK --rpcport http://wbm-greg.boxes.whiteblock.io:8570  && ../wb done
