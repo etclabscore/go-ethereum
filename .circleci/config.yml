@@ -46,7 +46,7 @@ jobs:
             - "66:fe:0a:cc:20:fb:80:7d:79:ed:72:4a:99:20:b3:0c"
       - run:
           name: Execute whiteblock tests
-          command: sh ./scripts/whiteblock.sh ${WB_JWT} ${CIRCLE_BRANCH}          
+          command: ./scripts/whiteblock.sh ${WB_JWT} ${CIRCLE_BRANCH}          
   release-linux-go-1.12:
     working_directory: ~/go-ethereum
     docker:
