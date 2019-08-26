@@ -14,7 +14,7 @@ echo "building gethc node..."
 ./wb build -b ethclassic --git-repo https://github.com/etclabscore/go-ethereum.git --git-repo-branch development -n 1 -m 0 -c 0 -y -p0=8570:8545
 
 echo "getting private key for funded account"
-PK=0x$(../wb get account info | jq '.[].privateKey' | tr -d '"')
+PK=0x$(./wb get account info | jq '.[].privateKey' | tr -d '"')
 PKS=( $PK )
 
 echo "building parity node..."
