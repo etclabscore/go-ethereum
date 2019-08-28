@@ -78,7 +78,7 @@ jobs:
             - go-mod-v4-{{ checksum "go.sum" }}
       - run:
           name: Compile Binaries
-          command: make build
+          command: make lin/build
       - run:
           name: Release Artifacts
           command: |
@@ -190,14 +190,14 @@ workflows:
           filters:
             tags:
               only: /.*/
-      - build-darwin-go-1.12:
-          filters:
-            tags:
-              only: /.*/
-      - build-windows-go-1.12:
-          filters:
-            tags:
-              only: /.*/
+      # - build-darwin-go-1.12:
+      #     filters:
+      #       tags:
+      #         only: /.*/
+      # - build-windows-go-1.12:
+      #     filters:
+      #       tags:
+      #         only: /.*/
       - tests-linux-go-1.12:
           requires:
             - build-linux-go-1.12
@@ -212,21 +212,21 @@ workflows:
               only: /^v.*/
             branches:
               ignore: /.*/
-      - release-darwin-go-1.12:
-          requires:
-            - build-darwin-go-1.12
-            - tests-linux-go-1.12
-          filters:
-            tags:
-              only: /^v.*/
-            branches:
-              ignore: /.*/
-      - release-windows-go-1.12:
-          requires:
-            - build-windows-go-1.12
-            - tests-linux-go-1.12
-          filters:
-            tags:
-              only: /^v.*/
-            branches:
-              ignore: /.*/
+      # - release-darwin-go-1.12:
+      #     requires:
+      #       - build-darwin-go-1.12
+      #       - tests-linux-go-1.12
+      #     filters:
+      #       tags:
+      #         only: /^v.*/
+      #       branches:
+      #         ignore: /.*/
+      # - release-windows-go-1.12:
+      #     requires:
+      #       - build-windows-go-1.12
+      #       - tests-linux-go-1.12
+      #     filters:
+      #       tags:
+      #         only: /^v.*/
+      #       branches:
+      #         ignore: /.*/

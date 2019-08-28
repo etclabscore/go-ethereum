@@ -11,6 +11,9 @@ WINFLAGS=GOOS=windows GOARCH=amd64
 MACFLAGS=GOOS=darwin GOARCH=amd64
 LDFLAGS=-ldflags "-X main.Version="`git describe --tags`
 
+SETMACFLAGS=$(eval BUILDFLAGS=${MACFLAGS})
+SETLINFLAGS=$(eval BUILDFLAGS=${LINFLAGS})
+
 BINARY=bin
 BUILD_TIME=`date +%FT%T%z`
 COMMIT=`git log --pretty=format:'%h' -n 1`
@@ -21,91 +24,57 @@ export GOPATH?=${HOME}/go
 build: cmd/abigen cmd/bootnode cmd/disasm cmd/ethtest cmd/evm cmd/gethrpctest cmd/rlpdump cmd/geth ## Build a local snapshot binary version of all commands
 	@ls -ld $(BINARY)/*
 
-mac/build: mac/abigen mac/bootnode mac/disasm mac/ethtest mac/evm mac/gethrpctest mac/rlpdump mac/geth ## Build a local snapshot binary version of all commands
-	@ls -ld $(BINARY)/*
+mac/build: macflags build
+
+lin/build: linflags build
+
+macflags:
+	${SETMACFLAGS}
+
+linflags:
+	${SETLINFLAGS}
 
 win/build: win/abigen win/bootnode win/disasm win/ethtest win/evm win/gethrpctest win/rlpdump win/geth ## Build a local snapshot binary version of all commands
 	@ls -ld $(BINARY)/*
 
 cmd/geth: chainconfig ## Build a local snapshot binary version of geth.
 	mkdir -p ./${BINARY}
-	${GO_MOD} ${LINFLAGS} go build ${LDFLAGS} -o ${BINARY}/geth -tags="netgo" ./cmd/geth
+	${GO_MOD} ${BUILDFLAGS} go build ${LDFLAGS} -o ${BINARY}/geth -tags="netgo" ./cmd/geth
 	@echo "Done building geth."
 	@echo "Run \"$(BINARY)/geth\" to launch geth."
 
 cmd/abigen: ## Build a local snapshot binary version of abigen.
-	mkdir -p ./${BINARY} && ${GO_MOD} ${LINFLAGS} go build ${LDFLAGS} -o ${BINARY}/abigen ./cmd/abigen
+	mkdir -p ./${BINARY} && ${GO_MOD} ${BUILDFLAGS} go build ${LDFLAGS} -o ${BINARY}/abigen ./cmd/abigen
 	@echo "Done building abigen."
 	@echo "Run \"$(BINARY)/abigen\" to launch abigen."
 
 cmd/bootnode: ## Build a local snapshot of bootnode.
-	mkdir -p ./${BINARY} && ${GO_MOD} ${LINFLAGS} go build ${LDFLAGS} -o ${BINARY}/bootnode ./cmd/bootnode
+	mkdir -p ./${BINARY} && ${GO_MOD} ${BUILDFLAGS} go build ${LDFLAGS} -o ${BINARY}/bootnode ./cmd/bootnode
 	@echo "Done building bootnode."
 	@echo "Run \"$(BINARY)/bootnode\" to launch bootnode."
 
 cmd/disasm: ## Build a local snapshot of disasm.
-	mkdir -p ./${BINARY} && ${GO_MOD} ${LINFLAGS} go build ${LDFLAGS} -o ${BINARY}/disasm ./cmd/disasm
+	mkdir -p ./${BINARY} && ${GO_MOD} ${BUILDFLAGS} go build ${LDFLAGS} -o ${BINARY}/disasm ./cmd/disasm
 	@echo "Done building disasm."
 	@echo "Run \"$(BINARY)/disasm\" to launch disasm."
 
 cmd/ethtest: ## Build a local snapshot of ethtest.
-	mkdir -p ./${BINARY} && ${GO_MOD} ${LINFLAGS} go build ${LDFLAGS} -o ${BINARY}/ethtest ./cmd/ethtest
+	mkdir -p ./${BINARY} && ${GO_MOD} ${BUILDFLAGS} go build ${LDFLAGS} -o ${BINARY}/ethtest ./cmd/ethtest
 	@echo "Done building ethtest."
 	@echo "Run \"$(BINARY)/ethtest\" to launch ethtest."
 
 cmd/evm: ## Build a local snapshot of evm.
-	mkdir -p ./${BINARY} && ${GO_MOD} ${LINFLAGS} go build ${LDFLAGS} -o ${BINARY}/evm ./cmd/evm
+	mkdir -p ./${BINARY} && ${GO_MOD} ${BUILDFLAGS} go build ${LDFLAGS} -o ${BINARY}/evm ./cmd/evm
 	@echo "Done building evm."
 	@echo "Run \"$(BINARY)/evm\" to launch evm."
 
 cmd/gethrpctest: ## Build a local snapshot of gethrpctest.
-	mkdir -p ./${BINARY} && ${GO_MOD} ${LINFLAGS} go build ${LDFLAGS} -o ${BINARY}/gethrpctest ./cmd/gethrpctest
+	mkdir -p ./${BINARY} && ${GO_MOD} ${BUILDFLAGS} go build ${LDFLAGS} -o ${BINARY}/gethrpctest ./cmd/gethrpctest
 	@echo "Done building gethrpctest."
 	@echo "Run \"$(BINARY)/gethrpctest\" to launch gethrpctest."
 
 cmd/rlpdump: ## Build a local snapshot of rlpdump.
-	mkdir -p ./${BINARY} && ${GO_MOD} ${LINFLAGS} go build ${LDFLAGS} -o ${BINARY}/rlpdump ./cmd/rlpdump
-	@echo "Done building rlpdump."
-	@echo "Run \"$(BINARY)/rlpdump\" to launch rlpdump."
-
-mac/geth: chainconfig ## Build a local snapshot binary version of geth.
-	mkdir -p ./${BINARY}
-	${GO_MOD} ${MACFLAGS} go build ${LDFLAGS} -o ${BINARY}/geth -tags="netgo" ./cmd/geth
-	@echo "Done building geth."
-	@echo "Run \"$(BINARY)/geth\" to launch geth."
-
-mac/abigen: ## Build a local snapshot binary version of abigen.
-	mkdir -p ./${BINARY} && ${GO_MOD} ${MACFLAGS} go build ${LDFLAGS} -o ${BINARY}/abigen ./cmd/abigen
-	@echo "Done building abigen."
-	@echo "Run \"$(BINARY)/abigen\" to launch abigen."
-
-mac/bootnode: ## Build a local snapshot of bootnode.
-	mkdir -p ./${BINARY} && ${GO_MOD} ${MACFLAGS} go build ${LDFLAGS} -o ${BINARY}/bootnode ./cmd/bootnode
-	@echo "Done building bootnode."
-	@echo "Run \"$(BINARY)/bootnode\" to launch bootnode."
-
-mac/disasm: ## Build a local snapshot of disasm.
-	mkdir -p ./${BINARY} && ${GO_MOD} ${MACFLAGS} go build ${LDFLAGS} -o ${BINARY}/disasm ./cmd/disasm
-	@echo "Done building disasm."
-	@echo "Run \"$(BINARY)/disasm\" to launch disasm."
-
-mac/ethtest: ## Build a local snapshot of ethtest.
-	mkdir -p ./${BINARY} && ${GO_MOD} ${MACFLAGS} go build ${LDFLAGS} -o ${BINARY}/ethtest ./cmd/ethtest
-	@echo "Done building ethtest."
-	@echo "Run \"$(BINARY)/ethtest\" to launch ethtest."
-
-mac/evm: ## Build a local snapshot of evm.
-	mkdir -p ./${BINARY} && ${GO_MOD} ${MACFLAGS} go build ${LDFLAGS} -o ${BINARY}/evm ./cmd/evm
-	@echo "Done building evm."
-	@echo "Run \"$(BINARY)/evm\" to launch evm."
-
-mac/gethrpctest: ## Build a local snapshot of gethrpctest.
-	mkdir -p ./${BINARY} && ${GO_MOD} ${MACFLAGS} go build ${LDFLAGS} -o ${BINARY}/gethrpctest ./cmd/gethrpctest
-	@echo "Done building gethrpctest."
-	@echo "Run \"$(BINARY)/gethrpctest\" to launch gethrpctest."
-
-mac/rlpdump: ## Build a local snapshot of rlpdump.
-	mkdir -p ./${BINARY} && ${GO_MOD} ${MACFLAGS} go build ${LDFLAGS} -o ${BINARY}/rlpdump ./cmd/rlpdump
+	mkdir -p ./${BINARY} && ${GO_MOD} ${BUILDFLAGS} go build ${LDFLAGS} -o ${BINARY}/rlpdump ./cmd/rlpdump
 	@echo "Done building rlpdump."
 	@echo "Run \"$(BINARY)/rlpdump\" to launch rlpdump."
 
@@ -151,12 +120,12 @@ win/rlpdump: ## Build a local snapshot of rlpdump.
 	@echo "Run \"$(BINARY)/rlpdump\" to launch rlpdump."
 
 install: ## Install all packages to $GOPATH/bin
-	${GO_MOD} ${LINFLAGS} go install ./cmd/{abigen,bootnode,disasm,ethtest,evm,gethrpctest,rlpdump}
+	${GO_MOD} ${BUILDFLAGS} go install ./cmd/{abigen,bootnode,disasm,ethtest,evm,gethrpctest,rlpdump}
 	$(MAKE) install_geth
 
 install_geth: chainconfig ## Install geth to $GOPATH/bin
 	$(info Installing $$GOPATH/bin/geth)
-	${GO_MOD} ${LINFLAGS} go install ${LDFLAGS} -tags="netgo" ./cmd/geth
+	${GO_MOD} ${BUILDFLAGS} go install ${LDFLAGS} -tags="netgo" ./cmd/geth
 
 fmt: ## gofmt and goimports all go files
 	find . -name '*.go' -not -wholename './vendor/*' -not -wholename './_vendor*' | while read -r file; do gofmt -w -s "$$file"; goimports -w "$$file"; done
@@ -184,7 +153,7 @@ lint: ## Run all the linters
 
 test: ## Run all the tests
 	echo 'mode: atomic' > coverage.txt && \
-	${GO_MOD} ${LINFLAGS} go list ./... | xargs -n1 -I{} sh -c '${GO_MOD} ${LINFLAGS} go test -covermode=atomic -coverprofile=coverage.tmp {} && \
+	${GO_MOD} go list ./... | xargs -n1 -I{} sh -c '${GO_MOD} go test -covermode=atomic -coverprofile=coverage.tmp {} && \
 	tail -n +2 coverage.tmp >> coverage.txt' && \
 	rm coverage.tmp
 
@@ -197,7 +166,7 @@ core/assets/assets.go: ${GOPATH}/bin/resources core/config/*.json core/config/*.
 	${GOPATH}/bin/resources -fmt -declare -var=DEFAULTS -package=assets -output=core/assets/assets.go core/config/*.json core/config/*.csv
 
 ${GOPATH}/bin/resources:
-	${GO_MOD} ${LINFLAGS} go get -u github.com/omeid/go-resources/cmd/resources
+	${GO_MOD} go get -u github.com/omeid/go-resources/cmd/resources
 
 clean: ## Remove local snapshot binary directory
 	if [ -d ${BINARY} ] ; then rm -rf ${BINARY} ; fi
@@ -210,4 +179,4 @@ help:
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
 
-.PHONY: setup test cover fmt lint ci build cmd/geth cmd/abigen cmd/bootnode cmd/disasm cmd/ethtest cmd/evm cmd/gethrlptest cmd/rlpdump install install_geth clean help static
+.PHONY: setup test cover fmt lint ci build mac/build lin/build macflags linflags cmd/geth cmd/abigen cmd/bootnode cmd/disasm cmd/ethtest cmd/evm cmd/gethrlptest cmd/rlpdump install install_geth clean help static
