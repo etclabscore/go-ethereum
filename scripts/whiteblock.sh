@@ -22,7 +22,7 @@ echo "building parity node..."
 
 echo "pulling latest testing script from github..."
 git clone https://github.com/ChainSafe/Anemone.git
-cd ./Attalus
+cd ./Anemone
 git fetch origin
 git checkout origin/stephanie/whiteblockChainID
 yarn install
