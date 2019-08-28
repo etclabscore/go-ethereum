@@ -21,7 +21,7 @@ echo "building parity node..."
 ./wb build append -b parity -n 1 -m 0 -c 0 -y -p0=8571:8545
 
 echo "pulling latest testing script from github..."
-git clone https://github.com/ChainSafe/Attalus.git
+git clone https://github.com/ChainSafe/Anemone.git
 cd ./Attalus
 git fetch origin
 git checkout origin/stephanie/whiteblockChainID
