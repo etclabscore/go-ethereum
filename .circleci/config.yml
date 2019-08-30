@@ -170,10 +170,10 @@ jobs:
             VERSION=$(bin/geth version | grep -i version | head -n1 | awk '{print $2}')
             rm ./bin/geth
             cp -rv ./bin ./geth-classic-${VERSION}-windows
-            tar -zcvf geth-classic-${VERSION}-windows.tar.gz geth-classic-${VERSION}-windows
-            cp -v ./geth-classic-${VERSION}-windows.tar.gz ./artifacts/
+            zip geth-classic-${VERSION}-windows.zip geth-classic-${VERSION}-windows
+            cp -v ./geth-classic-${VERSION}-windows.zip ./artifacts/
             pushd ./artifacts
-            sha256sum ./geth-classic-${VERSION}-windows.tar.gz > ./geth-classic-${VERSION}-windows.sha256
+            sha256sum ./geth-classic-${VERSION}-windows.zip > ./geth-classic-${VERSION}-windows.sha256
             popd
       - store_artifacts:
           path: ~/go-ethereum/artifacts
