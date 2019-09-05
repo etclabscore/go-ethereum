@@ -20,6 +20,8 @@ PKS=( $PK )
 echo "building parity node..."
 ./wb build append -b parity -n 1 -m 0 -c 0 -y -p0=8571:8545
 
+./wb miner start
+
 echo "pulling latest testing script from github..."
 git clone https://github.com/ChainSafe/Anemone.git
 cd ./Anemone
