@@ -103,7 +103,8 @@ workflows:
               only: /.*/ 
       - release-linux-go-1.12:
           requires:
-            - whiteblock-test
+            - tests-linux-go-1.12
+            - test-whiteblock-go-1.12
           filters:
             tags:
               only: /^v.*/
