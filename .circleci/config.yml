@@ -90,7 +90,7 @@ workflows:
   version: 2
   release:
     jobs:
-      - whiteblock-test
+      - test-whiteblock-go-1.12
       - build-linux-go-1.12:
           filters:
             tags:
