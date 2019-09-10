@@ -35,7 +35,7 @@ jobs:
           key: go-mod-v4-{{ checksum "go.sum" }}
           paths:
             - "/go/pkg/mod"
-  whiteblock-test:
+  test-whiteblock-go-1.12:
     working_directory: ~/go-ethereum
     docker:
       - image: circleci/golang:1.12-node
