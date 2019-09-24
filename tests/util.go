@@ -167,13 +167,6 @@ type StateTest struct {
 	Post map[string][]stPostState `json:"post"`
 }
 
-type ShiftTest struct {
-	Env         VmEnv                    `json:"env"`
-	Pre         map[string]Account       `json:"pre"`
-	Post        map[string][]stPostState `json:"post"`
-	Transaction map[string]string
-}
-
 // GenesisAccount is an account in the state of the genesis block.
 type GenesisAccount struct {
 	Code       string            `json:"code,omitempty"`
