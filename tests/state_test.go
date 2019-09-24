@@ -745,7 +745,6 @@ func runETHTests(t *testing.T, fileNames []string, skipTests map[string]string) 
 
 			for _, test := range stateTests {
 				for _, subtest := range test.Subtests() {
-
 					key := fmt.Sprintf("%s/%d", subtest.Fork, subtest.Index)
 
 					// Not supported implementations to test
