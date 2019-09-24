@@ -692,11 +692,6 @@ func TestAllETH(t *testing.T) {
 	//EIP 1052 (EXTCODEHASH) not implemented
 	skipTests["randomStatetestDEFAULT-Tue_07_58_41-15153-575192.json"] = "EXTCODEHASH not implemented"
 
-	skipTests["create2noCash.json"] = "Bug"
-
-	skipTests["randomStatetestDEFAULT-Tue_07_58_41-15153-575192.json"] = "EXTCODEHASH not implemented"
-	skipTests["create2SmartInitCode.json/ConstantinopleFix/0"] = "EXTCODEHASH not implemented"
-
 	unsupportedDirs := map[string]bool{
 		"stZeroKnowledge":  true,
 		"stZeroKnowledge2": true,
