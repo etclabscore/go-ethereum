@@ -701,7 +701,6 @@ func TestAllETH(t *testing.T) {
 		"stZeroKnowledge":  true,
 		"stZeroKnowledge2": true,
 		"stExtCodeHash":    true,
-		"stCreate2":        true,
 	}
 
 	for _, dn := range dirNames {

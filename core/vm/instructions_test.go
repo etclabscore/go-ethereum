@@ -20,14 +20,11 @@ import (
 	"bytes"
 	"math/big"
 	"testing"
-	"math/big"
-	"testing"
 
 	"github.com/eth-classic/go-ethereum/common"
+	"github.com/eth-classic/go-ethereum/crypto"
 )
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 func TestCreate2Addresses(t *testing.T) {
 	type testcase struct {
 		origin   string
@@ -97,14 +94,6 @@ func TestCreate2Addresses(t *testing.T) {
 	}
 }
 
-<<<<<<< HEAD
-=======
-
->>>>>>> Finished SAR, SHR, SHL opcodes. EIP 145
-=======
->>>>>>> Added back isAgharta check in ruleSet.
-=======
->>>>>>> beaeb1da5d45780574eb3c9f4c748365ce3af0d3
 type TwoOperandTestcase struct {
 	X        string
 	Y        string

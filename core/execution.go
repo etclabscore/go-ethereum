@@ -223,6 +223,30 @@ func StaticCall(env vm.Environment, caller vm.ContractRef, addr common.Address, 
 
 // Create creates a new contract with the given code
 func Create(env vm.Environment, caller vm.ContractRef, code []byte, gas, gasPrice, value *big.Int) (ret []byte, address common.Address, err error) {
+	nonce := env.Db().GetNonce(caller.Address())
+	addr := crypto.CreateAddress(caller.Address(), nonce)
+	ret, address, err = create(env, caller, addr, code, gas, gasPrice, value)
+	// Here we get an error if we run into maximum stack depth,
+	// See: https://github.com/ethereum/yellowpaper/pull/131
+	// and YP definitions for CREATE
+
+	return ret, address, err
+}
+
+// Create2 creates a new contract with the given code
+func Create2(env vm.Environment, caller vm.ContractRef, code []byte, gas, gasPrice, salt, value *big.Int) (ret []byte, address common.Address, err error) {
+	addr := crypto.CreateAddress2(caller.Address(), common.BigToHash(salt).Bytes(), crypto.Keccak256(code))
+	ret, address, err = create(env, caller, addr, code, gas, gasPrice, value)
+	// Here we get an error if we run into maximum stack depth,
+	// See: https://github.com/ethereum/yellowpaper/pull/131
+	// and YP definitions for CREATE
+
+	return ret, address, err
+}
+
+// create creates a new contract using code as deployment code.
+//Replace codeHash w/ crypto.Keccak256Hash
+func create(env vm.Environment, caller vm.ContractRef, address common.Address, code []byte, gas, gasPrice, value *big.Int) ([]byte, common.Address, error) {
 	// Depth check execution. Fail if we're trying to execute above the limit.
 	if env.Depth() > callCreateDepthMax {
 		caller.ReturnGas(gas, gasPrice)
