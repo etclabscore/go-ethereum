@@ -689,11 +689,13 @@ func TestAllETH(t *testing.T) {
 	skipTests["RevertPrecompiledTouch_storage.json/ConstantinopleFix/0"] = "Bug in Test"
 	skipTests["RevertPrecompiledTouch_storage.json/ConstantinopleFix/3"] = "Bug in Test"
 
+	//EIP 1052 (EXTCODEHASH) not implemented
+	skipTests["randomStatetestDEFAULT-Tue_07_58_41-15153-575192.json"] = "EXTCODEHASH not implemented"
+
 	unsupportedDirs := map[string]bool{
 		"stZeroKnowledge":  true,
 		"stZeroKnowledge2": true,
 		"stExtCodeHash":    true,
-		"stCreate2":        true,
 	}
 
 	for _, dn := range dirNames {
@@ -711,7 +713,7 @@ func TestAllETH(t *testing.T) {
 
 func runETHTests(t *testing.T, fileNames []string, skipTests map[string]string) {
 	unsupportedForkConfigs := map[string]bool{
-		// "Constantinople":               true,
+		"Constantinople":               true,
 		"EIP158":                       true,
 		"FrontierToHomesteadAt5":       true,
 		"HomesteadToEIP150At5":         true,
