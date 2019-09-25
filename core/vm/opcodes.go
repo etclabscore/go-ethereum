@@ -523,9 +523,9 @@ var stringToOp = map[string]OpCode{
 	"STATICCALL":     STATICCALL,
 	"REVERT":         REVERT,
 	"SUICIDE":        SUICIDE,
-	"SHL":          SHL,
-	"SHR":          SHR,
-	"SAR":          SAR,
+	"SHL":            SHL,
+	"SHR":            SHR,
+	"SAR":            SAR,
 }
 
 func StringToOp(str string) OpCode {
