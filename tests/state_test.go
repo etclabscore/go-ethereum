@@ -692,7 +692,6 @@ func TestAllETH(t *testing.T) {
 	unsupportedDirs := map[string]bool{
 		"stZeroKnowledge":  true,
 		"stZeroKnowledge2": true,
-		"stExtCodeHash":    true,
 	}
 
 	for _, dn := range dirNames {
