@@ -33,7 +33,7 @@ type ruleSet struct{}
 
 func (ruleSet) IsHomestead(*big.Int) bool { return true }
 func (ruleSet) IsAtlantis(*big.Int) bool  { return true }
-func (ruleSet) IsAgharta (*big.Int) bool { return true }
+func (ruleSet) IsAgharta(*big.Int) bool   { return true }
 func (ruleSet) GasTable(*big.Int) *vm.GasTable {
 	
 		//IsAgharta will always return true

@@ -343,8 +343,7 @@ func (c *ChainConfig) IsAtlantis(num *big.Int) bool {
 	return num.Cmp(fork.Block) >= 0
 }
 
-
-// IsAgharta returns true if num is greater than atlantic config block
+// IsAgharta returns true if num is greater than Agharta config block
 func (c *ChainConfig) IsAgharta(num *big.Int) bool {
 	fork := c.ForkByName("Agharta")
 	if fork.Block == nil || num == nil {

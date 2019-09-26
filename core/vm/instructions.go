@@ -22,6 +22,7 @@ import (
 
 	"github.com/eth-classic/go-ethereum/common"
 	"github.com/eth-classic/go-ethereum/crypto"
+	"github.com/ethereum/go-ethereum/common/math"
 )
 
 var callStipend = big.NewInt(2300) // Free gas given at beginning of call.
@@ -269,6 +270,52 @@ func opMulmod(pc *uint64, env Environment, contract *Contract, memory *Memory, s
 		stack.push(U256(mul))
 	} else {
 		stack.push(new(big.Int))
+	}
+	return nil, nil
+}
+
+func opSHL(pc *uint64, env Environment, contract *Contract, memory *Memory, stack *stack) ([]byte, error) {
+	shift, value := math.U256(stack.pop()), math.U256(stack.pop())
+
+	if shift.Cmp(big.NewInt(256)) >= 0 {
+		value.SetUint64(0)
+	} else {
+		n := uint(shift.Uint64())
+		math.U256(value.Lsh(value, n))
+	}
+	stack.push(value)
+	return nil, nil
+}
+
+func opSHR(pc *uint64, env Environment, contract *Contract, memory *Memory, stack *stack) ([]byte, error) {
+	shift, value := math.U256(stack.pop()), math.U256(stack.pop())
+
+	if shift.Cmp(big.NewInt(256)) >= 0 {
+		value.SetUint64(0)
+	} else {
+		n := uint(shift.Uint64())
+		math.U256(value.Rsh(value, n))
+	}
+	stack.push(value)
+	return nil, nil
+}
+
+func opSAR(pc *uint64, env Environment, contract *Contract, memory *Memory, stack *stack) ([]byte, error) {
+	shift, value := math.U256(stack.pop()), math.S256(stack.pop())
+
+	if shift.Cmp(big.NewInt(256)) >= 0 {
+		if value.Sign() >= 0 {
+			value.SetUint64(0)
+		} else {
+			value.SetInt64(-1)
+		}
+
+		stack.push(math.U256(value))
+	} else {
+		n := uint(shift.Uint64())
+		// value
+		value.Rsh(value, n)
+		stack.push(math.U256(value))
 	}
 	return nil, nil
 }
@@ -527,6 +574,37 @@ func opCreate(pc *uint64, env Environment, contract *Contract, memory *Memory, s
 	if env.RuleSet().IsHomestead(env.BlockNumber()) && suberr == CodeStoreOutOfGasError {
 		stack.push(new(big.Int))
 	} else if suberr != nil && suberr != CodeStoreOutOfGasError {
+		stack.push(new(big.Int))
+	} else {
+		stack.push(addr.Big())
+	}
+
+	if suberr == ErrRevert {
+		return ret, nil
+	}
+	return nil, nil
+}
+
+func opCreate2(pc *uint64, env Environment, contract *Contract, memory *Memory, stack *stack) ([]byte, error) {
+	var (
+		value        = stack.pop()
+		offset, size = stack.pop(), stack.pop()
+		salt         = stack.pop()
+		input        = memory.Get(offset.Int64(), size.Int64())
+		gas          = new(big.Int).Set(contract.Gas)
+	)
+	if env.RuleSet().GasTable(env.BlockNumber()).CreateBySuicide != nil {
+		gas.Div(gas, n64)
+		gas = gas.Sub(contract.Gas, gas)
+	}
+
+	contract.UseGas(gas)
+	ret, addr, suberr := env.Create2(contract, input, gas, contract.Price, salt, value)
+	// Push item on the stack based on the returned error. If the ruleset is
+	// homestead we must check for CodeStoreOutOfGasError (homestead only
+	// rule) and treat as an error, if the ruleset is frontier we must
+	// ignore this error and pretend the operation was successful.
+	if suberr != nil {
 		stack.push(new(big.Int))
 	} else {
 		stack.push(addr.Big())

@@ -163,7 +163,8 @@ func run(ctx *cli.Context) error {
 	vmdone := time.Since(tstart)
 
 	if ctx.GlobalBool(DumpFlag.Name) {
-		statedb.CommitTo(db, false)
+		statedb.IntermediateRoot(true)
+		statedb.CommitTo(db, true)
 		fmt.Println(string(statedb.Dump([]common.Address{})))
 	}
 
@@ -232,6 +233,10 @@ func (ruleSet) IsAtlantis(*big.Int) bool { return true }
 
 //set IsAgharta to true by default for tests
 func (ruleSet) IsAgharta(*big.Int) bool { return true }
+
+func (ruleSet) IsAgharta(*big.Int) bool {
+	return true
+}
 
 func (ruleSet) GasTable(*big.Int) *vm.GasTable {
 	//IsAgharta will always return true here, 
@@ -303,4 +308,8 @@ func (self *VMEnv) StaticCall(caller vm.ContractRef, addr common.Address, data [
 
 func (self *VMEnv) Create(caller vm.ContractRef, data []byte, gas, price, value *big.Int) ([]byte, common.Address, error) {
 	return core.Create(self, caller, data, gas, price, value)
+}
+
+func (self *VMEnv) Create2(caller vm.ContractRef, data []byte, gas, price, salt, value *big.Int) ([]byte, common.Address, error) {
+	return core.Create2(self, caller, data, gas, price, salt, value)
 }

@@ -84,6 +84,8 @@ type Environment interface {
 	StaticCall(me ContractRef, addr common.Address, data []byte, gas, price *big.Int) ([]byte, error)
 	// Create a new contract
 	Create(me ContractRef, data []byte, gas, price, value *big.Int) ([]byte, common.Address, error)
+	// Create a new contract
+	Create2(me ContractRef, data []byte, gas, price, salt, value *big.Int) ([]byte, common.Address, error)
 }
 
 // Vm is the basic interface for an implementation of the EVM.
@@ -135,6 +137,6 @@ type Account interface {
 	Address() common.Address
 	ReturnGas(*big.Int, *big.Int)
 	SetCode(common.Hash, []byte)
-	ForEachStorage(cb func(key, value common.Hash) bool)
+	ForEachStorage(cb func(key, value common.Hash) bool) error
 	Value() *big.Int
 }
