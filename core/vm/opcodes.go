@@ -63,6 +63,9 @@ const (
 	XOR
 	NOT
 	BYTE
+	SHL
+	SHR
+	SAR
 
 	SHA3 = 0x20
 )
@@ -236,6 +239,9 @@ var opCodeToString = map[OpCode]string{
 	OR:     "OR",
 	XOR:    "XOR",
 	BYTE:   "BYTE",
+	SHL:    "SHL",
+	SHR:    "SHR",
+	SAR:    "SAR",
 	ADDMOD: "ADDMOD",
 	MULMOD: "MULMOD",
 
@@ -517,6 +523,9 @@ var stringToOp = map[string]OpCode{
 	"STATICCALL":     STATICCALL,
 	"REVERT":         REVERT,
 	"SUICIDE":        SUICIDE,
+	"SHL":            SHL,
+	"SHR":            SHR,
+	"SAR":            SAR,
 }
 
 func StringToOp(str string) OpCode {
