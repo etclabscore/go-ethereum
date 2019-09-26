@@ -238,6 +238,10 @@ func (ruleSet) IsAgharta(*big.Int) bool {
 	return true
 }
 
+func (ruleSet) IsAgharta(*big.Int) bool {
+	return true
+}
+
 func (ruleSet) GasTable(*big.Int) *vm.GasTable {
 	//IsAgharta will always return true here, 
 	//just have gastable default to returning the Agharta GasTable
