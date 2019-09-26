@@ -234,16 +234,8 @@ func (ruleSet) IsAtlantis(*big.Int) bool { return true }
 //set IsAgharta to true by default for tests
 func (ruleSet) IsAgharta(*big.Int) bool { return true }
 
-func (ruleSet) IsAgharta(*big.Int) bool {
-	return true
-}
-
-func (ruleSet) IsAgharta(*big.Int) bool {
-	return true
-}
-
 func (ruleSet) GasTable(*big.Int) *vm.GasTable {
-	//IsAgharta will always return true here, 
+	//IsAgharta will always return true here,
 	//just have gastable default to returning the Agharta GasTable
 	return &vm.GasTable{
 		ExtcodeSize:     big.NewInt(700),
@@ -255,8 +247,8 @@ func (ruleSet) GasTable(*big.Int) *vm.GasTable {
 		Suicide:         big.NewInt(5000),
 		ExpByte:         big.NewInt(50),
 		CreateBySuicide: big.NewInt(25000),
-	}	
-	
+	}
+
 }
 
 func (self *VMEnv) RuleSet() vm.RuleSet       { return ruleSet{} }
