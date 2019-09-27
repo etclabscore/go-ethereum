@@ -224,6 +224,8 @@ func calculateGasAndSize(gasTable *GasTable, env Environment, contract *Contract
 		}
 	case EXTCODESIZE:
 		gas.Set(gasTable.ExtcodeSize)
+	case EXTCODEHASH:
+		gas.Set(gasTable.ExtcodeHash)
 	case BALANCE:
 		gas.Set(gasTable.Balance)
 	case SLOAD:
