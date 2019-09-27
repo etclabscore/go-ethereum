@@ -250,7 +250,7 @@ func (r RuleSet) GasTable(num *big.Int) *vm.GasTable {
 	return &vm.GasTable{
 		ExtcodeSize:     big.NewInt(700),
 		ExtcodeCopy:     big.NewInt(700),
-		ExtcodeHash:	 big.NewInt(400),
+		ExtcodeHash:     big.NewInt(400),
 		Balance:         big.NewInt(400),
 		SLoad:           big.NewInt(200),
 		Calls:           big.NewInt(700),
