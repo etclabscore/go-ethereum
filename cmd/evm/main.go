@@ -228,15 +228,15 @@ type ruleSet struct{}
 
 func (ruleSet) IsHomestead(*big.Int) bool { return true }
 
-//set IsAtlantis to true by default for tests
+// IsAtlantis defaults to true for tests
 func (ruleSet) IsAtlantis(*big.Int) bool { return true }
 
-//set IsAgharta to true by default for tests
+// IsAgharta defaults to true for tests
 func (ruleSet) IsAgharta(*big.Int) bool { return true }
 
 func (ruleSet) GasTable(*big.Int) *vm.GasTable {
-	//IsAgharta will always return true here,
-	//just have gastable default to returning the Agharta GasTable
+	// IsAgharta will always return true here,
+	// just have gastable default to returning the Agharta GasTable
 	return &vm.GasTable{
 		ExtcodeSize:     big.NewInt(700),
 		ExtcodeCopy:     big.NewInt(700),
@@ -248,7 +248,6 @@ func (ruleSet) GasTable(*big.Int) *vm.GasTable {
 		ExpByte:         big.NewInt(50),
 		CreateBySuicide: big.NewInt(25000),
 	}
-
 }
 
 func (self *VMEnv) RuleSet() vm.RuleSet       { return ruleSet{} }
