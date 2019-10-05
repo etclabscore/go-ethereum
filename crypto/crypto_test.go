@@ -233,10 +233,10 @@ func TestValidateSignatureValues(t *testing.T) {
 	check(false, 26, one, one)
 
 	// incorrect v, combinations of incorrect/correct r,s at lower limit
-	check(false, 0, zero, zero)
-	check(false, 0, zero, one)
-	check(false, 0, one, zero)
-	check(false, 0, one, one)
+	check(false, 3, zero, zero)
+	check(false, 3, zero, one)
+	check(false, 3, one, zero)
+	check(false, 3, one, one)
 
 	// correct v for any combination of incorrect r,s
 	check(false, 0, zero, zero)
