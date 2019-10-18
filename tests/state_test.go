@@ -689,21 +689,8 @@ func TestAllETH(t *testing.T) {
 	skipTests["RevertPrecompiledTouch_storage.json/ConstantinopleFix/0"] = "Bug in Test"
 	skipTests["RevertPrecompiledTouch_storage.json/ConstantinopleFix/3"] = "Bug in Test"
 
-	//EIP 1052 (EXTCODEHASH) not implemented
-	skipTests["randomStatetestDEFAULT-Tue_07_58_41-15153-575192.json"] = "EXTCODEHASH not implemented"
-
-	unsupportedDirs := map[string]bool{
-		"stZeroKnowledge":  true,
-		"stZeroKnowledge2": true,
-		"stExtCodeHash":    true,
-	}
-
 	for _, dn := range dirNames {
 		dirName := dn[strings.LastIndex(dn, "/")+1 : len(dn)]
-		if unsupportedDirs[dirName] {
-			continue
-		}
-
 		t.Run(dirName, func(t *testing.T) {
 			fns, _ := filepath.Glob(filepath.Join(ethGeneralStateDir, dirName, "*"))
 			runETHTests(t, fns, skipTests)

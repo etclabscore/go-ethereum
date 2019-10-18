@@ -35,14 +35,18 @@ func (ruleSet) IsHomestead(*big.Int) bool { return true }
 func (ruleSet) IsAtlantis(*big.Int) bool  { return true }
 func (ruleSet) IsAgharta(*big.Int) bool   { return true }
 func (ruleSet) GasTable(*big.Int) *vm.GasTable {
+
+	// IsAgharta will always return true
+	// just have gastable default to returning the Agharta GasTable
 	return &vm.GasTable{
 		ExtcodeSize:     big.NewInt(700),
 		ExtcodeCopy:     big.NewInt(700),
+		ExtcodeHash:     big.NewInt(400),
 		Balance:         big.NewInt(400),
 		SLoad:           big.NewInt(200),
 		Calls:           big.NewInt(700),
 		Suicide:         big.NewInt(5000),
-		ExpByte:         big.NewInt(10),
+		ExpByte:         big.NewInt(50),
 		CreateBySuicide: big.NewInt(25000),
 	}
 }

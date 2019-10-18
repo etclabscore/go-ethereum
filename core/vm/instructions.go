@@ -22,7 +22,6 @@ import (
 
 	"github.com/eth-classic/go-ethereum/common"
 	"github.com/eth-classic/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/common/math"
 )
 
 var callStipend = big.NewInt(2300) // Free gas given at beginning of call.
@@ -275,33 +274,33 @@ func opMulmod(pc *uint64, env Environment, contract *Contract, memory *Memory, s
 }
 
 func opSHL(pc *uint64, env Environment, contract *Contract, memory *Memory, stack *stack) ([]byte, error) {
-	shift, value := math.U256(stack.pop()), math.U256(stack.pop())
+	shift, value := U256(stack.pop()), U256(stack.pop())
 
 	if shift.Cmp(big.NewInt(256)) >= 0 {
 		value.SetUint64(0)
 	} else {
 		n := uint(shift.Uint64())
-		math.U256(value.Lsh(value, n))
+		U256(value.Lsh(value, n))
 	}
 	stack.push(value)
 	return nil, nil
 }
 
 func opSHR(pc *uint64, env Environment, contract *Contract, memory *Memory, stack *stack) ([]byte, error) {
-	shift, value := math.U256(stack.pop()), math.U256(stack.pop())
+	shift, value := U256(stack.pop()), U256(stack.pop())
 
 	if shift.Cmp(big.NewInt(256)) >= 0 {
 		value.SetUint64(0)
 	} else {
 		n := uint(shift.Uint64())
-		math.U256(value.Rsh(value, n))
+		U256(value.Rsh(value, n))
 	}
 	stack.push(value)
 	return nil, nil
 }
 
 func opSAR(pc *uint64, env Environment, contract *Contract, memory *Memory, stack *stack) ([]byte, error) {
-	shift, value := math.U256(stack.pop()), math.S256(stack.pop())
+	shift, value := U256(stack.pop()), S256(stack.pop())
 
 	if shift.Cmp(big.NewInt(256)) >= 0 {
 		if value.Sign() >= 0 {
@@ -310,12 +309,12 @@ func opSAR(pc *uint64, env Environment, contract *Contract, memory *Memory, stac
 			value.SetInt64(-1)
 		}
 
-		stack.push(math.U256(value))
+		stack.push(U256(value))
 	} else {
 		n := uint(shift.Uint64())
 		// value
 		value.Rsh(value, n)
-		stack.push(math.U256(value))
+		stack.push(U256(value))
 	}
 	return nil, nil
 }
@@ -380,6 +379,21 @@ func opExtCodeSize(pc *uint64, env Environment, contract *Contract, memory *Memo
 	addr := common.BigToAddress(stack.pop())
 	l := big.NewInt(int64(env.Db().GetCodeSize(addr)))
 	stack.push(l)
+	return nil, nil
+}
+
+func opExtCodeHash(pc *uint64, env Environment, contract *Contract, memory *Memory, stack *stack) ([]byte, error) {
+	//get address placed on stack
+	slot := stack.peek()
+	address := common.BigToAddress(slot)
+
+	//The EXTCODEHASH of non-existent OR empty account is 0
+	//see issue https://github.com/ethereum/tests/pull/569
+	if env.Db().Empty(address) {
+		slot.SetUint64(0)
+	} else {
+		slot.SetBytes(env.Db().GetCodeHash(address).Bytes())
+	}
 	return nil, nil
 }
 

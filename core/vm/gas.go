@@ -43,6 +43,7 @@ var (
 type GasTable struct {
 	ExtcodeSize *big.Int
 	ExtcodeCopy *big.Int
+	ExtcodeHash *big.Int
 	Balance     *big.Int
 	SLoad       *big.Int
 	Calls       *big.Int
@@ -176,6 +177,7 @@ var _baseCheck = map[OpCode]req{
 	BLOCKHASH:      {1, GasExtStep, 1},
 	BALANCE:        {1, new(big.Int), 1},
 	EXTCODESIZE:    {1, new(big.Int), 1},
+	EXTCODEHASH:    {1, new(big.Int), 1},
 	EXTCODECOPY:    {4, new(big.Int), 0},
 	SLOAD:          {1, big.NewInt(50), 1},
 	SSTORE:         {2, new(big.Int), 0},

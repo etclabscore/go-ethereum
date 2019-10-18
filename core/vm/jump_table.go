@@ -67,7 +67,11 @@ func newJumpTable(ruleset RuleSet, blockNumber *big.Int) vmJumpTable {
 	}
 
 	if ruleset.IsAgharta(blockNumber) {
-		
+		jumpTable[EXTCODEHASH] = jumpPtr{
+			fn:    opExtCodeHash,
+			valid: true,
+		}
+
 		jumpTable[SHL] = jumpPtr{
 			fn:    opSHL,
 			valid: true,
