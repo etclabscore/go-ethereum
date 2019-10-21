@@ -167,7 +167,7 @@ func ValidateSignatureValues(v byte, r, s *big.Int, homestead bool) bool {
 	if s.Cmp(secp256k1.N) >= 0 {
 		return false
 	}
-	if r.Cmp(secp256k1.N) < 0 && (vint == 27 || vint == 28) {
+	if r.Cmp(secp256k1.N) < 0 && (vint == 0 || vint == 1) {
 		return true
 	} else {
 		return false

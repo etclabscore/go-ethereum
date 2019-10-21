@@ -163,7 +163,7 @@ func (s ChainIdSigner) PublicKey(tx *Transaction) ([]byte, error) {
 		return nil, ErrInvalidChainId
 	}
 
-	V := normaliseV(s, tx.data.V)
+	V := normaliseV(s, tx.data.V) - 27
 	if !crypto.ValidateSignatureValues(V, tx.data.R, tx.data.S, true) {
 		return nil, ErrInvalidSig
 	}
@@ -173,7 +173,7 @@ func (s ChainIdSigner) PublicKey(tx *Transaction) ([]byte, error) {
 	sig := make([]byte, 65)
 	copy(sig[32-len(R):32], R)
 	copy(sig[64-len(S):64], S)
-	sig[64] = V - 27
+	sig[64] = V
 
 	// recover the public key from the signature
 	hash := s.Hash(tx)
@@ -275,7 +275,7 @@ func (fs BasicSigner) PublicKey(tx *Transaction) ([]byte, error) {
 		return nil, ErrInvalidSig
 	}
 
-	V := byte(tx.data.V.Uint64())
+	V := byte(tx.data.V.Uint64()) - 27
 	if !crypto.ValidateSignatureValues(V, tx.data.R, tx.data.S, false) {
 		return nil, ErrInvalidSig
 	}
@@ -284,7 +284,7 @@ func (fs BasicSigner) PublicKey(tx *Transaction) ([]byte, error) {
 	sig := make([]byte, 65)
 	copy(sig[32-len(r):32], r)
 	copy(sig[64-len(s):64], s)
-	sig[64] = V - 27
+	sig[64] = V
 
 	// recover the public key from the snature
 	hash := fs.Hash(tx)

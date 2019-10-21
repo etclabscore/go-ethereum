@@ -262,8 +262,8 @@ func TestDefaultChainConfigurationVariablesExist(t *testing.T) {
 	}
 
 	// Number of bootstrap nodes
-	if l := len(DefaultConfigMainnet.ParsedBootstrap); l != 10 {
-		t.Errorf("got: %v, want: %v", l, 10)
+	if l := len(DefaultConfigMainnet.ParsedBootstrap); l != 16 {
+		t.Errorf("got: %v, want: %v", l, 16)
 	}
 	if l := len(DefaultConfigMorden.ParsedBootstrap); l != 21 {
 		t.Errorf("got: %v, want: %v", l, 21)
