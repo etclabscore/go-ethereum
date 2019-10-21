@@ -689,18 +689,8 @@ func TestAllETH(t *testing.T) {
 	skipTests["RevertPrecompiledTouch_storage.json/ConstantinopleFix/0"] = "Bug in Test"
 	skipTests["RevertPrecompiledTouch_storage.json/ConstantinopleFix/3"] = "Bug in Test"
 
-	unsupportedDirs := map[string]bool{
-		"stZeroKnowledge":  true,
-		"stZeroKnowledge2": true,
-		"stCreate2":        true,
-	}
-
 	for _, dn := range dirNames {
 		dirName := dn[strings.LastIndex(dn, "/")+1 : len(dn)]
-		if unsupportedDirs[dirName] {
-			continue
-		}
-
 		t.Run(dirName, func(t *testing.T) {
 			fns, _ := filepath.Glob(filepath.Join(ethGeneralStateDir, dirName, "*"))
 			runETHTests(t, fns, skipTests)
@@ -711,7 +701,6 @@ func TestAllETH(t *testing.T) {
 func runETHTests(t *testing.T, fileNames []string, skipTests map[string]string) {
 	unsupportedForkConfigs := map[string]bool{
 		"Constantinople":               true,
-		"ConstantinopleFix":            true,
 		"EIP158":                       true,
 		"FrontierToHomesteadAt5":       true,
 		"HomesteadToEIP150At5":         true,

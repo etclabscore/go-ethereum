@@ -63,6 +63,9 @@ const (
 	XOR
 	NOT
 	BYTE
+	SHL
+	SHR
+	SAR
 
 	SHA3 = 0x20
 )
@@ -84,6 +87,7 @@ const (
 	EXTCODECOPY
 	RETURNDATASIZE
 	RETURNDATACOPY
+	EXTCODEHASH
 )
 
 const (
@@ -203,6 +207,7 @@ const (
 	CALLCODE
 	RETURN
 	DELEGATECALL
+	CREATE2
 	STATICCALL = 0xfa
 
 	REVERT  = 0xfd
@@ -235,6 +240,9 @@ var opCodeToString = map[OpCode]string{
 	OR:     "OR",
 	XOR:    "XOR",
 	BYTE:   "BYTE",
+	SHL:    "SHL",
+	SHR:    "SHR",
+	SAR:    "SAR",
 	ADDMOD: "ADDMOD",
 	MULMOD: "MULMOD",
 
@@ -255,6 +263,7 @@ var opCodeToString = map[OpCode]string{
 	GASPRICE:       "TXGASPRICE",
 	RETURNDATASIZE: "RETURNDATASIZE",
 	RETURNDATACOPY: "RETURNDATACOPY",
+	EXTCODEHASH:    "EXTCODEHASH",
 
 	// 0x40 range - block operations
 	BLOCKHASH:   "BLOCKHASH",
@@ -361,6 +370,7 @@ var opCodeToString = map[OpCode]string{
 	RETURN:       "RETURN",
 	CALLCODE:     "CALLCODE",
 	DELEGATECALL: "DELEGATECALL",
+	CREATE2:      "CREATE2",
 	STATICCALL:   "STATICCALL",
 	REVERT:       "REVERT",
 	SUICIDE:      "SUICIDE",
@@ -424,6 +434,7 @@ var stringToOp = map[string]OpCode{
 	"GASLIMIT":       GASLIMIT,
 	"EXTCODESIZE":    EXTCODESIZE,
 	"EXTCODECOPY":    EXTCODECOPY,
+	"EXTCODEHASH":    EXTCODEHASH,
 	"RETURNDATASIZE": RETURNDATASIZE,
 	"RETURNDATACOPY": RETURNDATACOPY,
 	"POP":            POP,
@@ -508,12 +519,16 @@ var stringToOp = map[string]OpCode{
 	"LOG3":           LOG3,
 	"LOG4":           LOG4,
 	"CREATE":         CREATE,
+	"CREATE2":        CREATE2,
 	"CALL":           CALL,
 	"RETURN":         RETURN,
 	"CALLCODE":       CALLCODE,
 	"STATICCALL":     STATICCALL,
 	"REVERT":         REVERT,
 	"SUICIDE":        SUICIDE,
+	"SHL":            SHL,
+	"SHR":            SHR,
+	"SAR":            SAR,
 }
 
 func StringToOp(str string) OpCode {

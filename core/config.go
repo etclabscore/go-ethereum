@@ -343,6 +343,15 @@ func (c *ChainConfig) IsAtlantis(num *big.Int) bool {
 	return num.Cmp(fork.Block) >= 0
 }
 
+// IsAgharta returns true if num is greater than Agharta config block
+func (c *ChainConfig) IsAgharta(num *big.Int) bool {
+	fork := c.ForkByName("Agharta")
+	if fork.Block == nil || num == nil {
+		return false
+	}
+	return num.Cmp(fork.Block) >= 0
+}
+
 // ForkByName looks up a Fork by its name, assumed to be unique
 func (c *ChainConfig) ForkByName(name string) *Fork {
 	for i := range c.Forks {
@@ -465,6 +474,8 @@ func (c *ChainConfig) GasTable(num *big.Int) *vm.GasTable {
 		name = ""
 	} // will wall to default panic
 	switch name {
+	case "agharta":
+		return DefaultAghartaGasTable	
 	case "homestead":
 		return DefaultHomeSteadGasTable
 	case "eip150":

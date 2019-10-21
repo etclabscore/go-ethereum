@@ -155,6 +155,7 @@ type RuleSet struct {
 	DiehardBlock             *big.Int
 	ExplosionBlock           *big.Int
 	AtlantisBlock            *big.Int
+	AghartaBlock             *big.Int
 }
 
 // StateTest object that matches the General State Test json file
@@ -203,6 +204,10 @@ func (r RuleSet) IsAtlantis(n *big.Int) bool {
 	return r.AtlantisBlock != nil && n.Cmp(r.AtlantisBlock) >= 0
 }
 
+func (r RuleSet) IsAgharta(n *big.Int) bool {
+	return r.AghartaBlock != nil && n.Cmp(r.AghartaBlock) >= 0
+}
+
 func (r RuleSet) GasTable(num *big.Int) *vm.GasTable {
 	if r.HomesteadGasRepriceBlock == nil || num == nil || num.Cmp(r.HomesteadGasRepriceBlock) < 0 {
 		return &vm.GasTable{
@@ -229,9 +234,23 @@ func (r RuleSet) GasTable(num *big.Int) *vm.GasTable {
 		}
 	}
 
+	if r.AtlantisBlock == nil || num == nil || num.Cmp(r.AtlantisBlock) < 0 {
+		return &vm.GasTable{
+			ExtcodeSize:     big.NewInt(700),
+			ExtcodeCopy:     big.NewInt(700),
+			Balance:         big.NewInt(400),
+			SLoad:           big.NewInt(200),
+			Calls:           big.NewInt(700),
+			Suicide:         big.NewInt(5000),
+			ExpByte:         big.NewInt(50),
+			CreateBySuicide: big.NewInt(25000),
+		}
+	}
+
 	return &vm.GasTable{
 		ExtcodeSize:     big.NewInt(700),
 		ExtcodeCopy:     big.NewInt(700),
+		ExtcodeHash:     big.NewInt(400),
 		Balance:         big.NewInt(400),
 		SLoad:           big.NewInt(200),
 		Calls:           big.NewInt(700),
@@ -394,6 +413,18 @@ func (self *Env) Create(caller vm.ContractRef, data []byte, gas, price, value *b
 		return nil, obj.Address(), nil
 	} else {
 		return core.Create(self, caller, data, gas, price, value)
+	}
+}
+
+func (self *Env) Create2(caller vm.ContractRef, data []byte, gas, price, salt, value *big.Int) ([]byte, common.Address, error) {
+	if self.vmTest {
+		caller.ReturnGas(gas, price)
+
+		obj := self.state.GetOrNewStateObject(crypto.CreateAddress2(caller.Address(), common.BigToHash(salt).Bytes(), crypto.Keccak256(data)))
+
+		return nil, obj.Address(), nil
+	} else {
+		return core.Create2(self, caller, data, gas, price, salt, value)
 	}
 }
 

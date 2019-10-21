@@ -273,6 +273,52 @@ func opMulmod(pc *uint64, env Environment, contract *Contract, memory *Memory, s
 	return nil, nil
 }
 
+func opSHL(pc *uint64, env Environment, contract *Contract, memory *Memory, stack *stack) ([]byte, error) {
+	shift, value := U256(stack.pop()), U256(stack.pop())
+
+	if shift.Cmp(big.NewInt(256)) >= 0 {
+		value.SetUint64(0)
+	} else {
+		n := uint(shift.Uint64())
+		U256(value.Lsh(value, n))
+	}
+	stack.push(value)
+	return nil, nil
+}
+
+func opSHR(pc *uint64, env Environment, contract *Contract, memory *Memory, stack *stack) ([]byte, error) {
+	shift, value := U256(stack.pop()), U256(stack.pop())
+
+	if shift.Cmp(big.NewInt(256)) >= 0 {
+		value.SetUint64(0)
+	} else {
+		n := uint(shift.Uint64())
+		U256(value.Rsh(value, n))
+	}
+	stack.push(value)
+	return nil, nil
+}
+
+func opSAR(pc *uint64, env Environment, contract *Contract, memory *Memory, stack *stack) ([]byte, error) {
+	shift, value := U256(stack.pop()), S256(stack.pop())
+
+	if shift.Cmp(big.NewInt(256)) >= 0 {
+		if value.Sign() >= 0 {
+			value.SetUint64(0)
+		} else {
+			value.SetInt64(-1)
+		}
+
+		stack.push(U256(value))
+	} else {
+		n := uint(shift.Uint64())
+		// value
+		value.Rsh(value, n)
+		stack.push(U256(value))
+	}
+	return nil, nil
+}
+
 func opSha3(pc *uint64, env Environment, contract *Contract, memory *Memory, stack *stack) ([]byte, error) {
 	offset, size := stack.pop(), stack.pop()
 	hash := crypto.Keccak256(memory.Get(offset.Int64(), size.Int64()))
@@ -333,6 +379,21 @@ func opExtCodeSize(pc *uint64, env Environment, contract *Contract, memory *Memo
 	addr := common.BigToAddress(stack.pop())
 	l := big.NewInt(int64(env.Db().GetCodeSize(addr)))
 	stack.push(l)
+	return nil, nil
+}
+
+func opExtCodeHash(pc *uint64, env Environment, contract *Contract, memory *Memory, stack *stack) ([]byte, error) {
+	//get address placed on stack
+	slot := stack.peek()
+	address := common.BigToAddress(slot)
+
+	//The EXTCODEHASH of non-existent OR empty account is 0
+	//see issue https://github.com/ethereum/tests/pull/569
+	if env.Db().Empty(address) {
+		slot.SetUint64(0)
+	} else {
+		slot.SetBytes(env.Db().GetCodeHash(address).Bytes())
+	}
 	return nil, nil
 }
 
@@ -512,6 +573,37 @@ func opCreate(pc *uint64, env Environment, contract *Contract, memory *Memory, s
 	if env.RuleSet().IsHomestead(env.BlockNumber()) && suberr == CodeStoreOutOfGasError {
 		stack.push(new(big.Int))
 	} else if suberr != nil && suberr != CodeStoreOutOfGasError {
+		stack.push(new(big.Int))
+	} else {
+		stack.push(addr.Big())
+	}
+
+	if suberr == ErrRevert {
+		return ret, nil
+	}
+	return nil, nil
+}
+
+func opCreate2(pc *uint64, env Environment, contract *Contract, memory *Memory, stack *stack) ([]byte, error) {
+	var (
+		value        = stack.pop()
+		offset, size = stack.pop(), stack.pop()
+		salt         = stack.pop()
+		input        = memory.Get(offset.Int64(), size.Int64())
+		gas          = new(big.Int).Set(contract.Gas)
+	)
+	if env.RuleSet().GasTable(env.BlockNumber()).CreateBySuicide != nil {
+		gas.Div(gas, n64)
+		gas = gas.Sub(contract.Gas, gas)
+	}
+
+	contract.UseGas(gas)
+	ret, addr, suberr := env.Create2(contract, input, gas, contract.Price, salt, value)
+	// Push item on the stack based on the returned error. If the ruleset is
+	// homestead we must check for CodeStoreOutOfGasError (homestead only
+	// rule) and treat as an error, if the ruleset is frontier we must
+	// ignore this error and pretend the operation was successful.
+	if suberr != nil {
 		stack.push(new(big.Int))
 	} else {
 		stack.push(addr.Big())

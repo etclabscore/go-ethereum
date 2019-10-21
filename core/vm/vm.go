@@ -26,6 +26,7 @@ import (
 	"github.com/eth-classic/go-ethereum/crypto"
 	"github.com/eth-classic/go-ethereum/logger"
 	"github.com/eth-classic/go-ethereum/logger/glog"
+	"github.com/eth-classic/go-ethereum/params"
 )
 
 var (
@@ -223,6 +224,10 @@ func calculateGasAndSize(gasTable *GasTable, env Environment, contract *Contract
 		}
 	case EXTCODESIZE:
 		gas.Set(gasTable.ExtcodeSize)
+	case EXTCODEHASH:
+		if gasTable.ExtcodeHash != nil {
+			gas.Set(gasTable.ExtcodeHash)
+		}
 	case BALANCE:
 		gas.Set(gasTable.Balance)
 	case SLOAD:
@@ -334,6 +339,12 @@ func calculateGasAndSize(gasTable *GasTable, env Environment, contract *Contract
 	case CREATE:
 		newMemSize = calcMemSize(stack.back(1), stack.back(2))
 
+		quadMemGas(mem, newMemSize, gas)
+	case CREATE2:
+		newMemSize = calcMemSize(stack.back(1), stack.back(2))
+
+		words := toWordSize(stack.back(2))
+		gas.Add(gas, words.Mul(words, params.Sha3WordGas))
 		quadMemGas(mem, newMemSize, gas)
 	case CALL, CALLCODE:
 		gas.Set(gasTable.Calls)
