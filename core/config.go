@@ -65,8 +65,8 @@ var (
 		"main":    true,
 		"mainnet": true,
 	}
-	ChainIdentitiesMorden = map[string]bool{
-		"morden":  true,
+	ChainIdentitiesMordor = map[string]bool{
+		"mordor":  true,
 		"testnet": true,
 	}
 
@@ -97,7 +97,7 @@ type SufficientChainConfig struct {
 	Identity        string           `json:"identity"`
 	Name            string           `json:"name,omitempty"`
 	State           *StateConfig     `json:"state"`     // don't omitempty for clarity of potential custom options
-	Network         int              `json:"network"`   // eth.NetworkId (mainnet=1, morden=2)
+	Network         int              `json:"network"`   // eth.NetworkId (mainnet=1, mordor=7)
 	Consensus       string           `json:"consensus"` // pow type (ethash OR ethash-test)
 	Genesis         *GenesisDump     `json:"genesis"`
 	ChainConfig     *ChainConfig     `json:"chainConfig"`

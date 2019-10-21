@@ -203,7 +203,7 @@ func TestMakeGenesisDump(t *testing.T) {
 
 func TestMakeGenesisDump2(t *testing.T) {
 	// setup so we have a genesis block in this test db
-	for i, gen := range []*GenesisDump{DefaultConfigMainnet.Genesis, DefaultConfigMorden.Genesis} {
+	for i, gen := range []*GenesisDump{DefaultConfigMainnet.Genesis, DefaultConfigMordor.Genesis} {
 		db, _ := ethdb.NewMemDatabase()
 		genesisDump := gen
 		gBlock1, err := WriteGenesisBlock(db, genesisDump)
@@ -244,7 +244,7 @@ func getDefaultChainConfigSorted() *ChainConfig {
 // Unit-y tests.
 
 func TestChainConfig_HasFeature(t *testing.T) {
-	c := DefaultConfigMorden.ChainConfig.SortForks()
+	c := DefaultConfigMordor.ChainConfig.SortForks()
 	for _, id := range allAvailableTestnetConfigKeys {
 		if _, _, ok := c.HasFeature(id); !ok {
 			t.Errorf("feature not found: %v", id)
@@ -258,7 +258,7 @@ func TestChainConfig_HasFeature(t *testing.T) {
 	}
 
 	// never gets unavailable keys
-	c = DefaultConfigMorden.ChainConfig.SortForks()
+	c = DefaultConfigMordor.ChainConfig.SortForks()
 	for _, id := range unavailableConfigKeys {
 		if _, _, ok := c.HasFeature(id); ok {
 			t.Errorf("nonexisting feature found: %v", id)
@@ -345,8 +345,8 @@ func TestChainConfig_GetChainID(t *testing.T) {
 	if DefaultConfigMainnet.ChainConfig.GetChainID().Cmp(DefaultConfigMainnet.ChainConfig.GetChainID()) != 0 {
 		t.Errorf("got: %v, want: %v", DefaultConfigMainnet.ChainConfig.GetChainID(), DefaultConfigMainnet.ChainConfig.GetChainID())
 	}
-	if DefaultConfigMorden.ChainConfig.GetChainID().Cmp(DefaultConfigMorden.ChainConfig.GetChainID()) != 0 {
-		t.Errorf("got: %v, want: %v", DefaultConfigMorden.ChainConfig.GetChainID(), DefaultConfigMorden.ChainConfig.GetChainID())
+	if DefaultConfigMordor.ChainConfig.GetChainID().Cmp(DefaultConfigMordor.ChainConfig.GetChainID()) != 0 {
+		t.Errorf("got: %v, want: %v", DefaultConfigMordor.ChainConfig.GetChainID(), DefaultConfigMordor.ChainConfig.GetChainID())
 	}
 
 	// If no chainID (config is empty) returns 0.
@@ -360,7 +360,7 @@ func TestChainConfig_GetChainID(t *testing.T) {
 	// Test parsing default external mainnet config.
 	cases := map[string]*big.Int{
 		"../core/config/mainnet.json": DefaultConfigMainnet.ChainConfig.GetChainID(),
-		"../core/config/morden.json":  DefaultConfigMorden.ChainConfig.GetChainID(),
+		"../core/config/mordor.json":  DefaultConfigMordor.ChainConfig.GetChainID(),
 	}
 	for extConfigPath, wantInt := range cases {
 		p, e := filepath.Abs(extConfigPath)
@@ -731,8 +731,8 @@ func makeOKSufficientChainConfig(dump *GenesisDump, config *ChainConfig) *Suffic
 
 // TestSufficientChainConfig_IsValid tests against defaulty dumps and chainconfigs.
 func TestSufficientChainConfig_IsValid(t *testing.T) {
-	dumps := []*GenesisDump{DefaultConfigMainnet.Genesis, DefaultConfigMorden.Genesis}
-	configs := []*ChainConfig{DefaultConfigMainnet.ChainConfig, DefaultConfigMorden.ChainConfig}
+	dumps := []*GenesisDump{DefaultConfigMainnet.Genesis, DefaultConfigMordor.Genesis}
+	configs := []*ChainConfig{DefaultConfigMainnet.ChainConfig, DefaultConfigMordor.ChainConfig}
 
 	for i, dump := range dumps {
 		for j, config := range configs {

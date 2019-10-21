@@ -68,13 +68,13 @@ func ApplyMultiVmTransaction(config *ChainConfig, bc *BlockChain, gp *GasPool, s
 		}
 	} else if state.StartingNonce == 1048576 {
 		if eip160Fork.Block != nil && currentNumber.Cmp(eip160Fork.Block) >= 0 {
-			vm = sputnikvm.NewMordenEIP160(&vmtx, &vmheader)
+			vm = sputnikvm.NewMordorEIP160(&vmtx, &vmheader)
 		} else if eip150Fork.Block != nil && currentNumber.Cmp(eip150Fork.Block) >= 0 {
-			vm = sputnikvm.NewMordenEIP150(&vmtx, &vmheader)
+			vm = sputnikvm.NewMordorEIP150(&vmtx, &vmheader)
 		} else if homesteadFork.Block != nil && currentNumber.Cmp(homesteadFork.Block) >= 0 {
-			vm = sputnikvm.NewMordenHomestead(&vmtx, &vmheader)
+			vm = sputnikvm.NewMordorHomestead(&vmtx, &vmheader)
 		} else {
-			vm = sputnikvm.NewMordenFrontier(&vmtx, &vmheader)
+			vm = sputnikvm.NewMordorFrontier(&vmtx, &vmheader)
 		}
 	} else {
 		sputnikvm.SetCustomInitialNonce(big.NewInt(int64(state.StartingNonce)))

@@ -16,22 +16,22 @@ func TestDefaultChainConfigurationVariablesExist(t *testing.T) {
 	if DefaultConfigMainnet.Identity != "mainnet" {
 		t.Errorf("got: %v, want: %v", DefaultConfigMainnet.Identity, "mainnet")
 	}
-	if DefaultConfigMorden.Identity != "morden" {
-		t.Errorf("got: %v, want: %v", DefaultConfigMorden.Identity, "mainnet")
+	if DefaultConfigMordor.Identity != "mordor" {
+		t.Errorf("got: %v, want: %v", DefaultConfigMordor.Identity, "mordor")
 	}
 
 	if DefaultConfigMainnet.Name != "Ethereum Classic Mainnet" {
 		t.Errorf("got: %v, want: %v", DefaultConfigMainnet.Name, "Ethereum Classic Mainnet")
 	}
-	if DefaultConfigMorden.Name != "Morden Testnet" {
-		t.Errorf("got: %v, want: %v", DefaultConfigMorden.Name, "Morden Testnet")
+	if DefaultConfigMordor.Name != "Mordor Testnet" {
+		t.Errorf("got: %v, want: %v", DefaultConfigMordor.Name, "Mordor Testnet")
 	}
 
 	if DefaultConfigMainnet.ChainConfig.GetChainID().Cmp(big.NewInt(61)) != 0 {
 		t.Errorf("got: %v, want: %v", DefaultConfigMainnet.ChainConfig.GetChainID(), big.NewInt(61))
 	}
-	if DefaultConfigMorden.ChainConfig.GetChainID().Cmp(big.NewInt(62)) != 0 {
-		t.Errorf("got: %v, want: %v", DefaultConfigMorden.ChainConfig.GetChainID(), big.NewInt(62))
+	if DefaultConfigMordor.ChainConfig.GetChainID().Cmp(big.NewInt(63)) != 0 {
+		t.Errorf("got: %v, want: %v", DefaultConfigMordor.ChainConfig.GetChainID(), big.NewInt(63))
 	}
 
 	// Test forks existence and block numbers
@@ -39,35 +39,35 @@ func TestDefaultChainConfigurationVariablesExist(t *testing.T) {
 	if fork := DefaultConfigMainnet.ChainConfig.ForkByName("Homestead"); fork.Block.Cmp(big.NewInt(1150000)) != 0 {
 		t.Errorf("Unexpected fork: %v", fork)
 	}
-	if fork := DefaultConfigMorden.ChainConfig.ForkByName("Homestead"); fork.Block.Cmp(big.NewInt(494000)) != 0 {
+	if fork := DefaultConfigMordor.ChainConfig.ForkByName("Homestead"); fork.Block.Cmp(big.NewInt(0)) != 0 {
 		t.Errorf("Unexpected fork: %v", fork)
 	}
 	// The DAO Hard Fork
 	if fork := DefaultConfigMainnet.ChainConfig.ForkByName("The DAO Hard Fork"); fork.Block.Cmp(big.NewInt(1920000)) != 0 {
 		t.Errorf("Unexpected fork: %v", fork)
 	}
-	if fork := DefaultConfigMorden.ChainConfig.ForkByName("The DAO Hard Fork"); fork.Block.Cmp(big.NewInt(1885000)) != 0 {
+	if fork := DefaultConfigMordor.ChainConfig.ForkByName("The DAO Hard Fork"); fork.Block.Cmp(big.NewInt(0)) != 0 {
 		t.Errorf("Unexpected fork: %v", fork)
 	}
 	// GasReprice
 	if fork := DefaultConfigMainnet.ChainConfig.ForkByName("GasReprice"); fork.Block.Cmp(big.NewInt(2500000)) != 0 {
 		t.Errorf("Unexpected fork: %v", fork)
 	}
-	if fork := DefaultConfigMorden.ChainConfig.ForkByName("GasReprice"); fork.Block.Cmp(big.NewInt(1783000)) != 0 {
+	if fork := DefaultConfigMordor.ChainConfig.ForkByName("GasReprice"); fork.Block.Cmp(big.NewInt(0)) != 0 {
 		t.Errorf("Unexpected fork: %v", fork)
 	}
 	// Diehard
 	if fork := DefaultConfigMainnet.ChainConfig.ForkByName("Diehard"); fork.Block.Cmp(big.NewInt(3000000)) != 0 {
 		t.Errorf("Unexpected fork: %v", fork)
 	}
-	if fork := DefaultConfigMorden.ChainConfig.ForkByName("Diehard"); fork.Block.Cmp(big.NewInt(1915000)) != 0 {
+	if fork := DefaultConfigMordor.ChainConfig.ForkByName("Diehard"); fork.Block.Cmp(big.NewInt(0)) != 0 {
 		t.Errorf("Unexpected fork: %v", fork)
 	}
 	// Gotham
 	if fork := DefaultConfigMainnet.ChainConfig.ForkByName("Gotham"); fork.Block.Cmp(big.NewInt(5000000)) != 0 {
 		t.Errorf("Unexpected fork: %v", fork)
 	}
-	if fork := DefaultConfigMorden.ChainConfig.ForkByName("Gotham"); fork.Block.Cmp(big.NewInt(2000000)) != 0 {
+	if fork := DefaultConfigMordor.ChainConfig.ForkByName("Gotham"); fork.Block.Cmp(big.NewInt(0)) != 0 {
 		t.Errorf("Unexpected fork: %v", fork)
 	}
 
@@ -78,8 +78,8 @@ func TestDefaultChainConfigurationVariablesExist(t *testing.T) {
 		Features []*ForkFeature
 	}{
 		{
-			Config: DefaultConfigMorden,
-			Block:  big.NewInt(494000),
+			Config: DefaultConfigMordor,
+			Block:  big.NewInt(0),
 			Name:   "Homestead",
 			Features: []*ForkFeature{
 				{
@@ -116,8 +116,8 @@ func TestDefaultChainConfigurationVariablesExist(t *testing.T) {
 			},
 		},
 		{
-			Config: DefaultConfigMorden,
-			Block:  big.NewInt(1885000),
+			Config: DefaultConfigMordor,
+			Block:  big.NewInt(0),
 			Name:   "The DAO Hard Fork",
 		},
 		{
@@ -126,8 +126,8 @@ func TestDefaultChainConfigurationVariablesExist(t *testing.T) {
 			Name:   "The DAO Hard Fork",
 		},
 		{
-			Config: DefaultConfigMorden,
-			Block:  big.NewInt(1783000),
+			Config: DefaultConfigMordor,
+			Block:  big.NewInt(0),
 			Name:   "GasReprice",
 			Features: []*ForkFeature{
 				{
@@ -152,8 +152,8 @@ func TestDefaultChainConfigurationVariablesExist(t *testing.T) {
 			},
 		},
 		{
-			Config: DefaultConfigMorden,
-			Block:  big.NewInt(1915000),
+			Config: DefaultConfigMordor,
+			Block:  big.NewInt(0),
 			Name:   "Diehard",
 			Features: []*ForkFeature{
 				{
@@ -204,8 +204,8 @@ func TestDefaultChainConfigurationVariablesExist(t *testing.T) {
 			},
 		},
 		{
-			Config: DefaultConfigMorden,
-			Block:  big.NewInt(2000000),
+			Config: DefaultConfigMordor,
+			Block:  big.NewInt(0),
 			Name:   "Gotham",
 			Features: []*ForkFeature{
 				{
@@ -265,7 +265,7 @@ func TestDefaultChainConfigurationVariablesExist(t *testing.T) {
 	if l := len(DefaultConfigMainnet.ParsedBootstrap); l != 16 {
 		t.Errorf("got: %v, want: %v", l, 16)
 	}
-	if l := len(DefaultConfigMorden.ParsedBootstrap); l != 21 {
+	if l := len(DefaultConfigMordor.ParsedBootstrap); l != 21 {
 		t.Errorf("got: %v, want: %v", l, 21)
 	}
 
@@ -273,7 +273,7 @@ func TestDefaultChainConfigurationVariablesExist(t *testing.T) {
 	if s, ok := DefaultConfigMainnet.IsValid(); !ok {
 		t.Errorf("Unexpected invalid default chain config: %s", s)
 	}
-	if s, ok := DefaultConfigMorden.IsValid(); !ok {
+	if s, ok := DefaultConfigMordor.IsValid(); !ok {
 		t.Errorf("Unexpected invalid default chain config: %s", s)
 	}
 

@@ -58,7 +58,7 @@ func testChainConfig() *ChainConfig {
 					{
 						ID: "eip155",
 						Options: ChainFeatureConfigOptions{
-							"chainID": 62,
+							"chainID": 63,
 						},
 					},
 					{ // ecip1010 bomb delay
@@ -85,7 +85,7 @@ func proc(t testing.TB) (Validator, *BlockChain) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	_, err = WriteGenesisBlock(db, DefaultConfigMorden.Genesis)
+	_, err = WriteGenesisBlock(db, DefaultConfigMordor.Genesis)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -419,7 +419,7 @@ func TestCalcDifficulty1Mainnet(t *testing.T) {
 }
 
 // Compare expected difficulties on edges of forks.
-func TestCalcDifficulty1Morden(t *testing.T) {
+func TestCalcDifficulty1Mordor(t *testing.T) {
 	config := DefaultConfigMainnet.ChainConfig
 
 	parentTime := uint64(1513175023)

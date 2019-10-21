@@ -6,7 +6,7 @@ import (
 
 var (
 	DefaultConfigMainnet *SufficientChainConfig
-	DefaultConfigMorden  *SufficientChainConfig
+	DefaultConfigMordor  *SufficientChainConfig
 )
 
 func init() {
@@ -17,8 +17,8 @@ func init() {
 	if err != nil {
 		glog.Fatal("Error parsing mainnet defaults from JSON:", err)
 	}
-	DefaultConfigMorden, err = parseExternalChainConfig("/core/config/morden.json", assetsOpen)
+	DefaultConfigMordor, err = parseExternalChainConfig("/core/config/mordor.json", assetsOpen)
 	if err != nil {
-		glog.Fatal("Error parsing morden defaults from JSON:", err)
+		glog.Fatal("Error parsing mordor defaults from JSON:", err)
 	}
 }

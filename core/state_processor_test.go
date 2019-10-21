@@ -374,13 +374,13 @@ func makeExpectedRewardCasesForConfig(c *ChainConfig, numUncles int, t *testing.
 // Accruing over block cases simulates miner account winning many times.
 // Uses maps of running sums for winner & 2 uncles to keep tally.
 func TestAccumulateRewards1(t *testing.T) {
-	configs := []*ChainConfig{DefaultConfigMainnet.ChainConfig, DefaultConfigMorden.ChainConfig}
+	configs := []*ChainConfig{DefaultConfigMainnet.ChainConfig, DefaultConfigMordor.ChainConfig}
 	cases := [][]expectedRewardCase{}
 	for _, c := range configs {
 		cases = append(cases, makeExpectedRewardCasesForConfig(c, 2, t))
 	}
 
-	// t.Logf("Accruing balances over cases. 2 uncles. Configs mainnet=0, morden=1")
+	// t.Logf("Accruing balances over cases. 2 uncles. Configs mainnet=0, mordor=1")
 	for i, config := range configs {
 		// Set up era len by chain configurations.
 		feat, _, exists := config.HasFeature("reward")
@@ -518,12 +518,12 @@ func TestAccumulateRewards2_2Uncles(t *testing.T) {
 
 	// Order matters here; expected cases must be ordered the same.
 	// Will uses indexes to match expectations -> test outcomes.
-	configs := []*ChainConfig{DefaultConfigMainnet.ChainConfig, DefaultConfigMorden.ChainConfig}
+	configs := []*ChainConfig{DefaultConfigMainnet.ChainConfig, DefaultConfigMordor.ChainConfig}
 	cases := [][]expectedRewardCase{}
 	for _, c := range configs {
 		cases = append(cases, makeExpectedRewardCasesForConfig(c, 2, t))
 	}
-	// t.Logf("Non-accruing balances over cases. 2 uncles. Configs mainnet=0, morden=1")
+	// t.Logf("Non-accruing balances over cases. 2 uncles. Configs mainnet=0, mordor=1")
 	for i, config := range configs {
 		// Here's where cases slice is assign according to config slice.
 		for _, c := range cases[i] {
@@ -616,12 +616,12 @@ func TestAccumulateRewards2_2Uncles(t *testing.T) {
 // Tests winner includes 1 ommer header.
 func TestAccumulateRewards3_1Uncle(t *testing.T) {
 
-	configs := []*ChainConfig{DefaultConfigMainnet.ChainConfig, DefaultConfigMorden.ChainConfig}
+	configs := []*ChainConfig{DefaultConfigMainnet.ChainConfig, DefaultConfigMordor.ChainConfig}
 	cases := [][]expectedRewardCase{}
 	for _, c := range configs {
 		cases = append(cases, makeExpectedRewardCasesForConfig(c, 1, t))
 	}
-	// t.Logf("Non-accruing balances over cases. 1 uncle. Configs mainnet=0, morden=1")
+	// t.Logf("Non-accruing balances over cases. 1 uncle. Configs mainnet=0, mordor=1")
 	for i, config := range configs {
 		for _, c := range cases[i] {
 
@@ -702,12 +702,12 @@ func TestAccumulateRewards3_1Uncle(t *testing.T) {
 // Tests winner includes 0 ommer headers.
 func TestAccumulateRewards4_0Uncles(t *testing.T) {
 
-	configs := []*ChainConfig{DefaultConfigMainnet.ChainConfig, DefaultConfigMorden.ChainConfig}
+	configs := []*ChainConfig{DefaultConfigMainnet.ChainConfig, DefaultConfigMordor.ChainConfig}
 	cases := [][]expectedRewardCase{}
 	for _, c := range configs {
 		cases = append(cases, makeExpectedRewardCasesForConfig(c, 0, t))
 	}
-	// t.Logf("Non-accruing balances over cases. 0 uncles. Configs mainnet=0, morden=1")
+	// t.Logf("Non-accruing balances over cases. 0 uncles. Configs mainnet=0, mordor=1")
 	for i, config := range configs {
 		for _, c := range cases[i] {
 

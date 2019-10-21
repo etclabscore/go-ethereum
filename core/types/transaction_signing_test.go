@@ -66,11 +66,11 @@ func TestClassicChainId(t *testing.T) {
 
 }
 
-func TestMordenChainId(t *testing.T) {
+func TestMordorChainId(t *testing.T) {
 	key, _ := defaultTestKey()
 
 	tx := NewTransaction(0, common.Address{}, new(big.Int), new(big.Int), new(big.Int), nil)
-	tx.SetSigner(NewChainIdSigner(big.NewInt(62)))
+	tx.SetSigner(NewChainIdSigner(big.NewInt(63)))
 
 	txs, err := tx.SignECDSA(key)
 	if err != nil {
