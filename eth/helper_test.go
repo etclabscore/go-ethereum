@@ -65,7 +65,7 @@ func newTestProtocolManager(mode downloader.SyncMode, blocks int, generator func
 		blockchain, _ = core.NewBlockChain(db, chainConfig, pow, evmux)
 	)
 
-	chain, _ := core.GenerateChain(core.DefaultConfigMorden.ChainConfig, genesis, db, blocks, generator)
+	chain, _ := core.GenerateChain(core.DefaultConfigMordor.ChainConfig, genesis, db, blocks, generator)
 	if res := blockchain.InsertChain(chain); res.Error != nil {
 		panic(res.Error)
 	}

@@ -181,8 +181,8 @@ func (s *PublicEthereumAPI) Syncing() (interface{}, error) {
 // ChainId returns the chain-configured value for EIP-155 chain id, used in signing protected txs.
 // If EIP-155 is not configured it will return 0.
 // Number will be returned as a string in hexadecimal format.
-// 61 - Mainnet $((0x3d))
-// 62 - Morden $((0x3e))
+// 61 - Classic $((0x3d))
+// 63 - Mordor $((0x3f))
 func (s *PublicEthereumAPI) ChainId() *big.Int {
 	return s.e.chainConfig.GetChainID()
 }
