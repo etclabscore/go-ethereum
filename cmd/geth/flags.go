@@ -50,17 +50,17 @@ var (
 	}
 	ChainIdentityFlag = cli.StringFlag{
 		Name:  "chain",
-		Usage: `Chain identifier (default='mainnet', test='morden') or path to JSON chain configuration file (eg './path/to/chain.json').`,
+		Usage: `Chain identifier (default='mainnet', test='mordor') or path to JSON chain configuration file (eg './path/to/chain.json').`,
 		Value: core.DefaultConfigMainnet.Identity,
 	}
 	NetworkIdFlag = cli.IntFlag{
 		Name:  "network-id, networkid",
-		Usage: "Network identifier (integer: 1=Homestead, 2=Morden)",
+		Usage: "Network identifier (integer: 1=Classic, 7=Mordor)",
 		Value: eth.NetworkId,
 	}
 	TestNetFlag = cli.BoolFlag{
 		Name:  "testnet",
-		Usage: "[Use: --chain=morden] Morden network: pre-configured test network with modified starting nonces (replay protection)",
+		Usage: "[Use: --chain=mordor] Mordor network: pre-configured test network (replay protected)",
 	}
 	DevModeFlag = cli.BoolFlag{
 		Name:  "dev",
@@ -241,7 +241,7 @@ var (
 	}
 	MLogComponentsFlag = cli.StringFlag{
 		Name: "mlog-components",
-		Usage: `Set machine-readable logging components, comma-separated. 
+		Usage: `Set machine-readable logging components, comma-separated.
 	Use a '!'-prefix to disabled listed components instead.`,
 		Value: "blockchain,txpool,downloader,fetcher,discover,server,state,headerchain,miner,client,wire",
 	}

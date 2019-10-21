@@ -54,7 +54,7 @@ var (
 	<DATADIR> and <CHAINDIR> flags will be parsed as usual.
 	For example:
 
-		geth --chain=morden attach
+		geth --chain=mordor attach
 
 	or,
 

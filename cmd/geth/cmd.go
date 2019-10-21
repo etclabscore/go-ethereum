@@ -637,8 +637,8 @@ func rollback(ctx *cli.Context) error {
 func dumpChainConfig(ctx *cli.Context) error {
 
 	chainIdentity := mustMakeChainIdentity(ctx)
-	if !(core.ChainIdentitiesMain[chainIdentity] || core.ChainIdentitiesMorden[chainIdentity]) {
-		glog.Fatal("Dump config should only be used with default chain configurations (mainnet or morden).")
+	if !(core.ChainIdentitiesMain[chainIdentity] || core.ChainIdentitiesMordor[chainIdentity]) {
+		glog.Fatal("Dump config should only be used with default chain configurations (mainnet or mordor).")
 	}
 
 	glog.D(logger.Warn).Infof("Dumping configuration for: %v", chainIdentity)
@@ -668,12 +668,12 @@ func dumpChainConfig(ctx *cli.Context) error {
 		glog.Fatalf("'%v' must be a directory", fb)
 	}
 
-	// Implicitly favor Morden because it is a smaller, simpler configuration,
+	// Implicitly favor Mordor because it is a smaller, simpler configuration,
 	// so I expect it to be used more frequently than mainnet.
-	genesisDump := core.DefaultConfigMorden.Genesis
-	netId := 2
+	genesisDump := core.DefaultConfigMordor.Genesis
+	netId := 7
 	stateConf := &core.StateConfig{StartingNonce: state.DefaultTestnetStartingNonce}
-	if !chainIsMorden(ctx) {
+	if !chainIsMordor(ctx) {
 		genesisDump = core.DefaultConfigMainnet.Genesis
 		netId = eth.NetworkId
 		stateConf = nil

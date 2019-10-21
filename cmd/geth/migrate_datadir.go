@@ -85,7 +85,7 @@ func migrateExistingDirToClassicNamingScheme(ctx *cli.Context) error {
 	}
 
 	ethChainDBPath := filepath.Join(ethDataDirPath, "chaindata")
-	if chainIsMorden(ctx) {
+	if chainIsMordor(ctx) {
 		ethChainDBPath = filepath.Join(ethDataDirPath, "testnet", "chaindata")
 	}
 
@@ -150,8 +150,8 @@ func migrateExistingDirToClassicNamingScheme(ctx *cli.Context) error {
 		// I think it's safe to assume that the chaindata directory is just too 'young', where it hasn't
 		// synced until block 1920000, and therefore can be migrated.
 		conf := core.DefaultConfigMainnet.ChainConfig
-		if chainIsMorden(ctx) {
-			conf = core.DefaultConfigMorden.ChainConfig
+		if chainIsMordor(ctx) {
+			conf = core.DefaultConfigMordor.ChainConfig
 		}
 
 		hf := conf.ForkByName("The DAO Hard Fork")
@@ -204,7 +204,7 @@ func migrateExistingDirToClassicNamingScheme(ctx *cli.Context) error {
 
 // migrateToChainSubdirIfNecessary migrates ".../EthereumClassic/nodes|chaindata|...|nodekey" --> ".../EthereumClassic/mainnet/nodes|chaindata|...|nodekey"
 func migrateToChainSubdirIfNecessary(ctx *cli.Context) error {
-	chainIdentity := mustMakeChainIdentity(ctx) // "mainnet", "morden", "custom"
+	chainIdentity := mustMakeChainIdentity(ctx) // "mainnet", "mordor", "custom"
 
 	datapath := mustMakeDataDir(ctx) // ".../EthereumClassic/ | --datadir"
 
@@ -223,7 +223,7 @@ func migrateToChainSubdirIfNecessary(ctx *cli.Context) error {
 	}
 
 	// 3.3 testnet uses subdir '/testnet'
-	if core.ChainIdentitiesMorden[chainIdentity] {
+	if core.ChainIdentitiesMordor[chainIdentity] {
 		exTestDir := filepath.Join(subdirPath, "../testnet")
 		exTestDirInfo, e := os.Stat(exTestDir)
 		if e != nil && os.IsNotExist(e) {
@@ -232,7 +232,7 @@ func migrateToChainSubdirIfNecessary(ctx *cli.Context) error {
 		if !exTestDirInfo.IsDir() {
 			return nil // don't interfere with user *file* that won't be relevant for geth
 		}
-		return os.Rename(exTestDir, subdirPath) // /testnet -> /morden
+		return os.Rename(exTestDir, subdirPath) // /testnet -> /mordor
 	}
 
 	// mkdir -p ".../mainnet"
