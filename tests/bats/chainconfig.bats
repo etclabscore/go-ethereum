@@ -6,8 +6,8 @@ setup() {
 	DATA_DIR=`mktemp -d`
 	default_mainnet_genesis_hash='"0xd4e56740f876aef8c010b86a40d5f56745a118d0906a34e69aec8c0db1cb8fa3"'
 	customnet_genesis_hash='"0x76bc07fbdfe084b9aff37425c24453f774d1945b28412a3b4b8c25d8d3c81df2"'
-	testnet_genesis_hash='"0x0cd786a2425d16f152c658316c423e6ce1181e15c3295826d7c9904cba9ce303"'
-	GENESIS_TESTNET=0x0cd786a2425d16f152c658316c423e6ce1181e15c3295826d7c9904cba9ce303
+	testnet_genesis_hash='"0xa68ebde7932eccb177d38d55dcc6461a019dd795a681e59b5a3e4f3a7259a3f1"'
+	GENESIS_TESTNET=0xa68ebde7932eccb177d38d55dcc6461a019dd795a681e59b5a3e4f3a7259a3f1
 }
 
 teardown() {
@@ -41,21 +41,21 @@ teardown() {
 	[[ "$output" == *"Wrote chain config file"* ]]
 	[ -f $DATA_DIR/dump.json ]
 
-	run grep -R "morden" $DATA_DIR/dump.json
+	run grep -R "mordor" $DATA_DIR/dump.json
 	echo "$output"
-	[[ "$output" == *"\"identity\": \"morden\"," ]]
+	[[ "$output" == *"\"identity\": \"mordor\"," ]]
 }
 
-@test "--chain morden dump-chain-config | exit 0" {
-	run $GETH_CMD --datadir $DATA_DIR --chain morden dump-chain-config $DATA_DIR/dump.json
+@test "--chain mordor dump-chain-config | exit 0" {
+	run $GETH_CMD --datadir $DATA_DIR --chain mordor dump-chain-config $DATA_DIR/dump.json
 	echo "$output"
 
 	[ "$status" -eq 0 ]
 	[[ "$output" == *"Wrote chain config file"* ]]
 	[ -f $DATA_DIR/dump.json ]
 
-	run grep -R "morden" $DATA_DIR/dump.json
-	[[ "$output" == *"\"identity\": \"morden\"," ]]
+	run grep -R "mordor" $DATA_DIR/dump.json
+	[[ "$output" == *"\"identity\": \"mordor\"," ]]
 }
 
 @test "--chain kittyCoin dump-chain-config | exit !=0" {
@@ -92,20 +92,20 @@ teardown() {
 
 @test "dump-chain-config | --chain privatenet.json | exit 0" {
 
-	run $GETH_CMD --data-dir $DATA_DIR --chain morden dump-chain-config $DATA_DIR/privatenet.json
+	run $GETH_CMD --data-dir $DATA_DIR --chain mordor dump-chain-config $DATA_DIR/privatenet.json
 	echo "$output"
 	[ "$status" -eq 0 ]
 	[[ "$output" == *"Wrote chain config file"* ]]
 
 	[ -f "$DATA_DIR"/privatenet.json ]
 
-	run grep -R "morden" "$DATA_DIR"/privatenet.json
+	run grep -R "mordor" "$DATA_DIR"/privatenet.json
 	[ "$status" -eq 0 ]
 	echo "$output"
-	[[ "$output" == *"\"identity\": \"morden\"," ]]
+	[[ "$output" == *"\"identity\": \"mordor\"," ]]
 
 	# Ensure JSON file dump is loadable as external config
-	sed -i.bak s/morden/kitty/ "$DATA_DIR"/privatenet.json
+	sed -i.bak s/mordor/kitty/ "$DATA_DIR"/privatenet.json
 	run $GETH_CMD --datadir $DATA_DIR --chain "$DATA_DIR"/privatenet.json --maxpeers 0 --nodiscover --nat none --ipcdisable --exec 'eth.getBlock(0).hash' console
 	[ "$status" -eq 0 ]
 	echo "$output"
@@ -116,56 +116,56 @@ teardown() {
 	[ -f "$DATA_DIR"/kitty/chain.json ]
 }
 
-@test "--chain morden dump-chain-config | --chain == morden | exit 0" {
+@test "--chain mordor dump-chain-config | --chain == mordor | exit 0" {
 
 	# Same as 'chainconfig customnet dump'... higher complexity::more confidence
 	customnet="$DATA_DIR"/kitty
 	mkdir -p "$customnet"
 
-	run $GETH_CMD --datadir $DATA_DIR --chain=morden dump-chain-config "$customnet"/chain.json
+	run $GETH_CMD --datadir $DATA_DIR --chain=mordor dump-chain-config "$customnet"/chain.json
 	echo "$output"
 	[ "$status" -eq 0 ]
 	[[ "$output" == *"Wrote chain config file"* ]]
 
 	[ -f "$customnet"/chain.json ]
 
-	run grep -R "morden" "$customnet"/chain.json
+	run grep -R "mordor" "$customnet"/chain.json
 	[ "$status" -eq 0 ]
 	echo "$output"
-	[[ "$output" == *"\"identity\": \"morden\"," ]]
+	[[ "$output" == *"\"identity\": \"mordor\"," ]]
 
 	# Ensure JSON file dump is loadable as external config
-	sed -i.bak s/morden/kitty/ "$customnet"/chain.json
+	sed -i.bak s/mordor/kitty/ "$customnet"/chain.json
 	run $GETH_CMD --datadir $DATA_DIR --chain kitty --maxpeers 0 --nodiscover --nat none --ipcdisable --exec 'eth.getBlock(0).hash' console
 	[ "$status" -eq 0 ]
 	echo "$output"
 	[[ "$output" == *"$testnet_genesis_hash"* ]]
 }
 
-# Dump morden and make customization and test that customizations are installed.
-@test "--chain morden dump-chain-config | --chain -> kitty | exit 0" {
+# Dump mordor and make customization and test that customizations are installed.
+@test "--chain mordor dump-chain-config | --chain -> kitty | exit 0" {
 
 	# Same as 'chainconfig customnet dump'... higher complexity::more confidence
 	customnet="$DATA_DIR"/kitty
 	mkdir -p "$customnet"
 
-	run $GETH_CMD --datadir $DATA_DIR --chain=morden dump-chain-config "$customnet"/chain.json
+	run $GETH_CMD --datadir $DATA_DIR --chain=mordor dump-chain-config "$customnet"/chain.json
 	echo "$output"
 	[ "$status" -eq 0 ]
 	[[ "$output" == *"Wrote chain config file"* ]]
 
 	[ -f "$customnet"/chain.json ]
 
-	run grep -R "morden" "$customnet"/chain.json
+	run grep -R "mordor" "$customnet"/chain.json
 	[ "$status" -eq 0 ]
 	echo "$output"
-	[[ "$output" == *"\"identity\": \"morden\"," ]]
+	[[ "$output" == *"\"identity\": \"mordor\"," ]]
 
 	# Ensure JSON file dump is loadable as external config
-	sed -i.bak s/morden/kitty/ "$customnet"/chain.json
+	sed -i.bak s/mordor/kitty/ "$customnet"/chain.json
 	sed -i.bak s/identity/id/ "$customnet"/chain.json	# ensure identity is aliases to identity
 	# remove starting nonce from external config
-	# config file should still be valid, but genesis should have different hash than default morden genesis
+	# config file should still be valid, but genesis should have different hash than default mordor genesis
 	grep -v 'startingNonce' "$customnet"/chain.json > "$DATA_DIR"/stripped.json
 	[ "$status" -eq 0 ]
 	mv "$DATA_DIR"/stripped.json "$customnet"/chain.json
@@ -209,34 +209,34 @@ teardown() {
 # Test loading testnet chain configuration from data/ JSON file.
 # Test ensures
 # - external chain config can determine chain configuration
-# - use datadir/subdir schema (/morden)
-@test "--chain morden | exit 0" {
-	run $GETH_CMD --datadir $DATA_DIR --chain=morden --maxpeers 0 --nodiscover --nat none --ipcdisable --exec 'eth.getBlock(0).hash' console
+# - use datadir/subdir schema (/mordor)
+@test "--chain mordor | exit 0" {
+	run $GETH_CMD --datadir $DATA_DIR --chain=mordor --maxpeers 0 --nodiscover --nat none --ipcdisable --exec 'eth.getBlock(0).hash' console
 	echo "$output"
 	[ "$status" -eq 0 ]
-	[[ "$output" == *"0x0cd786a2425d16f152c658316c423e6ce1181e15c3295826d7c9904cba9ce303"* ]]
+	[[ "$output" == *"0xa68ebde7932eccb177d38d55dcc6461a019dd795a681e59b5a3e4f3a7259a3f1"* ]]
 
 	# Ensure we're using the --chain named subdirectory under main $DATA_DIR.
-	[ -d $DATA_DIR/morden ]
-	[ -d $DATA_DIR/morden/chaindata ]
-	[ -f $DATA_DIR/morden/chaindata/CURRENT ]
-	[ -f $DATA_DIR/morden/chaindata/LOCK ]
-	[ -f $DATA_DIR/morden/chaindata/LOG ]
-	[ -d $DATA_DIR/morden/keystore ]
+	[ -d $DATA_DIR/mordor ]
+	[ -d $DATA_DIR/mordor/chaindata ]
+	[ -f $DATA_DIR/mordor/chaindata/CURRENT ]
+	[ -f $DATA_DIR/mordor/chaindata/LOCK ]
+	[ -f $DATA_DIR/mordor/chaindata/LOG ]
+	[ -d $DATA_DIR/mordor/keystore ]
 }
 
 # prove that trailing slashes in chain=val/ get removed harmlessly
-@test "--chain='morden/' | exit 0" {
+@test "--chain='mordor/' | exit 0" {
 
     # *nix path separator == /
-    run $GETH_CMD --data-dir $DATA_DIR --chain=morden/ --exec 'eth.getBlock(0).hash' console
+    run $GETH_CMD --data-dir $DATA_DIR --chain=mordor/ --exec 'eth.getBlock(0).hash' console
     echo "$output"
 	[ "$status" -eq 0 ]
-	[[ "$output" == *"0x0cd786a2425d16f152c658316c423e6ce1181e15c3295826d7c9904cba9ce303"* ]]
+	[[ "$output" == *"0xa68ebde7932eccb177d38d55dcc6461a019dd795a681e59b5a3e4f3a7259a3f1"* ]]
 
 	# Ensure we're using the --chain named subdirectory under main $DATA_DIR.
-	[ -d $DATA_DIR/morden ]
-	[ -d $DATA_DIR/morden/chaindata ]
+	[ -d $DATA_DIR/mordor ]
+	[ -d $DATA_DIR/mordor/chaindata ]
 }
 
 ## load /testdata

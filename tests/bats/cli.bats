@@ -66,14 +66,14 @@ teardown() {
 	[[ "$output" == *"USAGE"* ]]
 }
 
-@test "exactly overlapping flags not allowed: --chain=morden --testnet" {
-	run $GETH_CMD --data-dir $DATA_DIR --testnet --chain=morden --maxpeers 0 --nodiscover --nat none --ipcdisable --exec 'exit' console
+@test "exactly overlapping flags not allowed: --chain=mordor --testnet" {
+	run $GETH_CMD --data-dir $DATA_DIR --testnet --chain=mordor --maxpeers 0 --nodiscover --nat none --ipcdisable --exec 'exit' console
 	echo "$output"
 	[ "$status" -ne 0 ]
 }
 
-@test "custom testnet subdir --testnet --chain=morden2 | exit !=0" {
-	run $GETH_CMD --data-dir $DATA_DIR --testnet --chain=morden2 --maxpeers 0 --nodiscover --nat none --ipcdisable --exec 'exit' console
+@test "custom testnet subdir --testnet --chain=mordor2 | exit !=0" {
+	run $GETH_CMD --data-dir $DATA_DIR --testnet --chain=mordor2 --maxpeers 0 --nodiscover --nat none --ipcdisable --exec 'exit' console
 	echo "$output"
 	[ "$status" -ne 0 ]
 	[[ "$output" == *"invalid flag "* ]]
@@ -252,30 +252,30 @@ teardown() {
 	[[ "$output" == *"1507000000000000000000"* ]] # address balance
 }
 
-# Ensure --testnet and --chain=morden/testnet set up respective subdirs with default 'morden'
-@test "--chain=testnet creates /morden subdir, activating testnet genesis" { # This is kind of weird, but it is expected.
+# Ensure --testnet and --chain=mordor/testnet set up respective subdirs with default 'mordor'
+@test "--chain=testnet creates /mordor subdir, activating testnet genesis" { # This is kind of weird, but it is expected.
 	run $GETH_CMD --data-dir $DATA_DIR --chain=testnet --exec 'eth.getBlock(0).hash' console
 	[ "$status" -eq 0 ]
 
-	[[ "$output" == *"0x0cd786a2425d16f152c658316c423e6ce1181e15c3295826d7c9904cba9ce303"* ]]
+	[[ "$output" == *"0xa68ebde7932eccb177d38d55dcc6461a019dd795a681e59b5a3e4f3a7259a3f1"* ]]
 
-	[ -d $DATA_DIR/morden ]
+	[ -d $DATA_DIR/mordor ]
 }
 
-@test "--testnet creates /morden subdir, activating testnet genesis" {
+@test "--testnet creates /mordor subdir, activating testnet genesis" {
 	run $GETH_CMD --data-dir $DATA_DIR --testnet --exec 'eth.getBlock(0).hash' console
 	[ "$status" -eq 0 ]
-	[[ "$output" == *"0x0cd786a2425d16f152c658316c423e6ce1181e15c3295826d7c9904cba9ce303"* ]]
+	[[ "$output" == *"0xa68ebde7932eccb177d38d55dcc6461a019dd795a681e59b5a3e4f3a7259a3f1"* ]]
 
-	[ -d $DATA_DIR/morden ]
+	[ -d $DATA_DIR/mordor ]
 }
 
-@test "--chain=morden creates /morden subdir, activating testnet genesis" {
-	run $GETH_CMD --data-dir $DATA_DIR --chain=morden --exec 'eth.getBlock(0).hash' console
+@test "--chain=mordor creates /mordor subdir, activating testnet genesis" {
+	run $GETH_CMD --data-dir $DATA_DIR --chain=mordor --exec 'eth.getBlock(0).hash' console
 	[ "$status" -eq 0 ]
-	[[ "$output" == *"0x0cd786a2425d16f152c658316c423e6ce1181e15c3295826d7c9904cba9ce303"* ]]
+	[[ "$output" == *"0xa68ebde7932eccb177d38d55dcc6461a019dd795a681e59b5a3e4f3a7259a3f1"* ]]
 
-	[ -d $DATA_DIR/morden ]
+	[ -d $DATA_DIR/mordor ]
 }
 
 # Command: status
@@ -317,8 +317,8 @@ teardown() {
 	[[ "$output" == *"[17 187 232 219 78 52 123 78 140 147 124 28 131 112 228 181 237 51 173 179 219 105 203 219 122 56 225 229 11 27 130 250]"* ]]
 }
 
-@test "status command present and true for morden" {
-	run $GETH_CMD --data-dir $DATA_DIR --chain morden status
+@test "status command present and true for mordor" {
+	run $GETH_CMD --data-dir $DATA_DIR --chain mordor status
 	[ "$status" -eq 0 ]
 
 	# bug(whilei): warning: command substitution: ignored null byte in input
@@ -326,21 +326,21 @@ teardown() {
 
 	# Chain Configuration Genesis
 	[[ "$output" == *"Genesis"* ]]
-	[[ "$output" == *"morden"* ]]
-	[[ "$output" == *"Morden Testnet"* ]]
+	[[ "$output" == *"mordor"* ]]
+	[[ "$output" == *"Mordor Testnet"* ]]
 	[[ "$output" == *"0x2FEFD8"* ]]
 	[[ "$output" == *"0x020000"* ]]
 	[[ "$output" == *"5"* ]]
 
 	# Run twice, because the second time will have set up database.
-	run $GETH_CMD --data-dir $DATA_DIR --chain morden --exec 'exit' console # set up db
+	run $GETH_CMD --data-dir $DATA_DIR --chain mordor --exec 'exit' console # set up db
 	[ "$status" -eq 0 ]
-	run $GETH_CMD --data-dir $DATA_DIR --chain morden status
+	run $GETH_CMD --data-dir $DATA_DIR --chain mordor status
 	[ "$status" -eq 0 ]
 
 	# Chain database Genesis
 	[[ "$output" == *"Genesis"* ]]
-	[[ "$output" == *"0x0cd786a2425d16f152c658316c423e6ce1181e15c3295826d7c9904cba9ce303"* ]]
+	[[ "$output" == *"0xa68ebde7932eccb177d38d55dcc6461a019dd795a681e59b5a3e4f3a7259a3f1"* ]]
 	[[ "$output" == *"0x0000000000000000000000000000000000000000000000000000000000000000"* ]]
 	[[ "$output" == *"120325427979630"* ]]
 	[[ "$output" == *"131072"* ]]

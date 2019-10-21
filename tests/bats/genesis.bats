@@ -6,7 +6,7 @@ setup() {
 	DATA_DIR=`mktemp -d`
 	# Default constants.
 	GENESIS_MAINNET=0xd4e56740f876aef8c010b86a40d5f56745a118d0906a34e69aec8c0db1cb8fa3
-	GENESIS_TESTNET=0x0cd786a2425d16f152c658316c423e6ce1181e15c3295826d7c9904cba9ce303
+	GENESIS_TESTNET=0xa68ebde7932eccb177d38d55dcc6461a019dd795a681e59b5a3e4f3a7259a3f1
 }
 
 teardown() {
@@ -25,12 +25,12 @@ teardown() {
 }
 
 # Testnet.
-@test "defaults: genesis block hash constant @ --chain=morden" {
-	run $GETH_CMD --chain=morden --data-dir $DATA_DIR --exec 'eth.getBlock(0).hash' console
+@test "defaults: genesis block hash constant @ --chain=mordor" {
+	run $GETH_CMD --chain=mordor --data-dir $DATA_DIR --exec 'eth.getBlock(0).hash' console
 	echo "$output"
 
 	[ "$status" -eq 0 ]
-	[[ "$output" == *'"0x0cd786a2425d16f152c658316c423e6ce1181e15c3295826d7c9904cba9ce303"'* ]]
+	[[ "$output" == *'"0xa68ebde7932eccb177d38d55dcc6461a019dd795a681e59b5a3e4f3a7259a3f1"'* ]]
 }
 
 @test "defaults: genesis block hash constant @ --chain=testnet" {
@@ -38,7 +38,7 @@ teardown() {
 	echo "$output"
 
 	[ "$status" -eq 0 ]
-	[[ "$output" == *'"0x0cd786a2425d16f152c658316c423e6ce1181e15c3295826d7c9904cba9ce303"'* ]]
+	[[ "$output" == *'"0xa68ebde7932eccb177d38d55dcc6461a019dd795a681e59b5a3e4f3a7259a3f1"'* ]]
 }
 
 @test "defaults: genesis block hash constant @ --testnet" {
@@ -46,5 +46,5 @@ teardown() {
 	echo "$output"
 
 	[ "$status" -eq 0 ]
-	[[ "$output" == *'"0x0cd786a2425d16f152c658316c423e6ce1181e15c3295826d7c9904cba9ce303"'* ]]
+	[[ "$output" == *'"0xa68ebde7932eccb177d38d55dcc6461a019dd795a681e59b5a3e4f3a7259a3f1"'* ]]
 }

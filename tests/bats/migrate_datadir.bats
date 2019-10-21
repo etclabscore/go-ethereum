@@ -142,7 +142,7 @@ teardown() {
 }
 
 # testnet
-@test "should migrate datadir /Ethereum/testnet -> /EthereumClassic/ from ETC3.3 schema | --chain=morden" {
+@test "should migrate datadir /Ethereum/testnet -> /EthereumClassic/ from ETC3.3 schema | --chain=mordor" {
 	# Should create $HOME/Ethereum/testnet/chaindata,keystore,nodes,...
 	run "$CMD_DIR/gethc3.3" --fast --testnet --exec='exit' console
 	echo "$output"
@@ -152,7 +152,7 @@ teardown() {
 	[ -d "$DATA_DIR_PARENT"/"$DATA_DIR_NAME_EX"/testnet ] # 3.3 schema
 	[ -d "$DATA_DIR_PARENT"/"$DATA_DIR_NAME_EX"/testnet/chaindata ]
 
-	run $GETH_CMD --fast --verbosity 5 --chain morden --exec='exit' console
+	run $GETH_CMD --fast --verbosity 5 --chain mordor --exec='exit' console
 	echo "$output"
 	[ "$status" -eq 0 ]
 
@@ -160,8 +160,8 @@ teardown() {
 	! [ -d "$DATA_DIR_PARENT"/"$DATA_DIR_NAME_EX" ]
 
 	[ -d "$DATA_DIR_PARENT"/"$DATA_DIR_NAME" ]
-	[ -d "$DATA_DIR_PARENT"/"$DATA_DIR_NAME"/morden ]
-	[ -d "$DATA_DIR_PARENT"/"$DATA_DIR_NAME"/morden/chaindata ]
+	[ -d "$DATA_DIR_PARENT"/"$DATA_DIR_NAME"/mordor ]
+	[ -d "$DATA_DIR_PARENT"/"$DATA_DIR_NAME"/mordor/chaindata ]
 	! [ -d "$DATA_DIR_PARENT"/"$DATA_DIR_NAME"/testnet ]
 
 	[[ "$output" == *"Moving it from"* ]]
