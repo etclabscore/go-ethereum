@@ -1,10 +1,10 @@
-# Geth Classic 
+# Geth Classic
 
 [![GitHub release](https://img.shields.io/github/release-pre/etclabscore/go-ethereum.svg)](https://github.com/etclabscore/go-ethereum/releases/latest)
 ![GitHub All Releases](https://img.shields.io/github/downloads/etclabscore/go-ethereum/total.svg)
 ![LICENSE](https://img.shields.io/github/license/etclabscore/go-ethereum.svg)
 
-[![CircleCI](https://img.shields.io/circleci/build/gh/etclabscore/go-ethereum/development.svg)](https://circleci.com/gh/etclabscore/go-ethereum/tree/development) 
+[![CircleCI](https://img.shields.io/circleci/build/gh/etclabscore/go-ethereum/development.svg)](https://circleci.com/gh/etclabscore/go-ethereum/tree/development)
 ![GitHub last commit](https://img.shields.io/github/last-commit/etclabscore/go-ethereum.svg)
 [![Join the chat at https://gitter.im/etclabscore/go-ethereum](https://badges.gitter.im/etclabscore/go-ethereum.svg)](https://gitter.im/etclabscore/go-ethereum?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
@@ -94,8 +94,8 @@ You can specify this directory with `--data-dir=$HOME/id/rather/put/it/here`.
 
 Within this parent directory, geth will use a `/subdirectory` to hold data for each network you run. The defaults are:
 
- - `/mainnet` for the Mainnet
- - `/morden` for the Morden Testnet
+ - `/mainnet` for the Ethereum Classic Mainnet
+ - `/mordor` for the [Mordor Testnet](https://github.com/eth-classic/mordor)
 
 ### Run a full node
 ```
@@ -160,18 +160,18 @@ For a comprehensive list of command line options, please consult our [CLI Wiki p
 
 ## :orange_book: Geth: developing and advanced useage
 
-### Morden Testnet
-If you'd like to play around with creating Ethereum contracts, you almost certainly would like to do that without any real money involved until you get the hang of the entire system. In other words, instead of attaching to the main network, you want to join the **test** network with your node, which is fully equivalent to the main network, but with play-Ether only.
+### Mordor Testnet
+If you'd like to play around with creating Ethereum Classic contracts, you almost certainly would like to do that without any real money involved until you get the hang of the entire system. In other words, instead of attaching to the main network, you want to join the **test** network with your node, which is fully equivalent to the main network, but with play-Ether only. [github.com/eth-classic/mordor](https://github.com/eth-classic/mordor)
 
 ```
-$ geth --chain=morden --fast console
+$ geth --chain=mordor --fast console
 ```
 
 The `--fast` flag and `console` subcommand have the exact same meaning as above and they are equally useful on the testnet too. Please see above for their explanations if you've skipped to here.
 
-Specifying the `--chain=morden` flag will reconfigure your Geth instance a bit:
+Specifying the `--chain=mordor` flag will reconfigure your Geth instance a bit:
 
- -  As mentioned above, Geth will host its testnet data in a `morden` subfolder (`~/.ethereum-classic/morden`).
+ -  As mentioned above, Geth will host its testnet data in a `mordor` subfolder (`~/.ethereum-classic/mordor`).
  - Instead of connecting the main Ethereum network, the client will connect to the test network, which uses different P2P bootnodes, different network IDs and genesis states.
 
 You may also optionally use `--testnet` or `--chain=testnet` to enable this configuration.
@@ -208,7 +208,7 @@ You'll need to use your own programming environments' capabilities (libraries, t
 ### Operating a private/custom network
 As of [Geth 3.4](https://github.com/etclabscore/go-ethereum/releases) you are now able to configure a private chain by specifying an __external chain configuration__ JSON file, which includes necessary genesis block data as well as feature configurations for protocol forks, bootnodes, and chainID.
 
-Please find full [example  external configuration files representing the Mainnet and Morden Testnet specs in the /config subdirectory of this repo](). You can use either of these files as a starting point for your own customizations.
+Please find full [example  external configuration files representing the Mainnet and Mordor Testnet specs in the /config subdirectory of this repo](). You can use either of these files as a starting point for your own customizations.
 
 It is important for a private network that all nodes use compatible chains. In the case of custom chain configuration, the chain configuration file (`chain.json`) should be equivalent for each node.
 
@@ -216,7 +216,7 @@ It is important for a private network that all nodes use compatible chains. In t
 Specifying an external chain configuration file will allow fine-grained control over a custom blockchain/network configuration, including the genesis state and extending through bootnodes and fork-based protocol upgrades.
 
 ```shell
-$ geth --chain=morden dump-chain-config <datadir>/customnet/chain.json
+$ geth --chain=mordor dump-chain-config <datadir>/customnet/chain.json
 $ sed s/mainnet/customnet/ <datadir>/customnet/chain.json
 $ vi <datadir>/customnet/chain.json # make your custom edits
 $ geth --chain=customnet [--flags] [command]
@@ -227,7 +227,7 @@ The external chain configuration file specifies valid settings for the following
 | JSON Key | Notes |
 | --- | --- |
 | `chainID` |  Chain identity. Determines local __/subdir__ for chain data, with required `chain.json` located in it. It is required, but must not be identical for each node. Please note that this is _not_ the chainID validation introduced in _EIP-155_; that is configured as a protocal upgrade within `forks.features`. |
-| `name` | _Optional_. Human readable name, ie _Ethereum Classic Mainnet_, _Morden Testnet._ |
+| `name` | _Optional_. Human readable name, ie _Ethereum Classic Mainnet_, _Mordor Testnet._ |
 | `state.startingNonce` | _Optional_. Initialize state db with a custom nonce. |
 | `network` | Determines Network ID to identify valid peers. |
 | `consensus` | _Optional_. Proof of work algorithm to use, either "ethash" or "ethast-test" (for development) |
