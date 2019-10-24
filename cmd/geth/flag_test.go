@@ -311,8 +311,8 @@ func TestMakeBootstrapNodesFromContext4(t *testing.T) {
 	}
 	context = cli.NewContext(app, set, nil)
 	got := MakeBootstrapNodesFromContext(context)
-	if len(got) != len(core.DefaultConfigMorden.ParsedBootstrap) {
-		t.Errorf("wanted: %v, got %v", len(core.DefaultConfigMorden.ParsedBootstrap), len(got))
+	if len(got) != len(core.DefaultConfigMordor.ParsedBootstrap) {
+		t.Errorf("wanted: %v, got %v", len(core.DefaultConfigMordor.ParsedBootstrap), len(got))
 	}
 }
 

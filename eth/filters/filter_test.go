@@ -63,7 +63,7 @@ func BenchmarkMipmaps(b *testing.B) {
 	defer db.Close()
 
 	genesis := core.WriteGenesisBlockForTesting(db, core.GenesisAccount{Address: addr1, Balance: big.NewInt(1000000)})
-	chain, receipts := core.GenerateChain(core.DefaultConfigMorden.ChainConfig, genesis, db, 100010, func(i int, gen *core.BlockGen) {
+	chain, receipts := core.GenerateChain(core.DefaultConfigMordor.ChainConfig, genesis, db, 100010, func(i int, gen *core.BlockGen) {
 		var receipts types.Receipts
 		switch i {
 		case 2403:
@@ -139,7 +139,7 @@ func TestFilters(t *testing.T) {
 	defer db.Close()
 
 	genesis := core.WriteGenesisBlockForTesting(db, core.GenesisAccount{Address: addr, Balance: big.NewInt(1000000)})
-	chain, receipts := core.GenerateChain(core.DefaultConfigMorden.ChainConfig, genesis, db, 1000, func(i int, gen *core.BlockGen) {
+	chain, receipts := core.GenerateChain(core.DefaultConfigMordor.ChainConfig, genesis, db, 1000, func(i int, gen *core.BlockGen) {
 		var receipts types.Receipts
 		switch i {
 		case 1:

@@ -183,6 +183,7 @@ func (s *PublicEthereumAPI) Syncing() (interface{}, error) {
 // Number will be returned as a string in hexadecimal format.
 // 61 - Mainnet $((0x3d))
 // 62 - Morden $((0x3e))
+// 63 - Mordor $((0x3f))
 func (s *PublicEthereumAPI) ChainId() *big.Int {
 	return s.e.chainConfig.GetChainID()
 }
