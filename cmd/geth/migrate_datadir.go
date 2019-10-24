@@ -153,6 +153,9 @@ func migrateExistingDirToClassicNamingScheme(ctx *cli.Context) error {
 		if chainIsMorden(ctx) {
 			conf = core.DefaultConfigMorden.ChainConfig
 		}
+		if chainIsMordor(ctx) {
+			conf = core.DefaultConfigMordor.ChainConfig
+		}
 
 		hf := conf.ForkByName("The DAO Hard Fork")
 		if hf == nil || hf.Block == nil || new(big.Int).Cmp(hf.Block) == 0 || hf.RequiredHash.IsEmpty() {
@@ -204,7 +207,7 @@ func migrateExistingDirToClassicNamingScheme(ctx *cli.Context) error {
 
 // migrateToChainSubdirIfNecessary migrates ".../EthereumClassic/nodes|chaindata|...|nodekey" --> ".../EthereumClassic/mainnet/nodes|chaindata|...|nodekey"
 func migrateToChainSubdirIfNecessary(ctx *cli.Context) error {
-	chainIdentity := mustMakeChainIdentity(ctx) // "mainnet", "morden", "custom"
+	chainIdentity := mustMakeChainIdentity(ctx) // "mainnet", "morden", "mordor", "custom"
 
 	datapath := mustMakeDataDir(ctx) // ".../EthereumClassic/ | --datadir"
 

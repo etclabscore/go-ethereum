@@ -128,13 +128,14 @@ func TestMustMakeChainDataDir(t *testing.T) {
 		{[]string{"--datadir", tmpDir}, filepath.Join(tmpDir, "mainnet"), nil},
 		{[]string{"--data-dir", tmpDir}, filepath.Join(tmpDir, "mainnet"), nil},
 
-		{[]string{"--testnet", "--data-dir", tmpDir}, filepath.Join(tmpDir, "morden"), nil},
-		{[]string{"--testnet"}, filepath.Join(dd, "morden"), nil},
+		{[]string{"--testnet", "--data-dir", tmpDir}, filepath.Join(tmpDir, "mordor"), nil},
+		{[]string{"--testnet"}, filepath.Join(dd, "mordor"), nil},
 
 		{[]string{"--chain"}, "", ErrInvalidFlag},
 		{[]string{"--chain", "main"}, filepath.Join(dd, "mainnet"), nil},
 		{[]string{"--chain", "morden"}, filepath.Join(dd, "morden"), nil},
-		{[]string{"--chain", "testnet"}, filepath.Join(dd, "morden"), nil},
+		{[]string{"--chain", "mordor"}, filepath.Join(dd, "mordor"), nil},
+		{[]string{"--chain", "testnet"}, filepath.Join(dd, "mordor"), nil},
 		{[]string{"--chain", "kitty"}, filepath.Join(dd, "kitty"), nil},
 
 		{[]string{"--chain", "kitty/cat"}, filepath.Join(dd, "kitty", "cat"), nil},
@@ -180,7 +181,8 @@ func TestGetChainIdentityValue(t *testing.T) {
 	}{
 		// Known (defaulty) chain values.
 		{[]string{"--chain", "morden"}, "morden"},
-		{[]string{"--chain", "testnet"}, "morden"},
+		{[]string{"--chain", "mordor"}, "mordor"},
+		{[]string{"--chain", "testnet"}, "mordor"},
 		{[]string{"--chain", "main"}, "mainnet"},
 		{[]string{"--chain", "mainnet"}, "mainnet"},
 
