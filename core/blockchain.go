@@ -263,9 +263,10 @@ func (bc *BlockChain) blockIsGenesis(b *types.Block) bool {
 	if bc.Genesis() != nil {
 		return reflect.DeepEqual(b, bc.Genesis())
 	}
+	mo, _ := DefaultConfigMordor.Genesis.Header()
 	ht, _ := DefaultConfigMorden.Genesis.Header()
 	hm, _ := DefaultConfigMainnet.Genesis.Header()
-	return b.Hash() == ht.Hash() || b.Hash() == hm.Hash()
+	return b.Hash() == ht.Hash() || b.Hash() == hm.Hash() || b.Hash() == mo.Hash()
 
 }
 

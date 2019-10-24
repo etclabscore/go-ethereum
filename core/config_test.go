@@ -348,6 +348,9 @@ func TestChainConfig_GetChainID(t *testing.T) {
 	if DefaultConfigMorden.ChainConfig.GetChainID().Cmp(DefaultConfigMorden.ChainConfig.GetChainID()) != 0 {
 		t.Errorf("got: %v, want: %v", DefaultConfigMorden.ChainConfig.GetChainID(), DefaultConfigMorden.ChainConfig.GetChainID())
 	}
+	if DefaultConfigMordor.ChainConfig.GetChainID().Cmp(DefaultConfigMordor.ChainConfig.GetChainID()) != 0 {
+		t.Errorf("got: %v, want: %v", DefaultConfigMordor.ChainConfig.GetChainID(), DefaultConfigMordor.ChainConfig.GetChainID())
+	}
 
 	// If no chainID (config is empty) returns 0.
 	c := &ChainConfig{}
@@ -361,6 +364,7 @@ func TestChainConfig_GetChainID(t *testing.T) {
 	cases := map[string]*big.Int{
 		"../core/config/mainnet.json": DefaultConfigMainnet.ChainConfig.GetChainID(),
 		"../core/config/morden.json":  DefaultConfigMorden.ChainConfig.GetChainID(),
+		"../core/config/mordor.json":  DefaultConfigMordor.ChainConfig.GetChainID(),
 	}
 	for extConfigPath, wantInt := range cases {
 		p, e := filepath.Abs(extConfigPath)
