@@ -55,7 +55,7 @@ var (
 	}
 	NetworkIdFlag = cli.IntFlag{
 		Name:  "network-id, networkid",
-		Usage: "Network identifier (integer: 1=Homestead, 2=Morden)",
+		Usage: "Network identifier (integer: 1=Classic, 2=Morden, 7=Mordor)",
 		Value: eth.NetworkId,
 	}
 	TestNetFlag = cli.BoolFlag{
@@ -241,7 +241,7 @@ var (
 	}
 	MLogComponentsFlag = cli.StringFlag{
 		Name: "mlog-components",
-		Usage: `Set machine-readable logging components, comma-separated. 
+		Usage: `Set machine-readable logging components, comma-separated.
 	Use a '!'-prefix to disabled listed components instead.`,
 		Value: "blockchain,txpool,downloader,fetcher,discover,server,state,headerchain,miner,client,wire",
 	}
