@@ -266,6 +266,8 @@ func New(ctx *node.ServiceContext, config *Config) (*Ethereum, error) {
 	var genName string
 	if fmt.Sprintf("%x", genesis.Hash()) == "0cd786a2425d16f152c658316c423e6ce1181e15c3295826d7c9904cba9ce303" {
 		genName = "morden testnet"
+	} else if fmt.Sprintf("%x", genesis.Hash()) == "a68ebde7932eccb177d38d55dcc6461a019dd795a681e59b5a3e4f3a7259a3f1" {
+		genName = "mordor testnet"
 	} else if fmt.Sprintf("%x", genesis.Hash()) == "d4e56740f876aef8c010b86a40d5f56745a118d0906a34e69aec8c0db1cb8fa3" {
 		genName = "mainnet"
 	} else {
