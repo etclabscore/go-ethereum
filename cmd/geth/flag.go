@@ -109,6 +109,23 @@ func chainIsMorden(ctx *cli.Context) bool {
 	return false
 }
 
+// chainIsMordor allows
+// '--chain=mordor'
+func chainIsMordor(ctx *cli.Context) bool {
+	if _, ok := core.ChainIdentitiesMordor[core.GetCacheChainIdentity()]; ok {
+		return ok
+	}
+	if _, ok := core.ChainIdentitiesMordor[ctx.GlobalString(aliasableName(ChainIdentityFlag.Name, ctx))]; ok {
+		return ok
+	}
+	if c := core.GetCacheChainConfig(); c != nil {
+		if _, ok := core.ChainIdentitiesMordor[c.Identity]; ok {
+			return ok
+		}
+	}
+	return false
+}
+
 // if argument to --chain is a path and is a valid configuration file, copy it to
 // identity/chain.json. It will overwrite an existing configuration file with same identity.
 // This allows specification of a chain config by filename and subsequently by configured identity as well.
@@ -133,7 +150,7 @@ func copyChainConfigFileToChainDataDir(ctx *cli.Context, identity, configFilePat
 
 // getChainIdentity parses --chain and --testnet (legacy) flags.
 // It will fatal if finds notok value.
-// It returns one of valid strings: ["mainnet", "morden", or --chain="flaggedCustom"]
+// It returns one of valid strings: ["mainnet", "morden", "mordor", or --chain="flaggedCustom"]
 func mustMakeChainIdentity(ctx *cli.Context) (identity string) {
 
 	if id := core.GetCacheChainIdentity(); id != "" {
@@ -157,6 +174,10 @@ func mustMakeChainIdentity(ctx *cli.Context) (identity string) {
 	if chainIsMorden(ctx) {
 		// This makes '--testnet', '--chain=testnet', and '--chain=morden' all use the same /morden subdirectory, if --chain isn't specified
 		identity = core.DefaultConfigMorden.Identity
+		return identity
+	}
+	if chainIsMordor(ctx) {
+		identity = core.DefaultConfigMordor.Identity
 		return identity
 	}
 	// If --chain is in use.
@@ -185,7 +206,7 @@ func mustMakeChainIdentity(ctx *cli.Context) (identity string) {
 				}
 				// In edge case of using a config file for default configuration (decided by 'identity'),
 				// set global context and override config file.
-				if core.ChainIdentitiesMorden[c.Identity] || core.ChainIdentitiesMain[c.Identity] {
+				if core.ChainIdentitiesMordor[c.Identity] || core.ChainIdentitiesMorden[c.Identity] || core.ChainIdentitiesMain[c.Identity] {
 					if e := ctx.Set(aliasableName(ChainIdentityFlag.Name, ctx), c.Identity); e != nil {
 						glog.Fatalf("Could not set global context chain identity to morden, error: %v", e)
 					}
@@ -217,6 +238,9 @@ func mustMakeChainIdentity(ctx *cli.Context) (identity string) {
 func mustMakeChainConfigNameDefaulty(ctx *cli.Context) string {
 	if chainIsMorden(ctx) {
 		return core.DefaultConfigMorden.Name
+	}
+	if chainIsMordor(ctx) {
+		return core.DefaultConfigMordor.Name
 	}
 	return core.DefaultConfigMainnet.Name
 }
@@ -308,6 +332,9 @@ func MakeBootstrapNodesFromContext(ctx *cli.Context) []*discover.Node {
 		// --testnet/--chain=morden flag overrides --config flag
 		if chainIsMorden(ctx) {
 			return core.DefaultConfigMorden.ParsedBootstrap
+		}
+		if chainIsMordor(ctx) {
+			return core.DefaultConfigMordor.ParsedBootstrap
 		}
 		return core.DefaultConfigMainnet.ParsedBootstrap
 	}
@@ -523,7 +550,7 @@ func MakeSystemNode(version string, ctx *cli.Context) *node.Node {
 // should attempt to migration from old (<=3.3) directory schema to new.
 func shouldAttemptDirMigration(ctx *cli.Context) bool {
 	if !ctx.GlobalIsSet(aliasableName(DataDirFlag.Name, ctx)) {
-		if chainVal := mustMakeChainIdentity(ctx); core.ChainIdentitiesMain[chainVal] || core.ChainIdentitiesMorden[chainVal] {
+		if chainVal := mustMakeChainIdentity(ctx); core.ChainIdentitiesMain[chainVal] || core.ChainIdentitiesMorden[chainVal] || core.ChainIdentitiesMordor[chainVal] {
 			return true
 		}
 	}
@@ -683,7 +710,7 @@ func mustMakeSufficientChainConfig(ctx *cli.Context) *core.SufficientChainConfig
 	chainIdentity := mustMakeChainIdentity(ctx)
 
 	// If chain identity is either of defaults (via config file or flag), use defaults.
-	if core.ChainIdentitiesMain[chainIdentity] || core.ChainIdentitiesMorden[chainIdentity] {
+	if core.ChainIdentitiesMain[chainIdentity] || core.ChainIdentitiesMorden[chainIdentity] || core.ChainIdentitiesMordor[chainIdentity] {
 		// Initialise chain configuration before handling migrations or setting up node.
 		config.Identity = chainIdentity
 		config.Name = mustMakeChainConfigNameDefaulty(ctx)
@@ -696,6 +723,9 @@ func mustMakeSufficientChainConfig(ctx *cli.Context) *core.SufficientChainConfig
 			config.Network = 2
 			config.Genesis = core.DefaultConfigMorden.Genesis
 			state.StartingNonce = state.DefaultTestnetStartingNonce // (2**20)
+		} else if chainIsMordor(ctx) {
+			config.Network = 7
+			config.Genesis = core.DefaultConfigMordor.Genesis
 		}
 		return config
 	}
@@ -737,7 +767,7 @@ func mustMakeSufficientChainConfig(ctx *cli.Context) *core.SufficientChainConfig
 
 func logChainConfiguration(ctx *cli.Context, config *core.SufficientChainConfig) {
 	chainIdentity := mustMakeChainIdentity(ctx)
-	chainIsCustom := !(core.ChainIdentitiesMain[chainIdentity] || core.ChainIdentitiesMorden[chainIdentity])
+	chainIsCustom := !(core.ChainIdentitiesMain[chainIdentity] || core.ChainIdentitiesMorden[chainIdentity] || core.ChainIdentitiesMordor[chainIdentity])
 
 	// File logs.
 	// TODO: uglify V logs? provide more detail for debugging? normal users won't see this.
@@ -799,6 +829,8 @@ func MustMakeChainConfigFromDefaults(ctx *cli.Context) *core.ChainConfig {
 	c := core.DefaultConfigMainnet.ChainConfig
 	if chainIsMorden(ctx) {
 		c = core.DefaultConfigMorden.ChainConfig
+	} else if chainIsMordor(ctx) {
+		c = core.DefaultConfigMordor.ChainConfig
 	}
 	return c
 }
