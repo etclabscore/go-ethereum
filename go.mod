@@ -37,3 +37,5 @@ require (
 )
 
 replace github.com/eth-classic/go-ethereum/accounts/abi/bind v0.0.0-20190521151733-fe17e9e1e2ce => ./accounts/abi/bind
+
+go 1.13

@@ -290,10 +290,10 @@ func makeCLIApp() (app *cli.App) {
 			return fmt.Errorf("malformed %s flag value %q", aliasableName(TargetGasLimitFlag.Name, ctx), gasLimit)
 		}
 
-		// Set morden chain by default for dev mode.
+		// Set mordor chain by default for dev mode.
 		if ctx.GlobalBool(aliasableName(DevModeFlag.Name, ctx)) {
 			if !ctx.GlobalIsSet(aliasableName(ChainIdentityFlag.Name, ctx)) {
-				if e := ctx.Set(aliasableName(ChainIdentityFlag.Name, ctx), "morden"); e != nil {
+				if e := ctx.Set(aliasableName(ChainIdentityFlag.Name, ctx), "mordor"); e != nil {
 					return fmt.Errorf("failed to set chain value: %v", e)
 				}
 			}

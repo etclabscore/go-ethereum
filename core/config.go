@@ -69,6 +69,9 @@ var (
 		"morden":  true,
 		"testnet": true,
 	}
+	ChainIdentitiesMordor = map[string]bool{
+		"mordor":  true,
+	}
 
 	cacheChainIdentity string
 	cacheChainConfig   *SufficientChainConfig
