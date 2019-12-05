@@ -38,6 +38,7 @@ var (
 	rlpTestDir         = filepath.Join(baseDir, "RLPTests")
 	ethDir             = filepath.Join(".", "testData")
 	ethGeneralStateDir = filepath.Join(ethDir, "GeneralStateTests")
+	ethLegacyGeneralStateDir = filepath.Join(ethDir, "LegacyTests", "Constantinople", "GeneralStateTests")
 	ethBasicTestDir    = filepath.Join(ethDir, "BasicTests")
 
 	BlockSkipTests = initBlockSkipTests()
@@ -141,7 +142,20 @@ var Forks = map[string]RuleSet{
 		DiehardBlock:             big.NewInt(0),
 		AtlantisBlock:            big.NewInt(0),
 	},
+	"ETC_Atlantis": {
+		HomesteadBlock:           big.NewInt(0),
+		HomesteadGasRepriceBlock: big.NewInt(0),
+		DiehardBlock:             big.NewInt(0),
+		AtlantisBlock:            big.NewInt(0),
+	},
 	"ConstantinopleFix": {
+		HomesteadBlock:           big.NewInt(0),
+		HomesteadGasRepriceBlock: big.NewInt(0),
+		DiehardBlock:             big.NewInt(0),
+		AtlantisBlock:            big.NewInt(0),
+		AghartaBlock:             big.NewInt(0),
+	},
+	"ETC_Agharta": {
 		HomesteadBlock:           big.NewInt(0),
 		HomesteadGasRepriceBlock: big.NewInt(0),
 		DiehardBlock:             big.NewInt(0),
