@@ -18,7 +18,6 @@ package tests
 
 import (
 	"path/filepath"
-	"strings"
 	"testing"
 )
 
@@ -34,7 +33,7 @@ func TestETHDifficulty(t *testing.T) {
 
 	// Loop through each file
 	for _, fn := range fileNames {
-		fileName := fn[strings.LastIndex(fn, "/")+1:]
+		fileName := filepath.Base(fn)
 
 		if !supportedTests[fileName] {
 			continue

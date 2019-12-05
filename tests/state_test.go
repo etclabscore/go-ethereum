@@ -711,9 +711,9 @@ func runETHTests(t *testing.T, fileNames []string, skipTests map[string]string) 
 	}
 
 	for _, fn := range fileNames {
-		fileName := fn[strings.LastIndex(fn, "/")+1:]
-
-		if fileName[strings.LastIndex(fileName, ".")+1:] != "json" {
+		fileName := filepath.Base(fn)
+		
+		if filepath.Ext(fileName) != ".json" {
 			continue
 		}
 
