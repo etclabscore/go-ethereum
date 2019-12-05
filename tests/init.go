@@ -25,6 +25,7 @@ import (
 	"math/big"
 	"os"
 	"path/filepath"
+	"regexp"
 
 	"github.com/eth-classic/go-ethereum/core"
 )
@@ -164,6 +165,8 @@ var Forks = map[string]RuleSet{
 	},
 }
 
+var reETC = regexp.MustCompile(`.*ETC_.*`)
+
 // ChainConfigs table used to map configs to difficulty test files
 var ChainConfigs = map[string]core.ChainConfig{
 	// "difficulty":              {},
@@ -201,6 +204,52 @@ var ChainConfigs = map[string]core.ChainConfig{
 						Options: core.ChainFeatureConfigOptions{
 							"type":   "atlantis",
 							"length": 3000000,
+						},
+					},
+				},
+			},
+		},
+	},
+	"difficultyETC_Atlantis.json": {
+		Forks: []*core.Fork{
+			{
+				Name:  "Atlantis",
+				Block: big.NewInt(0),
+				Features: []*core.ForkFeature{
+					{
+						ID: "difficulty",
+						Options: core.ChainFeatureConfigOptions{
+							"type":   "atlantis",
+							"length": "Any. Bomb is defused.",
+						},
+					},
+				},
+			},
+		},
+	},
+	"difficultyETC_Agharta.json": {
+		Forks: []*core.Fork{
+			{
+				Name:  "Atlantis",
+				Block: big.NewInt(0),
+				Features: []*core.ForkFeature{
+					{
+						ID: "difficulty",
+						Options: core.ChainFeatureConfigOptions{
+							"type":   "atlantis",
+							"length": 0, // noop
+						},
+					},
+				},
+			},
+			{
+				Name:  "Agharta",
+				Block: big.NewInt(0),
+				Features: []*core.ForkFeature{
+					{
+						ID: "gastable",
+						Options: core.ChainFeatureConfigOptions{
+							"type":   "agharta",
 						},
 					},
 				},
