@@ -34,7 +34,7 @@ func TestETHDifficulty(t *testing.T) {
 
 	// Loop through each file
 	for _, fn := range fileNames {
-		fileName := fn[strings.LastIndex(fn, "/")+1 : len(fn)]
+		fileName := fn[strings.LastIndex(fn, "/")+1:]
 
 		if !supportedTests[fileName] {
 			continue
