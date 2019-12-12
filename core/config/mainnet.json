@@ -107,6 +107,18 @@
                         }
                     }
                 ]
+            },
+            {
+                "name": "Agharta",
+                "block": 9573000,
+                "features": [
+                    {
+                        "id": "gastable",
+                        "options": {
+                            "type": "agharta"
+                        }
+                    }
+                ]
             }
         ],
         "badHashes": [
