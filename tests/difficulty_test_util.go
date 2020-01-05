@@ -30,6 +30,7 @@ import (
 
 // DifficultyTest is the structure of JSON from test files
 type DifficultyTest struct {
+	Name               string      `json:"name"`
 	ParentTimestamp    string      `json:"parentTimestamp"`
 	ParentDifficulty   string      `json:"parentDifficulty"`
 	UncleHash          common.Hash `json:"parentUncles"`
@@ -52,8 +53,8 @@ func (test *DifficultyTest) runDifficulty(t *testing.T, config *core.ChainConfig
 		UncleHash:  test.UncleHash,
 	}
 
-	if config.IsAtlantis(parentNumber) && parent.Number.Cmp(big.NewInt(3199999)) >= 0 {
-		return nil
+	if !reETC.MatchString(test.Name) && config.IsAtlantis(parentNumber) && parent.Number.Cmp(big.NewInt(3199999)) >= 0 {
+		t.Skip("Non-ETC applicable test.")
 	}
 
 	// Check to make sure difficulty is above minimum
@@ -67,8 +68,8 @@ func (test *DifficultyTest) runDifficulty(t *testing.T, config *core.ChainConfig
 
 	if actual.Cmp(exp) != 0 {
 		return fmt.Errorf("parent[time %v diff %v unclehash:%x] child[time %v number %v] diff %v != expected %v",
-			test.ParentTimestamp, test.ParentDifficulty, test.UncleHash,
-			test.CurrentTimestamp, test.CurrentBlockNumber, actual, exp)
+			parentTimestamp, parentDifficulty, test.UncleHash,
+			currentTimestamp, currentNumber, actual, exp)
 	}
 	return nil
 

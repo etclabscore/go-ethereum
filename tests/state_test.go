@@ -670,8 +670,8 @@ func TestEIP150HomesteadBounds(t *testing.T) {
 	}
 }
 
-func TestAllETH(t *testing.T) {
-	dirNames, _ := filepath.Glob(filepath.Join(ethGeneralStateDir, "*"))
+func TestAllETHState(t *testing.T) {
+	dirNames, _ := filepath.Glob(filepath.Join(ethLegacyGeneralStateDir, "*"))
 
 	skipTests := make(map[string]string)
 
@@ -692,7 +692,7 @@ func TestAllETH(t *testing.T) {
 	for _, dn := range dirNames {
 		dirName := dn[strings.LastIndex(dn, "/")+1 : len(dn)]
 		t.Run(dirName, func(t *testing.T) {
-			fns, _ := filepath.Glob(filepath.Join(ethGeneralStateDir, dirName, "*"))
+			fns, _ := filepath.Glob(filepath.Join(ethLegacyGeneralStateDir, dirName, "*"))
 			runETHTests(t, fns, skipTests)
 		})
 	}
@@ -707,12 +707,13 @@ func runETHTests(t *testing.T, fileNames []string, skipTests map[string]string) 
 		"HomesteadToDaoAt5":            true,
 		"EIP158ToByzantiumAt5":         true,
 		"ByzantiumToConstantinopleAt5": true,
+		"Istanbul":                     true,
 	}
 
 	for _, fn := range fileNames {
-		fileName := fn[strings.LastIndex(fn, "/")+1 : len(fn)]
-
-		if fileName[strings.LastIndex(fileName, ".")+1:len(fileName)] != "json" {
+		fileName := filepath.Base(fn)
+		
+		if filepath.Ext(fileName) != ".json" {
 			continue
 		}
 
